@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, FormEvent } from 'react';
-import Logo from '../../assets/ca0c9cdcbae437845fbc9799b27e8fa0.png'
+import Logo from '../../assets/gestmedLogo.png'
 import Image from 'next/image';
 import Link from 'next/link';
 
