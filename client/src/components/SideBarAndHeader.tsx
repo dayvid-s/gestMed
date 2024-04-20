@@ -116,10 +116,9 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
         <div className={manrope.className} >
             <Box sx={{ display: 'flex', maxHeight: "100vh", overflowX: "auto" }}>
                 <CssBaseline />
-                <AppBar sx={{ backgroundColor: "#025959", zIndex: "30", overflow: 'hidden' }} position="fixed" open={open}>
+                <AppBar sx={{ backgroundColor: "#FFFFFF", zIndex: "30", overflow: 'hidden' }} position="fixed" open={open}>
                     <Toolbar sx={{ zIndex: 300 }} >
                         <IconButton
-                            color="inherit"
                             aria-label="open drawer"
                             onClick={handleDrawerOpen}
                             edge="start"
@@ -128,10 +127,11 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                             <MenuIcon />
                         </IconButton>
                         <div className='flex flex-row items-center w-full cursor-pointer ' >
-                            <Typography sx={{ marginLeft: 'auto' }} variant="h6" noWrap >
+                            <Typography sx={{ marginLeft: 'auto', color: "#000" }} variant="h6" noWrap >
+                                Dr. Dayvid Santos
                                 {/* {userName} */}
                             </Typography>
-                            <MdAccountCircle className="ml-2 mr-10 w-7 h-7" />
+                            <MdAccountCircle className="ml-2 mr-10 text-black w-7 h-7 " />
 
 
                         </div>
@@ -157,7 +157,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                             <div className="flex justify-center mt-3" >
                                 <div className='w-36'>
                                     <Link href='/home'>
-                                        <Image className="mr-5  " src={Logo} alt="Logo" />
+                                        <Image className="mr-5 " src={Logo} alt="Logo" />
                                     </Link>
                                 </div>
 
@@ -196,9 +196,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                 <Main open={open}>
                     <DrawerHeader />
 
-                    {/* componente filho */}
                     {children}
-                    {/* componente filho */}
 
 
                 </Main>

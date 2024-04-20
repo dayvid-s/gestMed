@@ -23,7 +23,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     // <Provider store={store} >
     <CustomProvider locale={pt_BR}>
       <html lang="pt_BR" className={manrope.className} >
-        <body>
+        <body  >
           <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
         </body>
       </html>
