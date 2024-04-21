@@ -33,8 +33,10 @@ export function WrapperWithSchedulesOfAllDoctors() {
 
                         {/* aqui os cards com info do plantao */}
 
-                        <div className='border-r-2	p-2	border-[#e2e2e2]'  >
-                            <div className=' p-2 bg-[#C4E7E7] border-l-8	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
+                        <div className='border-r-2	p-2	border-[#e2e2e2]  '  >
+                            <div
+                                title="Mostrar informações desse plantão"
+                                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
 
                                 <p className='font-bold '>Dr. Dayvid Santos </p>
                                 <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
@@ -44,7 +46,9 @@ export function WrapperWithSchedulesOfAllDoctors() {
 
 
                         <div className='border-r-2	p-2	border-[#e2e2e2]'  >
-                            <div className=' p-2 bg-[#C4E7E7] border-l-8	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
+                            <div
+                                title="Mostrar informações desse plantão"
+                                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
 
                                 <p className='font-bold '>Dr. Dayvid Santos </p>
                                 <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
@@ -54,7 +58,9 @@ export function WrapperWithSchedulesOfAllDoctors() {
 
 
                         <div className='border-r-2	p-2	border-[#e2e2e2]'  >
-                            <div className=' p-2 bg-[#C4E7E7] border-l-8	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
+                            <div
+                                title="Mostrar informações desse plantão"
+                                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
 
                                 <p className='font-bold '>Dr. Dayvid Santos </p>
                                 <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
@@ -63,7 +69,9 @@ export function WrapperWithSchedulesOfAllDoctors() {
                         </div>
 
                         <div className='border-r-2	p-2	border-[#e2e2e2]'  >
-                            <div className=' p-2 bg-[#C4E7E7] border-l-8	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
+                            <div
+                                title="Mostrar informações desse plantão"
+                                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
 
                                 <p className='font-bold '>Dr. Dayvid Santos </p>
                                 <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>

@@ -1,6 +1,7 @@
 'use client'
 import React from 'react';
 import Logo from '../assets/e21dbb677223401d840a815501782a44.png'
+import Dayvid from '../assets/dayvid 1.png'
 import Image from 'next/image';
 
 import Link from 'next/link';
@@ -116,7 +117,10 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
         <div className={manrope.className} >
             <Box sx={{ display: 'flex', maxHeight: "100vh", overflowX: "auto" }}>
                 <CssBaseline />
-                <AppBar sx={{ backgroundColor: "#FFFFFF", zIndex: "30", overflow: 'hidden' }} position="fixed" open={open}>
+                <AppBar sx={{
+                    backgroundColor: "#FFFFFF", zIndex: "30",
+                    overflow: 'hidden', height: "80px", justifyContent: 'center'
+                }} position="fixed" open={open}>
                     <Toolbar sx={{ zIndex: 300 }} >
                         <IconButton
                             aria-label="open drawer"
@@ -126,12 +130,20 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                         >
                             <MenuIcon />
                         </IconButton>
-                        <div className='flex flex-row items-center w-full cursor-pointer ' >
-                            <Typography sx={{ marginLeft: 'auto', color: "#000" }} variant="h6" noWrap >
-                                Dr. Dayvid Santos
-                                {/* {userName} */}
-                            </Typography>
-                            <MdAccountCircle className="ml-2 mr-10 text-black w-7 h-7 " />
+                        <div title="Editar conta" className='flex flex-row items-center w-full  justify-end' >
+                            <Image className="h-14 w-14	mr-2 cursor-pointer	 " src={Dayvid} alt="Foto de perfil" />
+
+                            {/* <MdAccountCircle className="ml-auto  text-black w-7 h-7 " /> */}
+
+                            <div className='flex flex-col cursor-pointer ' >
+
+                                <p className=' text-black font-extrabold text-xl		'>
+                                    Dr. Dayvid Santos
+                                    {/* {userName} */}
+                                </p>
+
+                                <span className='text-slate-500	' > Cardiologista</span>
+                            </div>
 
 
                         </div>
@@ -172,7 +184,8 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                                 <Link key={page.name} href={page.path} passHref>
                                     <ListItemButton>
                                         <ListItemIcon sx={{ color: "#fff" }}  >{page.icon}</ListItemIcon>
-                                        <ListItemText className='font-bold text-white ' primary={page.name} />
+                                        {/* <ListItemText  primary={page.name} /> */}
+                                        <h1 className='font-bold text-white text-xl ' >{page.name}</h1>
                                     </ListItemButton>
                                 </Link>
                             ))}
@@ -183,7 +196,8 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                                 <Link key={page.name} href={page.path} passHref>
                                     <ListItemButton>
                                         <ListItemIcon sx={{ color: "#fff" }} >{page.icon}</ListItemIcon>
-                                        <ListItemText className='font-extrabold text-white ' sx={{ fontWeight: "800" }} primary={page.name} />
+                                        <h1 className='font-bold text-white text-xl ' >{page.name}</h1>
+
                                     </ListItemButton>
                                 </Link>
                             ))}

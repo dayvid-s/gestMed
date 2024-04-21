@@ -20,14 +20,13 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    // <Provider store={store} >
     <CustomProvider locale={pt_BR}>
-      <html lang="pt_BR" className={manrope.className} >
-        <body  >
+      <html lang="pt_BR" className={manrope.className}>
+        <body>
           <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
         </body>
       </html>
     </CustomProvider>
-    // </Provider>
-  )
+  );
 }
+
