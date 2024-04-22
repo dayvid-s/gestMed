@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import Logo from '../assets/e21dbb677223401d840a815501782a44.png'
+import Logo from '../assets/gestmedLogo branca.png'
 import Dayvid from '../assets/dayvid 1.png'
 import Image from 'next/image';
 
