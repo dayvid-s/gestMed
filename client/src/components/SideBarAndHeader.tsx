@@ -30,6 +30,8 @@ import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { MdAccountCircle } from "react-icons/md";
 import { Manrope } from 'next/font/google';
 // import { useAppSelector } from '../utils/useSelectorHook';
@@ -39,6 +41,8 @@ const manrope = Manrope({ subsets: ['latin'] })
 const sideBarItems = {
     pages: [
         { name: 'Horários', icon: <HomeIcon />, path: '/home' },
+        { name: 'Escala', icon: <DateRangeIcon />, path: '/scale' },
+
         { name: 'Médicos', icon: <PeopleIcon />, path: '/users' },
         { name: 'Relatórios', icon: <SearchIcon />, path: '/report' },
     ],
