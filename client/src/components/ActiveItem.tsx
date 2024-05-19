@@ -19,11 +19,11 @@ export default function ActiveItem() {
 
             </Nav>
             <button
-                className='ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-[#1B1E59] hover:bg-[#0056b3] text-white'
+                className='ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white'
                 type="button"
                 onClick={() => { setModalIsOpen(true) }}
             >
-                Criar Usuário
+                Criar Médico
             </button>
             <CreateUserModal setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
         </div>

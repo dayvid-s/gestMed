@@ -3,13 +3,26 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { UserForm } from './UserForm';
 import { axiosClient } from '../services/axiosClient';
 
+
 interface UserData {
     name: string;
     email: string;
+    crm: string;
+    uf: string;
+    city: string;
+    phone: string;
+    cpf: string;
+    rg: string;
+    address: string;
+    bank: string;
+    agency: string;
+    account: string;
     password: string;
     department: string | null;
     role: string | null;
 }
+
+
 
 
 export interface ImodalProps {
@@ -25,11 +38,20 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const [userData, setUserData] = useState<UserData>({
         name: '',
         email: '',
+        crm: '',
+        uf: '',
+        city: '',
+        phone: '',
+        cpf: '',
+        rg: '',
+        address: '',
+        bank: '',
+        agency: '',
+        account: '',
         password: '',
         department: userDepartment,
         role: userRole,
     });
-
     console.log(userData);
 
     const handleDepartmentChange = (value: string | null) => {
@@ -77,7 +99,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         <>
             <Modal className='z-10 ' backdrop={true} size="lg" open={modalIsOpen} onClose={handleClose}>
                 <Modal.Header>
-                    <Modal.Title className='text-3xl font-semibold ' >Criar usuário</Modal.Title>
+                    <h4 className='text-4xl  ' >Criar Médico</h4>
                 </Modal.Header>
                 <Modal.Body style={{ height: "80vh" }} >
                     <UserForm
