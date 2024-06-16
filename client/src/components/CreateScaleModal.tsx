@@ -17,9 +17,6 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         quantityOfDays: 15
     });
     
-    useEffect(() => {
-        console.log(scaleData);
-    }, [scaleData]);
 
     const handleIsAutoFilledChange = () => {
         setScaleData(prevData => ({
