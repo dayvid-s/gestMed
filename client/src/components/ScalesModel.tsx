@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CreateScaleModal } from './CreateScaleModal';
-import { AddUsersToScaleModal } from './AddUsersToScaleModal';
+import { AddUsersToScaleModal } from './ModalToAddUsersToScale';
 
 export function ScalesModel() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
