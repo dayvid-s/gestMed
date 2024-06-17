@@ -43,7 +43,6 @@ export function ChoiceScale() {
                     className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Criar Escala</button>
 
                 <CreateScaleModal
-
                     setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
 
             </div>
