@@ -23,12 +23,6 @@ export function ChoiceScale() {
                     placeholder="Escolha uma escala"
                 />
 
-                <SelectPicker
-                    data={data}
-                    searchable={false}
-                    style={{ width: 224 }}
-                    placeholder="Escolha uma escala"
-                />
 
                 <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Baixar Escala</button>
 
@@ -41,6 +35,13 @@ export function ChoiceScale() {
                     onClick={() => { setModalIsOpen(true) }}
 
                     className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Criar Escala</button>
+                
+
+                {/* <button
+                    onClick={() => { setModalIsOpen(true) }}
+
+                    className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Salvar Alterações</button> */}
+
 
                 <CreateScaleModal
                     setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
