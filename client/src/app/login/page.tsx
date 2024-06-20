@@ -22,7 +22,7 @@ export default function Login() {
 
                             <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' type='text' id='username' name='username' required />
                             <br />
-                            <label className='my-1 text-left' htmlFor='password'>Senha:</label>
+                            <label className='my-1 text-left font-semibold  ' htmlFor='password'>Senha:</label>
 
                             <br />
                             <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium ' type='password' id='password' name='password' required />
