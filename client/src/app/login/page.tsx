@@ -15,17 +15,17 @@ export default function Login() {
 
                 <div className='flex items-center justify-center' >
                     <form className='p-6' >
-                        <h2 className='mb-4 text-xl font-bold'>Login</h2>
+                        <h2 className='mb-4 text-xl font-extrabold'>Login</h2>
                         <div className='mb-2'>
-                            <label className='my-1 text-left' htmlFor='username'>Usuário:</label>
+                            <label className='my-1 text-left font-semibold ' htmlFor='username'>Usuário:</label>
                             <br />
 
-                            <input className='border-2 w-56 px-3 py-0.5 rounded-md' type='text' id='username' name='username' required />
+                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' type='text' id='username' name='username' required />
                             <br />
                             <label className='my-1 text-left' htmlFor='password'>Senha:</label>
 
                             <br />
-                            <input className='border-2 w-56 px-3 py-0.5 rounded-md' type='password' id='password' name='password' required />
+                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium ' type='password' id='password' name='password' required />
                         </div>
 
                         <Link href="/home">
