@@ -33,8 +33,8 @@ import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { MdAccountCircle } from "react-icons/md";
-import { Manrope } from 'next/font/google';
 // import { useAppSelector } from '../utils/useSelectorHook';
+import { Manrope } from 'next/font/google';
 const manrope = Manrope({ subsets: ['latin'] })
 
 
@@ -44,7 +44,7 @@ const sideBarItems = {
         { name: 'Escala', icon: <DateRangeIcon />, path: '/scale' },
 
         { name: 'Médicos', icon: <PeopleIcon />, path: '/users' },
-        { name: 'Relatórios', icon: <SearchIcon />, path: '/report' },
+        { name: 'Relatórios', icon: <SearchIcon />, path: '' },
     ],
     configuration: [
         { name: 'Editar Conta', icon: <ManageAccountsSharpIcon />, path: '/userAccount' },
@@ -170,16 +170,18 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                     <div className='bg-[#025959] min-h-screen z-auto ' >
 
                         <DrawerHeader  >
-                            <div className="flex justify-center mt-3" >
-                                <div className='w-36'>
+                            <div className="flex justify-center mt-3 mb-6" >
+                                <div className='w-36 mr-4'>
                                     <Link href='/home'>
-                                        <Image className="mr-5 " src={Logo} alt="Logo" />
+                                        <Image  className="mr-10 " src={Logo} alt="Logo" />
                                     </Link>
                                 </div>
+                                <div className=' mt-10 max-w-14  '>
+                                    <IconButton sx={{ color: "#fff" }} onClick={handleDrawerClose}>
 
-                                <IconButton sx={{ color: "#fff" }} onClick={handleDrawerClose}>
-                                    <ChevronLeftIcon sx={{ marginLeft: "15px", width: "30px", height: "30px" }} />
-                                </IconButton>
+                                        <ChevronLeftIcon sx={{  width: "30px", height: "30px" }} />
+                                    </IconButton>
+                                </div>
                             </div>
                         </DrawerHeader>
                         <Divider />
