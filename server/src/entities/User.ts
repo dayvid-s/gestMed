@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Shift } from './Shift';
 
-@Entity('users') // Nome da tabela
+@Entity('user') // Nome da tabela
 export class User {
 	@PrimaryGeneratedColumn('increment') // Decorator do TypeORM que cria uma chave primária com incrementação
 	id: number
@@ -20,4 +21,12 @@ export class User {
 	
 	@Column({ type: 'varchar', length: 255 })
 	role: string
+	
+	
+	@CreateDateColumn()
+	created_at: Date;
+	
+	@ManyToMany(() => Shift)
+	@JoinTable()
+	shifts: Shift[];
 }
