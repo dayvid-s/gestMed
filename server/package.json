@@ -6,7 +6,7 @@
     "migration:create": "cd ./src/migrations && typeorm-ts-node-commonjs migration:create",
     "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/migrations/default",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run ",
-    "migration:revert": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:revert --all",
+    "migration:revert": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:revert ",
     "build": "tsc",
     "dev": "npm run build && pm2 start dist/index.js --watch",
     "start": "npm run build && pm2 start dist/index.js"
