@@ -7,15 +7,15 @@ import {  roles } from '../@types/user'
 
 export class UserController {
 	async create(req: Request, res: Response) {
-		const { name, email, password, especialization, role } = req.body
+		const { name, email, password, specialization, role } = req.body
 
 		const userExists = await userRepository.findOneBy({ email })
 
 		const validRoles: roles[] = ['Básico', 'Admin'];
 
 		
-		if (!name || !email || !password || !especialization || !role) {
-			throw new BadRequestError('Faltam campos na requisição. Certifique-se de fornecer os campos: name, email, password, especialization e role.');
+		if (!name || !email || !password || !specialization || !role) {
+			throw new BadRequestError('Faltam campos na requisição. Certifique-se de fornecer os campos: name, email, password, specialization e role.');
 		}
 		
 		if (!validRoles.includes(role)) {
@@ -33,7 +33,7 @@ export class UserController {
 			name,
 			email,
 			password: hashPassword,
-			especialization,
+			specialization,
 			role
 		})
 

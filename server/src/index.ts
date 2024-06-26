@@ -11,5 +11,6 @@ AppDataSource.initialize().then(() => { //conexão com banco de dados
 	app.use(routes)
 
 	app.use(errorMiddleware)
+	console.log('Servidor ativo na porta ', process.env.PORT)
 	return app.listen(process.env.PORT)
 })

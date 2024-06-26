@@ -17,7 +17,7 @@ export class User {
 	
 	
 	@Column({ type: 'varchar', length: 255 })
-	especialization: string
+	specialization: string
 	
 	@Column({ type: 'varchar', length: 255 })
 	role: string

@@ -3,8 +3,8 @@ import { User } from './User';
 import { Shift } from './Shift';
 import { Schedule } from './Schedule';
 
-@Entity("scaleInsertion")
-export class ScaleInsertions {
+@Entity("scale_insertion")
+export class Scale_insertions {
     @PrimaryGeneratedColumn()
     id: number;
 
