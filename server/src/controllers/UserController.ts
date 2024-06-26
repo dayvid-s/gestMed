@@ -7,42 +7,41 @@ import {  roles } from '../@types/user'
 
 export class UserController {
 	async create(req: Request, res: Response) {
-		const { name, email, password, specialization, role } = req.body
+		const { name, email, password, specialization, role } = req.body;
 
-		const userExists = await userRepository.findOneBy({ email })
+		const userExists = await userRepository.findOneBy({ email });
 
-		const validRoles: roles[] = ['Básico', 'Coordernador', 'Master','Médico'];
+		const validRoles: roles[] = ['Básico', 'Coordernador', 'Master', 'Médico'];
 
-		
-		if (!name || !email || !password || !specialization || !role) {
-			throw new BadRequestError('Faltam campos na requisição. Certifique-se de fornecer os campos: name, email, password, specialization e role.');
+		if (!name || !email || !password || !role) {
+			throw new BadRequestError('Faltam campos na requisição. Certifique-se de fornecer os campos: name, email, password e role.');
 		}
-		
+
 		if (!validRoles.includes(role)) {
 			throw new BadRequestError('Role inválido. Os valores válidos são: ' + validRoles.join(', '));
 		}
 
-		
 		if (userExists) {
-			throw new BadRequestError('E-mail já existe')
+			throw new BadRequestError('Usuário já possui login');
 		}
 
-		const hashPassword = await bcrypt.hash(password, 10)
+		const hashPassword = await bcrypt.hash(password, 10);
 
 		const newUser = userRepository.create({
 			name,
 			email,
 			password: hashPassword,
-			specialization,
+			specialization: specialization ?? 'null', 
 			role
-		})
+		});
 
-		await userRepository.save(newUser)
+		await userRepository.save(newUser);
 
-		const { password: _, ...user } = newUser
+		const { password: _, ...user } = newUser;
 
-		return res.status(201).json(user)
+		return res.status(201).json(user);
 	}
+
 
 	async login(req: Request, res: Response) {
 		const { email, password } = req.body

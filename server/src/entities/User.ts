@@ -16,7 +16,7 @@ export class User {
 	password: string
 	
 	
-	@Column({ type: 'varchar', length: 255 })
+	@Column({ type: 'varchar', length: 255, nullable: true })
 	specialization: string
 	
 	@Column({ type: 'varchar', length: 255 })
