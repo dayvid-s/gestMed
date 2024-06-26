@@ -3,7 +3,7 @@ import pt_BR from 'rsuite/locales/pt_BR';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FaRegPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
-import { axiosClient } from '../services/axiosClient';
+import { api } from '../services/axiosClient';
 import { Table, Button, Pagination } from 'rsuite';
 import { MdDeleteOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
@@ -25,7 +25,7 @@ interface User {
 
 async function getData() {
   try {
-    const response = await axiosClient.get('/users');
+    const response = await api.get('/users');
 
     return response.data;
   } catch (error) {
@@ -102,7 +102,7 @@ export default function UsersTable() {
 
   async function handleDeleteUser(userId: number) {
     try {
-      await axiosClient.delete(`/users/${userId}`);
+      await api.delete(`/users/${userId}`);
       // Atualize a lista de usuários após a exclusão
       const updatedUsers = users.filter(user => user.id !== userId);
       setUsers(updatedUsers);

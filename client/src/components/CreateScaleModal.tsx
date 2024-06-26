@@ -1,6 +1,6 @@
 import { Button, Modal } from 'rsuite';
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { axiosClient } from '../services/axiosClient';
+import { api } from '../services/axiosClient';
 import { CreateScaleForm } from './CreateScaleForm';
 import { ScaleData, QuantityOfDaysTypes } from '@/@types/scaleTypes';
 
@@ -36,7 +36,7 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
     async function handleSubmit() {
         try {
-            const response = await axiosClient.post('/user', scaleData);
+            const response = await api.post('/user', scaleData);
 
             if (response.status < 300) {
                 console.log('Usuário criado com sucesso');

@@ -1,6 +1,6 @@
 import { Button, Form, Modal, SelectPicker } from 'rsuite';
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { axiosClient } from '../services/axiosClient';
+import { api } from '../services/axiosClient';
 import Dayvid from '../assets/dayvid 1.png'
 import Image from 'next/image';
 import { Manrope } from 'next/font/google';

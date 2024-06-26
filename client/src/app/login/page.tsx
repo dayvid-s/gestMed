@@ -1,36 +1,71 @@
 "use client"
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import Logo from '../../assets/gestmedLogo.png'
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useDispatch } from 'react-redux';
+import { signInAsync } from '../../features/authSlice';
+import { AppDispatch } from '../../store';
+import { useAppSelector } from '../../utils/useSelectorHook';
+import { useRouter } from 'next/navigation';
+
+
+
 export default function Login() {
+    const [user, setUser] = useState({ email: '', password: '' });
+    const dispatch = useDispatch<AppDispatch>();
+    const { token } = useAppSelector((state) => state.auth);
+    const router = useRouter();
+
+    
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUser({
+            ...user,
+            [event.target.name]: event.target.value
+        });
+    };
+
+    useEffect(() => {
+        if (token) {
+            router.push("/home");
+        }
+    }, [token]);
+
+
+    const handleLogin = async (event: FormEvent) => {
+        console.log(user)
+        event.preventDefault();
+        dispatch(signInAsync(user));
+    };
+
+
 
     return (
         <div className='w-screen bg-[#025959] h-screen flex align justify-center items-center relative'>
-            <div className="bg-[#fff] w-72 mx-5 flex justify-center items-center flex-col rounded-lg border-2 shadow-lg sm:flex-row w-[500px]" >
+            <div className="bg-[#fff]  mx-5 flex justify-center items-center flex-col rounded-lg border-2 shadow-lg sm:flex-row w-[500px]" >
                 <div className='mt-4 sm:mb-2' >
                     <Image className='w-40 sm:max-w-80' src={Logo} alt='Logo do Sistema' />
                 </div>
 
                 <div className='flex items-center justify-center' >
-                    <form className='p-6' >
+                    <form className='p-6' onSubmit={handleLogin}>
                         <h2 className='mb-4 text-xl font-extrabold'>Login</h2>
                         <div className='mb-2'>
                             <label className='my-1 text-left font-semibold ' htmlFor='username'>Usuário:</label>
                             <br />
 
-                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' type='text' id='username' name='username' required />
+                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' type='text' id='username' name='email'  required onChange={handleInputChange}  />
                             <br />
                             <label className='my-1 text-left font-semibold  ' htmlFor='password'>Senha:</label>
 
                             <br />
-                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium ' type='password' id='password' name='password' required />
+                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium ' type='password' id='password' name='password' required onChange={handleInputChange} />
                         </div>
 
-                        <Link href="/home">
+                        {/* <Link href="/home"> */}
                             <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Entrar</button>
-                        </Link>
+                        {/* </Link> */}
                     </form>
                 </div>
             </div>

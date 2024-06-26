@@ -11,7 +11,7 @@ export class UserController {
 
 		const userExists = await userRepository.findOneBy({ email })
 
-		const validRoles: roles[] = ['Básico', 'Admin'];
+		const validRoles: roles[] = ['Básico', 'Coordernador', 'Master','Médico'];
 
 		
 		if (!name || !email || !password || !specialization || !role) {

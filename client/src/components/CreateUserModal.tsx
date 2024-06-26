@@ -1,7 +1,7 @@
 import { Button, Modal } from 'rsuite';
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { UserForm } from './UserForm';
-import { axiosClient } from '../services/axiosClient';
+import { api } from '../services/axiosClient';
 
 
 interface UserData {
@@ -75,7 +75,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         try {
             // Validações adicionais podem ser realizadas aqui
 
-            const response = await axiosClient.post('/user', userData);
+            const response = await api.post('/user', userData);
 
             if (response.status < 300) {
                 console.log('Usuário criado com sucesso');
