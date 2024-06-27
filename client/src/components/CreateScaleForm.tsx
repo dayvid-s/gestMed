@@ -21,13 +21,13 @@ export function CreateScaleForm({ handleInputChange, scaleData,
     };
 
     const quantityOfDaysOptions = [
-        { label: "15 dias", value: 15 as QuantityOfDaysTypes },
+        { label: "7 dias", value: 7 as QuantityOfDaysTypes },
         { label: "30 dias", value: 30 as QuantityOfDaysTypes }
     ];
 
     return (
         <Form>
-            <div className='flex flex-col sm:flex-row flex-wrap gap-y-3.5 justify-between items-center'>
+            <div className='flex flex-col sm:flex-row flex-wrap gap-6 justify-start align-baseline'>
                 <Form.Group controlId="name">
                     <Form.ControlLabel>Nome da Escala</Form.ControlLabel>
                     <Form.Control name="name" value={scaleData.name} onChange={handleInput} />
@@ -42,13 +42,13 @@ export function CreateScaleForm({ handleInputChange, scaleData,
                         data={quantityOfDaysOptions}
                     />
                 </Form.Group>
-                <Form.Group>
+                {/* <Form.Group>
                     <Checkbox
                         checked={scaleData.isAutoFilled}
                         onChange={handleIsAutoFilledChange}>
                         Preencher Automaticamente
                     </Checkbox>
-                </Form.Group>
+                </Form.Group> */}
             </div>
         </Form>
     );

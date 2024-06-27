@@ -14,7 +14,7 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const [scaleData, setScaleData] = useState<ScaleData>({
         name: '',
         isAutoFilled: false,
-        quantityOfDays: 15
+        quantityOfDays:7 
     });
     
 
@@ -52,11 +52,11 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
     return (
         <>
-            <Modal className='z-10' backdrop={true} size="lg" open={modalIsOpen} onClose={handleClose}>
+            <Modal className='z-10' backdrop={true} size="md" open={modalIsOpen} onClose={handleClose}>
                 <Modal.Header>
                     <h4 className='text-4xl'>Criar Escala</h4>
                 </Modal.Header>
-                <Modal.Body style={{ height: "80vh" }}>
+                <Modal.Body style={{ height: "20vh" }}>
                     <CreateScaleForm
                         handleIsAutoFilledChange={handleIsAutoFilledChange}
                         handleScaleType={handleWithChangeOfScaleType}

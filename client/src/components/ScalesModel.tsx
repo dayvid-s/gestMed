@@ -13,7 +13,7 @@ export function ScalesModel() {
     var dias = Array.from({ length: totalDiasMes }, (_, i) => i + 1);
     var diasDaSemana = ['Dom', 'Seg', 'Ter', 'Quar', 'Qui', 'Sex', 'Sáb'];
     return (
-        <div className='bg-[#ececec] items-center flex py-5 rounded-3xl flex-col	 pb-10 '  >
+        <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col	 pb-10 '  >
 
             <h1 className='text-3xl font-extrabold ' >
                 &lt;Escala Modelo&gt;

@@ -1,4 +1,4 @@
-export type QuantityOfDaysTypes = 15 | 30;
+export type QuantityOfDaysTypes = 7 | 30;
 
 export interface ScaleData {
     name: string;
