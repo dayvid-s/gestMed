@@ -35,6 +35,8 @@ export function CreateScaleForm({ handleInputChange, scaleData,
                 <Form.Group>
                     <Form.ControlLabel>Tipo de Escala</Form.ControlLabel>
                     <SelectPicker
+                        placeholder="Selecionar Tipo"
+
                         searchable={false}
                         value={scaleData.quantityOfDays}
                         name="quantityOfDays"

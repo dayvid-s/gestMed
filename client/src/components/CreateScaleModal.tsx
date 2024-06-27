@@ -14,7 +14,7 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const [scaleData, setScaleData] = useState<ScaleData>({
         name: '',
         isAutoFilled: false,
-        quantityOfDays:7 
+        quantityOfDays:null 
     });
     
 
