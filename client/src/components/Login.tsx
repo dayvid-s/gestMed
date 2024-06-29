@@ -1,15 +1,14 @@
 "use client"
 import React, { useState, FormEvent, useEffect } from 'react';
-import Logo from '../../assets/gestmedLogo.png'
+import Logo from '../assets/gestmedLogo.png'
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { useDispatch } from 'react-redux';
-import { signInAsync } from '../../features/authSlice';
-import { AppDispatch } from '../../store';
-import { useAppSelector } from '../../utils/useSelectorHook';
+import { signInAsync } from '@/features/authSlice';
+import { AppDispatch } from '@/store';
 import { useRouter } from 'next/navigation';
-
+import { useAppSelector } from '@/utils/useSelectorHook';
 
 
 export default function Login() {
@@ -18,7 +17,7 @@ export default function Login() {
     const { token } = useAppSelector((state) => state.auth);
     const router = useRouter();
 
-    
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUser({
             ...user,
@@ -55,7 +54,7 @@ export default function Login() {
                             <label className='my-1 text-left font-semibold ' htmlFor='username'>Usuário:</label>
                             <br />
 
-                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' type='text' id='username' name='email'  required onChange={handleInputChange}  />
+                            <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' type='text' id='username' name='email' required onChange={handleInputChange} />
                             <br />
                             <label className='my-1 text-left font-semibold  ' htmlFor='password'>Senha:</label>
 
@@ -64,7 +63,7 @@ export default function Login() {
                         </div>
 
                         {/* <Link href="/home"> */}
-                            <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Entrar</button>
+                        <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Entrar</button>
                         {/* </Link> */}
                     </form>
                 </div>
