@@ -30,4 +30,23 @@ export class ScheduleController {
             return res.status(500).json({ message: 'Erro interno do servidor' })
         }
     }
+
+    async delete(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const schedule = await scheduleRepository.findOneBy({ id: parseInt(id) });
+
+            if (!schedule) {
+                return res.status(404).json({ message: 'Escala não encontrada' });
+            }
+
+            await scheduleRepository.remove(schedule);
+
+            return res.status(200).json({ message: 'Escala removida com sucesso' });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
 }
