@@ -13,7 +13,7 @@ export class Scale_insertions {
 
     @ManyToOne(() => User, user => user.id)
     user: User;
-
+ 
     @ManyToOne(() => Shift, shift => shift.id)
     shift: Shift;
 
