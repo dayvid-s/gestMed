@@ -4,7 +4,6 @@ import { scheduleRepository } from '../repositories/scheduleRepository'
 export class ScheduleController {
     async create(req: Request, res: Response) {
         const { name, total_of_schedule_days, is_auto_filled } = req.body
-
         if (!name) {
             return res.status(400).json({ message: 'O nome da escala é obrigatório' })
         }

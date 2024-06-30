@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { api } from '../services/axiosClient';
 import { CreateScaleForm } from './CreateScaleForm';
 import { ScaleData, QuantityOfDaysTypes } from '@/@types/scaleTypes';
+import { createUser } from '@/services/ScaleService';
 
 export interface ImodalProps {
     modalIsOpen: boolean;
@@ -13,10 +14,9 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const handleClose = () => setIsOpen(false);
     const [scaleData, setScaleData] = useState<ScaleData>({
         name: '',
-        isAutoFilled: false,
-        quantityOfDays:null 
+        quantityOfDays: null,
+        isAutoFilled: false
     });
-    
 
     const handleIsAutoFilledChange = () => {
         setScaleData(prevData => ({
@@ -36,19 +36,13 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
     async function handleSubmit() {
         try {
-            const response = await api.post('/user', scaleData);
-
-            if (response.status < 300) {
-                console.log('Usuário criado com sucesso');
-            } else {
-                console.error('Falha ao criar usuário', response);
-            }
+            await createUser(scaleData.name, scaleData.quantityOfDays, scaleData.isAutoFilled);
+            handleClose();
         } catch (error) {
-            console.error('Falha ao criar usuário', error);
+            console.error('Falha ao criar escala', error);
         }
-
-        handleClose();
     }
+
 
     return (
         <>
