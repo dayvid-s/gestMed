@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { api } from '../services/axiosClient';
 import { CreateScaleForm } from './CreateScaleForm';
 import { ScaleData, QuantityOfDaysTypes } from '@/@types/scaleTypes';
-import { createUser } from '@/services/ScaleService';
+import { createSchedule } from '@/services/ScaleService';
 
 export interface ImodalProps {
     modalIsOpen: boolean;
@@ -36,7 +36,7 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
     async function handleSubmit() {
         try {
-            await createUser(scaleData.name, scaleData.quantityOfDays, scaleData.isAutoFilled);
+            await createSchedule(scaleData.name, scaleData.quantityOfDays, scaleData.isAutoFilled);
             handleClose();
         } catch (error) {
             console.error('Falha ao criar escala', error);

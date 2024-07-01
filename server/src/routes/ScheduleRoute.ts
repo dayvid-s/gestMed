@@ -7,5 +7,6 @@ const scheduleController = new ScheduleController();
 
 router.post("/schedule", authMiddleware, scheduleController.create);
 router.delete("/schedule/:id", authMiddleware, scheduleController.delete);
+router.get('/schedule', authMiddleware, scheduleController.getAll);
 
 export default router;

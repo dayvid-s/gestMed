@@ -48,4 +48,16 @@ export class ScheduleController {
             return res.status(500).json({ message: 'Erro interno do servidor' });
         }
     }
+    
+    
+    
+    async getAll(req: Request, res: Response) {
+        try {
+            const schedules = await scheduleRepository.find();
+            return res.status(200).json(schedules);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
 }
