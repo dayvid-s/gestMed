@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { CreateScaleModal } from './CreateScaleModal';
 import { AddUsersToScaleModal } from './ModalToAddUsersToScale';
+import { useAppSelector } from '@/utils/useSelectorHook';
 
 export function ScalesModel() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
-
+    const selectedScaleModel = useAppSelector((state) => state.scaleOptions.selectedScaleModel?.label);
+    
+    
     var data = new Date();
     var ano = data.getFullYear();
     var mes = data.getMonth() + 1;
@@ -16,7 +19,7 @@ export function ScalesModel() {
         <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col	 pb-10 '  >
 
             <h1 className='text-3xl font-extrabold ' >
-                &lt;Escala Modelo&gt;
+                &lt;{selectedScaleModel}&gt;
             </h1>
 
             <div className='flex flex-wrap items-start justify-center mt-5'>

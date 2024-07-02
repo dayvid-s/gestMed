@@ -2,20 +2,19 @@ import { useEffect, useState } from "react";
 import { SelectPicker } from "rsuite";
 import { CreateScaleModal } from "./CreateScaleModal";
 
-import { AppDispatch } from "@/store";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { fetchAllScaleModels } from "@/features/scaleModelSlice";
 
+import {  clearSelectedScaleModel, setSelectedScaleModel } from "@/features/ScaleModelOptionSlice";
+import { AppDispatch } from "@/store";
 export function ChoiceScale() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [data, setData] = useState<{ label: string; value: string }[]>([]);
     const dispatch = useDispatch<AppDispatch>();
 
     const scaleModels = useAppSelector((state) => state.scaleModel.scaleModels);
     const loading = useAppSelector((state) => state.scaleModel.loading);
     const error = useAppSelector((state) => state.scaleModel.error);
-
     useEffect(() => {
         dispatch(fetchAllScaleModels());
     }, [dispatch]);
@@ -26,17 +25,34 @@ export function ChoiceScale() {
                 label: scale.name,
                 value: scale.name
             }));
-            setData(formattedData);
+            dispatch(setSelectedScaleModel(formattedData[0])); 
         }
-    }, [scaleModels]);
+    }, [scaleModels, dispatch]);
+    
+    const handleScaleModelChange = (value: any) => {
+        if (value) {
+            const selectedOption = scaleModels.find(scale => scale.name === value);
+            if (selectedOption) {
+                dispatch(setSelectedScaleModel({
+                    label: selectedOption.name,
+                    value: selectedOption.name
+                }));
+            }
+        } else {
+            dispatch(clearSelectedScaleModel());
+        }
+    };
 
     return (
         <div>
             <div className="flex-row">
                 <SelectPicker
+                    onChange={handleScaleModelChange}
                     className="mr-10"
-                    data={data}
-                    searchable={true}
+                    data={scaleModels.map(scale => ({
+                        label: scale.name,
+                        value: scale.name
+                    }))}                    searchable={true}
                     style={{ width: 224 }}
                     placeholder="Escolha uma escala"
                 />
