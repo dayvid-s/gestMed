@@ -36,6 +36,10 @@ import { MdAccountCircle } from "react-icons/md";
 // import { useAppSelector } from '../utils/useSelectorHook';
 import { Manrope } from 'next/font/google';
 import { useAppSelector } from '@/utils/useSelectorHook';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { logoutUser } from '@/features/authSlice';
+import { useRouter } from 'next/navigation';
 const manrope = Manrope({ subsets: ['latin'] })
 
 
@@ -107,10 +111,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function SideBarAndHeader({ children }: { children: React.ReactNode }) {
+    const router = useRouter()
     const [open, setOpen] = React.useState(false);
     const user = useAppSelector((state) => state.auth.user);
-
-
+    const dispatch = useDispatch<AppDispatch>();
+    const handleLogout = () => {
+        
+        dispatch(logoutUser())
+        router.push("/")
+    }
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -216,7 +225,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                                 </Link>
                             ))}
                         </List>
-                        <button className="w-40 px-4 py-2 mt-20 ml-5 font-bold text-black bg-white rounded hover:bg-blue-700 ">
+                        <button onClick={handleLogout} className="w-40 px-4 py-2 mt-20 ml-5 font-bold text-black bg-white rounded hover:bg-blue-700 ">
                             Sair da Conta
                         </button>
                     </div>
