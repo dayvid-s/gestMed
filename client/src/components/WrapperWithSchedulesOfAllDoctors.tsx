@@ -26,8 +26,8 @@ export function WrapperWithSchedulesOfAllDoctors() {
 
                         {/* aqui os 2 textos que indicam a semana  */}
                         <div className='flex justify-between px-3 w-60 bg-green500 ' >
-                            <text className='text-white ' >{diasDaSemana[new Date(ano, mes - 1, dia).getDay()]}</text>
-                            <text className='text-white ' >{dia.toString().padStart(2, '0')}/{mes.toString().padStart(2, '0')}</text>
+                            <h4 className='text-white ' >{diasDaSemana[new Date(ano, mes - 1, dia).getDay()]}</h4>
+                            <h4 className='text-white ' >{dia.toString().padStart(2, '0')}/{mes.toString().padStart(2, '0')}</h4>
                         </div>
 
 

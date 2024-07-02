@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useEffect } from 'react';
 import Logo from '../assets/gestmedLogo branca.png'
 import Dayvid from '../assets/dayvid 1.png'
 import Image from 'next/image';
@@ -35,6 +35,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { MdAccountCircle } from "react-icons/md";
 // import { useAppSelector } from '../utils/useSelectorHook';
 import { Manrope } from 'next/font/google';
+import { useAppSelector } from '@/utils/useSelectorHook';
 const manrope = Manrope({ subsets: ['latin'] })
 
 
@@ -107,7 +108,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function SideBarAndHeader({ children }: { children: React.ReactNode }) {
     const [open, setOpen] = React.useState(false);
-    // const userName = useAppSelector((state) => state.user.name);
+    const user = useAppSelector((state) => state.auth.user);
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -142,11 +144,17 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                             <div className='flex flex-col cursor-pointer ' >
 
                                 <p className=' text-black font-extrabold text-xl		'>
-                                    Dr. Dayvid Santos
-                                    {/* {userName} */}
+                                    {/* Dr. Dayvid Santos */}
+                                    {user?.name}
+                                    {/* aqui vai ser DR caso doutor, e DRA. caso doutora, e nome normal caso seja adm/master */}
                                 </p>
 
-                                <span className='text-slate-500	' > Cardiologista</span>
+
+                                {user?.role === 'Médico' ?
+                                    <span className='text-slate-500	' > {user.specialization}</span>
+                                    :
+                                    <span className='text-slate-500	'>{ user?.role}</span>
+                                }
                             </div>
 
 
@@ -173,13 +181,13 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                             <div className="flex justify-center mt-3 mb-6" >
                                 <div className='w-36 mr-4'>
                                     <Link href='/home'>
-                                        <Image  className="mr-10 " src={Logo} alt="Logo" />
+                                        <Image className="mr-10 " src={Logo} alt="Logo" />
                                     </Link>
                                 </div>
                                 <div className=' mt-10 max-w-14  '>
                                     <IconButton sx={{ color: "#fff" }} onClick={handleDrawerClose}>
 
-                                        <ChevronLeftIcon sx={{  width: "30px", height: "30px" }} />
+                                        <ChevronLeftIcon sx={{ width: "30px", height: "30px" }} />
                                     </IconButton>
                                 </div>
                             </div>

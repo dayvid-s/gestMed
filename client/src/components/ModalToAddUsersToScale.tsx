@@ -141,7 +141,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
                             <div className='flex flex-col cursor-pointer ' >
 
-                                <p className='text-xl font-extrabold text-black '>
+                                <p className='text-xl font-extrabold text-black '>        
                                     Dr. Dayvid Santos
                                     {/* {userName} */}
                                 </p>
