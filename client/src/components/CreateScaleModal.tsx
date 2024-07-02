@@ -3,7 +3,11 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { api } from '../services/axiosClient';
 import { CreateScaleForm } from './CreateScaleForm';
 import { ScaleData, QuantityOfDaysTypes } from '@/@types/scaleTypes';
-import { createSchedule } from '@/services/ScaleService';
+import { createScaleModel } from '@/features/scaleModelSlice';
+import { useDispatch } from 'react-redux';
+import { fetchAllScaleModels } from '@/features/scaleModelSlice';
+import { AppDispatch } from '@/store';
+
 
 export interface ImodalProps {
     modalIsOpen: boolean;
@@ -11,6 +15,8 @@ export interface ImodalProps {
 }
 
 export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
+    const dispatch = useDispatch<AppDispatch>();
+
     const handleClose = () => setIsOpen(false);
     const [scaleData, setScaleData] = useState<ScaleData>({
         name: '',
@@ -36,8 +42,14 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
     async function handleSubmit() {
         try {
-            await createSchedule(scaleData.name, scaleData.quantityOfDays, scaleData.isAutoFilled);
+            await dispatch(createScaleModel({
+                name: scaleData.name,
+                total_of_schedule_days: scaleData.quantityOfDays,
+                is_auto_filled: scaleData.isAutoFilled
+            }));
+
             handleClose();
+            dispatch(fetchAllScaleModels());
         } catch (error) {
             console.error('Falha ao criar escala', error);
         }

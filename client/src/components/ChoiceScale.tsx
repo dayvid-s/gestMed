@@ -1,29 +1,34 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SelectPicker } from "rsuite";
 import { CreateScaleModal } from "./CreateScaleModal";
-import { fetchAllSchedules } from "@/services/ScaleService";
-import { ScaleData } from "@/@types/scaleTypes";
 
+import { AppDispatch } from "@/store";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/utils/useSelectorHook";
+import { fetchAllScaleModels } from "@/features/scaleModelSlice";
 
 export function ChoiceScale() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [data, setData] = useState<{ label: string; value: string }[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const scaleModels = useAppSelector((state) => state.scaleModel.scaleModels);
+    const loading = useAppSelector((state) => state.scaleModel.loading);
+    const error = useAppSelector((state) => state.scaleModel.error);
 
     useEffect(() => {
-        async function getSchedules() {
-            const fetchedSchedules= await fetchAllSchedules();
-            if (fetchedSchedules) {
-                const formattedData = fetchedSchedules.map(schedule => ({
-                    label: schedule.name,
-                    value: schedule.name
-                }));
-                setData(formattedData);
-            }
-        }
+        dispatch(fetchAllScaleModels());
+    }, [dispatch]);
 
-        getSchedules();
-    }, []);
+    useEffect(() => {
+        if (scaleModels.length > 0) {
+            const formattedData = scaleModels.map(scale => ({
+                label: scale.name,
+                value: scale.name
+            }));
+            setData(formattedData);
+        }
+    }, [scaleModels]);
 
     return (
         <div>
@@ -47,10 +52,8 @@ export function ChoiceScale() {
                 <button onClick={() => { setModalIsOpen(true) }} className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
                     Criar Escala
                 </button>
-
                 {/* <button
                     onClick={() => { setModalIsOpen(true) }}
-
                     className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Salvar Alterações</button> */}
 
                 <CreateScaleModal setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
