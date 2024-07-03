@@ -3,6 +3,9 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { UserForm } from './UserForm';
 import { api } from '../services/axiosClient';
 import { UserData, roles } from '@/@types/userTypes';
+import { useDispatch } from 'react-redux';
+import { createUser } from '@/features/userSlice';
+import { AppDispatch } from '@/store';
 
 
 
@@ -14,6 +17,7 @@ export interface ImodalProps {
 }
 
 export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
+    const dispatch = useDispatch<AppDispatch>();
     const handleClose = () => setIsOpen(false);
     const [userRole, setUserRole] = useState<roles | null>(null);
 
@@ -47,29 +51,17 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     };
 
 
-    async function handleSubmit() {
+    const handleSubmit = async () => {
         try {
             // Validações adicionais podem ser realizadas aqui
-
-            const response = await api.post('/user', userData);
-
-            if (response.status < 300) {
-                console.log('Usuário criado com sucesso');
-                // Atualiza a lista de usuários após a criação
-                // Você pode chamar a função fetchData ou setUsers para atualizar a lista na tabela
-                //  e tambem notificar o usuario que o usuario foi criado
-                //  e também limpar o form
-                //  e tambem adicionar validações. deixe com o fabio. 
-            } else {
-                console.error('Falha ao criar usuário', response);
-            }
+            await dispatch(createUser(userData)).unwrap();
+            console.log('Usuário criado com sucesso');
+            // Atualizações adicionais após a criação do usuário
+            handleClose();
         } catch (error) {
             console.error('Falha ao criar usuário', error);
         }
-
-        handleClose();
-    }
-
+    };
 
     return (
         <>
