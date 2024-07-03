@@ -2,25 +2,8 @@ import { Button, Modal } from 'rsuite';
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { UserForm } from './UserForm';
 import { api } from '../services/axiosClient';
+import { UserData, roles } from '@/@types/userTypes';
 
-
-interface UserData {
-    name: string;
-    email: string;
-    crm: string;
-    uf: string;
-    city: string;
-    phone: string;
-    cpf: string;
-    rg: string;
-    address: string;
-    bank: string;
-    agency: string;
-    account: string;
-    password: string;
-    department: string | null;
-    role: string | null;
-}
 
 
 
@@ -32,8 +15,7 @@ export interface ImodalProps {
 
 export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const handleClose = () => setIsOpen(false);
-    const [userDepartment, setUserDepartment] = useState<string | null>(null);
-    const [userRole, setUserRole] = useState<string | null>(null);
+    const [userRole, setUserRole] = useState<roles | null>(null);
 
     const [userData, setUserData] = useState<UserData>({
         name: '',
@@ -49,20 +31,13 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         agency: '',
         account: '',
         password: '',
-        department: userDepartment,
+        specialization: '',
         role: userRole,
     });
     console.log(userData);
 
-    const handleDepartmentChange = (value: string | null) => {
-        setUserDepartment(value);
-        setUserData(prevData => ({
-            ...prevData,
-            department: value,
-        }));
-    };
 
-    const handleRoleChange = (value: string | null) => {
+    const handleRoleChange = (value: roles | null) => {
         setUserRole(value);
         setUserData(prevData => ({
             ...prevData,
@@ -99,11 +74,10 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         <>
             <Modal className='z-10 ' backdrop={true} size="lg" open={modalIsOpen} onClose={handleClose}>
                 <Modal.Header>
-                    <h4 className='text-4xl  ' >Criar Médico</h4>
+                    <h4 className='text-4xl ' >Criar Médico</h4>
                 </Modal.Header>
                 <Modal.Body style={{ height: "80vh" }} >
                     <UserForm
-                        handleDepartmentChange={handleDepartmentChange}
                         handleRoleChange={handleRoleChange}
                         handleInputChange={setUserData}
                         userData={userData}

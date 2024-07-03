@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserType } from "../@types/user";
+import { UserType } from "../@types/userTypes";
 import { api } from '../services/axiosClient'
 import Cookies from "js-cookie";
 type ChangeUserPayload = {

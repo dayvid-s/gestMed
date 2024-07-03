@@ -1,12 +1,7 @@
-import { CustomProvider, SelectPicker, DatePicker, Calendar, } from 'rsuite';
-import pt_BR from 'rsuite/locales/pt_BR';
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { FaRegPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 import { api } from '../services/axiosClient';
 import { Table, Button, Pagination } from 'rsuite';
 import { MdDeleteOutline } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
 import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
@@ -171,7 +166,7 @@ export default function UsersTable() {
 
           <Cell style={{ padding: '6px' }}>
             {rowData => (
-              <div className="flex flex-row 	" >
+              <div className="flex flex-row " >
                 <MdDeleteOutline style={{ width: '25', height: "25" }} />
                 <CiEdit style={{ width: '25', height: "25" }} />
                 <Button appearance="link" onClick={() => alert(`id:${rowData.id}`)}>
