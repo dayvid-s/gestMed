@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 interface SideBarProps {
-    value: boolean;
+    open: boolean;
 }
 
 const initialState: SideBarProps = {
-    value: false
+    open: false
 }
 
 export const sideBar = createSlice({
@@ -13,10 +13,10 @@ export const sideBar = createSlice({
     initialState,
     reducers: {
         closeSideBar: (state) => {
-                state.value= false
+                state.open= false
         },
         openSideBar: (state) => {
-            state.value = true
+            state.open = true
         },
 
     }

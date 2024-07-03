@@ -111,7 +111,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function SideBarAndHeader({ children }: { children: React.ReactNode }) {
     const router = useRouter()
     const user = useAppSelector((state) => state.auth.user);
-    const open = useAppSelector((state) => state.sideBar.value);
+    const open = useAppSelector((state) => state.sideBar.open);
 
     const dispatch = useDispatch<AppDispatch>();
     const handleLogout = () => {
