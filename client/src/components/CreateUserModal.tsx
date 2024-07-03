@@ -33,6 +33,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         password: '',
         specialization: '',
         role: userRole,
+        gender: ''
     });
     console.log(userData);
 

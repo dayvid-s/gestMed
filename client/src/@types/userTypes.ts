@@ -1,4 +1,5 @@
 export type roles = 'Básico' | 'Médico' | 'Coordernador' | 'Master'
+export type genders = 'Masculino' | 'Feminino' | ''  
 
 
 export interface UserType {
@@ -23,4 +24,5 @@ export type UserData = Omit<UserType, 'id'> & {
     agency: string;
     account: string;
     specialization: string | null;
+    gender: genders;
 };
