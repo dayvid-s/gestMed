@@ -3,6 +3,7 @@ import { Shift } from './Shift';
 
 @Entity('user') 
 export class User {
+	@PrimaryGeneratedColumn('increment') 
 	id: number;
 
 	@Column({ type: 'varchar', length: 255 })
