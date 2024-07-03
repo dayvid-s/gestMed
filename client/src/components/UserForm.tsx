@@ -11,7 +11,7 @@ type UserFormProps = {
     handleRoleChange: (value: roles | null) => void;
 };
 
-export function UserForm({ handleInputChange, userData,  handleRoleChange }: UserFormProps) {
+export function UserForm({ handleInputChange, userData, handleRoleChange }: UserFormProps) {
     const handleInput = (value: string, event: React.ChangeEvent<HTMLInputElement>) => {
         const { name } = event.target;
         handleInputChange(prevState => ({ ...prevState, [name]: value }));
@@ -104,6 +104,10 @@ export function UserForm({ handleInputChange, userData,  handleRoleChange }: Use
                             <Form.Group controlId="account">
                                 <Form.ControlLabel>Conta</Form.ControlLabel>
                                 <Form.Control name="account" value={userData.account} onChange={handleInput} />
+                            </Form.Group>
+                            <Form.Group controlId="gender">
+                                <Form.ControlLabel>Sexo</Form.ControlLabel>
+                                <Form.Control name="gender" value={userData.gender} onChange={handleInput} />
                             </Form.Group>
                         </>
                         : null}

@@ -1,17 +1,20 @@
-import { Request, Response } from 'express'
-import { BadRequestError, NotFoundError } from '../helpers/api-erros'
-import { userRepository } from '../repositories/userRepository'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { roles } from '../@types/user'
+import { Request, Response } from 'express';
+import { BadRequestError, NotFoundError } from '../helpers/api-erros';
+import { userRepository } from '../repositories/userRepository';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { roles, genders, UserData } from '../@types/user';
 
 export class UserController {
 	async create(req: Request, res: Response) {
-		const { name, email, password, specialization, role } = req.body;
+		const {
+			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender,
+		} = req.body;
 
 		const userExists = await userRepository.findOneBy({ email });
 
-		const validRoles: roles[] = ['Básico', 'Coordernador', 'Master', 'Médico'];
+		const validRoles: roles[] = ['Básico', 'Coordenador', 'Master', 'Médico'];
+		const validGenders: genders[] = ['Masculino', 'Feminino', ''];
 
 		if (!name || !email || !password || !role) {
 			throw new BadRequestError('Faltam campos na requisição. Certifique-se de fornecer os campos: name, email, password e role.');
@@ -19,6 +22,25 @@ export class UserController {
 
 		if (!validRoles.includes(role)) {
 			throw new BadRequestError('Role inválido. Os valores válidos são: ' + validRoles.join(', '));
+		}
+
+		if (role === 'Médico') {
+			const requiredFields = ['crm', 'uf', 'city', 'phone', 'cpf', 'rg', 'address', 'bank', 'agency', 'account', 'gender'];
+			const missingFields: string[] = [];
+
+			requiredFields.forEach(field => {
+				if (!req.body[field]) {
+					missingFields.push(field);
+				}
+			});
+
+			if (missingFields.length > 0) {
+				throw new BadRequestError(`Faltam campos na requisição para o cargo/função de "Médico". Certifique-se de fornecer todos os campos obrigatórios: ${missingFields.join(', ')}.`);
+			}
+
+			if (!validGenders.includes(gender)) {
+				throw new BadRequestError('Gênero inválido. Os valores válidos são: ' + validGenders.join(', '));
+			}
 		}
 
 		if (userExists) {
@@ -31,8 +53,19 @@ export class UserController {
 			name,
 			email,
 			password: hashPassword,
-			specialization: specialization ?? 'null',
-			role
+			specialization: specialization ?? '',
+			role,
+			crm,
+			uf,
+			city,
+			phone,
+			cpf,
+			rg,
+			address,
+			bank,
+			agency,
+			account,
+			gender,
 		});
 
 		await userRepository.save(newUser);
@@ -43,34 +76,34 @@ export class UserController {
 	}
 
 	async login(req: Request, res: Response) {
-		const { email, password } = req.body
+		const { email, password } = req.body;
 
-		const user = await userRepository.findOneBy({ email })
+		const user = await userRepository.findOneBy({ email });
 
 		if (!user) {
-			throw new BadRequestError('E-mail ou senha inválidos')
+			throw new BadRequestError('E-mail ou senha inválidos');
 		}
 
-		const verifyPass = await bcrypt.compare(password, user.password)
+		const verifyPass = await bcrypt.compare(password, user.password);
 
 		if (!verifyPass) {
-			throw new BadRequestError('E-mail ou senha inválidos')
+			throw new BadRequestError('E-mail ou senha inválidos');
 		}
 
 		const token = jwt.sign({ id: user.id }, process.env.JWT_PASS ?? '', {
 			expiresIn: '8h',
-		})
+		});
 
-		const { password: _, ...userLogin } = user
+		const { password: _, ...userLogin } = user;
 
 		return res.json({
 			user: userLogin,
 			token: token,
-		})
+		});
 	}
 
 	async getProfile(req: Request, res: Response) {
-		return res.json(req.user)
+		return res.json(req.user);
 	}
 
 	async delete(req: Request, res: Response) {
@@ -94,9 +127,12 @@ export class UserController {
 
 	async update(req: Request, res: Response) {
 		const { id } = req.params;
-		const { name, email, password, specialization, role } = req.body;
+		const {
+			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender,
+		} = req.body;
 
-		const validRoles: roles[] = ['Básico', 'Coordernador', 'Master', 'Médico'];
+		const validRoles: roles[] = ['Básico', 'Coordenador', 'Master', 'Médico'];
+		const validGenders: genders[] = ['Masculino', 'Feminino', ''];
 
 		try {
 			const user = await userRepository.findOneBy({ id: parseInt(id) });
@@ -122,6 +158,37 @@ export class UserController {
 				user.role = role;
 			}
 			if (password) user.password = await bcrypt.hash(password, 10);
+
+			if (role === 'Médico') {
+				const requiredFields = ['crm', 'uf', 'city', 'phone', 'cpf', 'rg', 'address', 'bank', 'agency', 'account', 'gender'];
+				const missingFields: string[] = [];
+
+				requiredFields.forEach(field => {
+					if (!req.body[field]) {
+						missingFields.push(field);
+					}
+				});
+
+				if (missingFields.length > 0) {
+					throw new BadRequestError(`Faltam campos na requisição para o cargo/função de "Médico". Certifique-se de fornecer todos os campos obrigatórios: ${missingFields.join(', ')}.`);
+				}
+
+				if (!validGenders.includes(gender)) {
+					throw new BadRequestError('Gênero inválido. Os valores válidos são: ' + validGenders.join(', '));
+				}
+
+				user.crm = crm ?? user.crm;
+				user.uf = uf ?? user.uf;
+				user.city = city ?? user.city;
+				user.phone = phone ?? user.phone;
+				user.cpf = cpf ?? user.cpf;
+				user.rg = rg ?? user.rg;
+				user.address = address ?? user.address;
+				user.bank = bank ?? user.bank;
+				user.agency = agency ?? user.agency;
+				user.account = account ?? user.account;
+				user.gender = gender ?? user.gender;
+			}
 
 			await userRepository.save(user);
 

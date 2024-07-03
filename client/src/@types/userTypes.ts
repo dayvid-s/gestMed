@@ -1,5 +1,5 @@
-export type roles = 'Básico' | 'Médico' | 'Coordernador' | 'Master'
-export type genders = 'Masculino' | 'Feminino' | ''  
+export type roles = 'Básico' | 'Médico' | 'Coordenador' | 'Master'
+export type genders = 'Masculino' | 'Feminino' | ''
 
 
 export interface UserType {
