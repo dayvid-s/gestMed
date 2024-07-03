@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { CreateScaleModal } from './CreateScaleModal';
 import { AddUsersToScaleModal } from './ModalToAddUsersToScale';
 import { useAppSelector } from '@/utils/useSelectorHook';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { closeSideBar } from '@/features/sideBarSlice';
 
 export function ScalesModel() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const selectedScaleModel = useAppSelector((state) => state.scaleOptions.selectedScaleModel?.label);
+    const dispatch = useDispatch<AppDispatch>();    const selectedScaleModel = useAppSelector((state) => state.scaleOptions.selectedScaleModel?.label);
     
     
     var data = new Date();
@@ -42,7 +45,7 @@ export function ScalesModel() {
 
                         <div className='border-r-2	p-1	border-[#e2e2e2] items-center justify-center   '  >
                             <div
-                                onClick={() => setModalIsOpen(true)} title="Adicionar médico nesse plantão"
+                                onClick={() => {setModalIsOpen(true), dispatch(closeSideBar())}} title="Adicionar médico nesse plantão"
                                 className=' p-1 bg-[#ffffff] border-2 flex 
                               hover:bg-slate-200
                                 cursor-pointer	border-[#b7b7b7]	   rounded		min-h-16 items-center justify-center		 ' >

@@ -5,9 +5,6 @@ import Dayvid from '../assets/dayvid 1.png'
 import Image from 'next/image';
 
 import Link from 'next/link';
-import { FaFile } from "react-icons/fa";
-import { FaFileSignature } from "react-icons/fa";
-import { FaUsers } from "react-icons/fa";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -40,6 +37,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { logoutUser } from '@/features/authSlice';
 import { useRouter } from 'next/navigation';
+import { closeSideBar, openSideBar } from '@/features/sideBarSlice';
 const manrope = Manrope({ subsets: ['latin'] })
 
 
@@ -112,21 +110,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function SideBarAndHeader({ children }: { children: React.ReactNode }) {
     const router = useRouter()
-    const [open, setOpen] = React.useState(false);
     const user = useAppSelector((state) => state.auth.user);
+    const open = useAppSelector((state) => state.sideBar.value);
+
     const dispatch = useDispatch<AppDispatch>();
     const handleLogout = () => {
         
         dispatch(logoutUser())
         router.push("/")
     }
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     return (
         <div className={manrope.className} >
@@ -139,7 +131,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                     <Toolbar sx={{ zIndex: 300 }} >
                         <IconButton
                             aria-label="open drawer"
-                            onClick={handleDrawerOpen}
+                            onClick={() =>{dispatch(openSideBar())}}
                             edge="start"
                             sx={{ zIndex: 300, mr: 2, ...(open && { display: 'none' }) }}
                         >
@@ -194,7 +186,8 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                                     </Link>
                                 </div>
                                 <div className=' mt-10 max-w-14  '>
-                                    <IconButton sx={{ color: "#fff" }} onClick={handleDrawerClose}>
+                                    <IconButton sx={{ color: "#fff" }} onClick={() => { dispatch(closeSideBar()) }}
+>
 
                                         <ChevronLeftIcon sx={{ width: "30px", height: "30px" }} />
                                     </IconButton>

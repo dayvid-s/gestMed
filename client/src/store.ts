@@ -5,6 +5,8 @@ import { UserReducer } from './features/userSlice'
 import { AuthReducer } from './features/authSlice'
 import { ScaleModelReducer } from './features/scaleModelSlice'
 import { ScaleModelOptionReducer } from './features/ScaleModelOptionSlice'
+import { sideBarReducer } from './features/sideBarSlice'
+
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,7 @@ export const store = configureStore({
     auth: AuthReducer,
     scaleModel: ScaleModelReducer,
     scaleOptions: ScaleModelOptionReducer,
+    sideBar: sideBarReducer
 
   }
 
