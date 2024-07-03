@@ -1,7 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Form } from 'rsuite';
 import { SelectPicker } from 'rsuite';
-import { userDepartments, userRoles } from '../utils/userDepartmentHelper'
+import { userDepartments, userRoles } from '../utils/userDepartmentHelper';
+
 type UserData = {
     name: string;
     email: string;
@@ -18,33 +19,30 @@ type UserData = {
     password: string;
     department: string | null;
     role: string | null;
+    sexo: string | null
 };
 
 type UserFormProps = {
     handleInputChange: Dispatch<SetStateAction<UserData>>;
     userData: UserData;
-    handleDepartmentChange:  (value: string | null) => void;
-    handleRoleChange:  (value: string | null) => void;
+    handleDepartmentChange: (value: string | null) => void;
+    handleRoleChange: (value: string | null) => void;
 };
 
-export function UserForm({ handleInputChange, userData,
-    handleDepartmentChange,
-    handleRoleChange
-
-}: UserFormProps) {
-
+export function UserForm({ handleInputChange, userData, handleDepartmentChange, handleRoleChange }: UserFormProps) {
     const handleInput = (value: string, event: React.ChangeEvent<HTMLInputElement>) => {
         const { name } = event.target;
         handleInputChange(prevState => ({ ...prevState, [name]: value }));
     };
 
     return (
-        <Form  >
-            <div className='flex flex-col sm:flex-row flex-wrap gap-y-3.5 justify-between' >
+        <Form>
+            <div className='flex flex-col sm:flex-row flex-wrap gap-y-3.5 justify-between'>
                 <Form.Group controlId="name">
                     <Form.ControlLabel>Nome de usuário</Form.ControlLabel>
-                    <Form.Control name="name" value={userData.name} onChange={handleInput} />
-
+                    <Form.Control
+                        className='max-w-36'
+                        name="name" value={userData.name} onChange={handleInput} />
                 </Form.Group>
                 <Form.Group controlId="email">
                     <Form.ControlLabel>Email</Form.ControlLabel>
@@ -56,36 +54,31 @@ export function UserForm({ handleInputChange, userData,
                 </Form.Group>
 
                 <div className="flex flex-row flex-wrap gap-x-4">
-                    <Form.Group controlId="select-10">
-                        <div>
-                            <Form.ControlLabel>Setor</Form.ControlLabel>
-                            <SelectPicker
-                                className="max-w-32 sm:max-w-max"
-                                value={userData.department}
-                                name="department"
-
-                                onChange={handleDepartmentChange
-
-                                }
-                                data={userDepartments.map(
-                                    item => ({ label: item, value: item })
-                                )}
-                            />
-                        </div>
-                    </Form.Group>
-
                     <Form.Group controlId="select-12">
-                        <div className="ml-10">
+                        <div>
                             <Form.ControlLabel>Permissão</Form.ControlLabel>
                             <SelectPicker
-                                name='role'
+                                name="role"
                                 className="max-w-32 sm:max-w-max"
                                 value={userData.role}
                                 data={userRoles.map(item => ({ label: item, value: item }))}
                                 onChange={handleRoleChange}
                             />
+                        </div>
+                    </Form.Group>
 
-
+                    <Form.Group controlId="select-10">
+                        <div className="ml-10">
+                            <Form.ControlLabel>Setor</Form.ControlLabel>
+                            <SelectPicker
+                                className="max-w-32 sm:max-w-max"
+                                value={userData.department}
+                                name="department"
+                                onChange={handleDepartmentChange}
+                                data={userDepartments.map(
+                                    item => ({ label: item, value: item })
+                                )}
+                            />
                         </div>
                     </Form.Group>
 
@@ -132,6 +125,5 @@ export function UserForm({ handleInputChange, userData,
                 </div>
             </div>
         </Form>
-
     );
 };
