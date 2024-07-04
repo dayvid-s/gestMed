@@ -4,11 +4,13 @@ import { userRepository } from '../repositories/userRepository';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { roles, genders, UserData } from '../@types/user';
+import { shiftRepository } from '../repositories/shiftRepository';
+
 
 export class UserController {
 	async create(req: Request, res: Response) {
 		const {
-			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender,
+			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender, shifts,
 		} = req.body;
 
 		const userExists = await userRepository.findOneBy({ email });
@@ -41,6 +43,10 @@ export class UserController {
 			if (!validGenders.includes(gender)) {
 				throw new BadRequestError('Gênero inválido. Os valores válidos são: ' + validGenders.join(', '));
 			}
+
+			if (!shifts || !Array.isArray(shifts) || shifts.length === 0) {
+				throw new BadRequestError('Turnos são obrigatórios para médicos.');
+			}
 		}
 
 		if (userExists) {
@@ -67,6 +73,13 @@ export class UserController {
 			account,
 			gender,
 		});
+
+		if (role === 'Médico') {
+			const shiftEntities = await shiftRepository.createQueryBuilder("shift")
+				.where("shift.name IN (:...names)", { names: shifts })
+				.getMany();
+			newUser.shifts = shiftEntities;
+		}
 
 		await userRepository.save(newUser);
 
