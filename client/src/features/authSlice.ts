@@ -78,9 +78,7 @@ export const authSlice = createSlice({
             console.log('resultado da action', action.payload.token)
             state.user = action.payload.user;
             state.token = action.payload.token
-            console.log("essa bomba passou", state.user)
             if (state.token) {
-                console.log('meu par')
 
                 Cookies.set("auth_token", state.token, { expires: 1 / 3 });
                 Cookies.set("auth_user", JSON.stringify(state.user), { expires: 1 / 3 });
