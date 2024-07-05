@@ -16,7 +16,9 @@ export function UserForm({ handleInputChange, userData, handleRoleChange }: User
         const { name } = event.target;
         handleInputChange(prevState => ({ ...prevState, [name]: value }));
     };
-
+    const data = ['SD', 'SN', ['SD/ SN']].flat().map(
+        item => ({ label: item, value: item })
+    );
     return (
         <Form>
             <div className='flex flex-col sm:flex-row flex-wrap gap-y-3.5 justify-between'>
@@ -55,7 +57,7 @@ export function UserForm({ handleInputChange, userData, handleRoleChange }: User
                         <>
                             <Form.Group controlId="select-10">
                                 <div className="ml-10">
-                                    <Form.ControlLabel>Setor</Form.ControlLabel>
+                                    <Form.ControlLabel>Especialização</Form.ControlLabel>
                                     <Form.Control
                                         className="max-w-32 sm:max-w-max"
                                         value={userData.specialization}
@@ -109,6 +111,18 @@ export function UserForm({ handleInputChange, userData, handleRoleChange }: User
                                 <Form.ControlLabel>Sexo</Form.ControlLabel>
                                 <Form.Control name="gender" value={userData.gender} onChange={handleInput} />
                             </Form.Group>
+                            <Form.Group controlId="select-type">
+                                <Form.ControlLabel>Tipo</Form.ControlLabel>
+                                <SelectPicker
+                                    name="type"
+                                    className="max-w-32 sm:max-w-max"
+                                    value={userData.}
+                                    data={data}
+                                    onChange={(value) => handleInputChange(prevState => ({ ...prevState, type: value }))}
+
+                                />
+                            </Form.Group>
+
                         </>
                         : null}
                 </div>

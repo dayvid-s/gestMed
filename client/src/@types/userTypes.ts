@@ -1,12 +1,14 @@
 export type roles = 'Básico' | 'Médico' | 'Coordenador' | 'Master';
+export type Shift = 'SD' | 'SN' | 'SD/SN'
+
 export type genders = 'Masculino' | 'Feminino' | '';
 
-export interface Shift {
-    id: number;
-    name: string;
-    start_time: string;
-    end_time: string;
-}
+// export interface Shift {
+//     id: number;
+//     name: string;
+//     start_time: string;
+//     end_time: string;
+// }
 
 export interface UserType {
     id: number | null;
@@ -15,7 +17,7 @@ export interface UserType {
     specialization: string | null;
     password: string | null;
     role: roles | null;
-    shifts: Shift[];
+    shifts: Shift | null;
 }
 
 export type UserData = Omit<UserType, 'id'> & {

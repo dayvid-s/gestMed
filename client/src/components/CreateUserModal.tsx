@@ -2,7 +2,7 @@ import { Button, Modal } from 'rsuite';
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { UserForm } from './UserForm';
 import { api } from '../services/axiosClient';
-import { UserData, roles } from '@/@types/userTypes';
+import { Shift, UserData, roles } from '@/@types/userTypes';
 import { useDispatch } from 'react-redux';
 import { createUser } from '@/features/userSlice';
 import { AppDispatch } from '@/store';
@@ -20,6 +20,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const dispatch = useDispatch<AppDispatch>();
     const handleClose = () => setIsOpen(false);
     const [userRole, setUserRole] = useState<roles | null>(null);
+    const [userShift, setUserShift] = useState<Shift | null>(null);
 
     const [userData, setUserData] = useState<UserData>({
         name: '',
@@ -38,7 +39,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         specialization: '',
         role: userRole,
         gender: '',
-        shifts: []
+        shifts: userShift
     });
     console.log(userData);
 
@@ -51,7 +52,13 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         }));
     };
 
-
+    const handleShiftChange = (value: roles | null) => {
+        setUserRole(value);
+        setUserData(prevData => ({
+            ...prevData,
+            role: value,
+        }));
+    };
     const handleSubmit = async () => {
         try {
             // Validações adicionais podem ser realizadas aqui
