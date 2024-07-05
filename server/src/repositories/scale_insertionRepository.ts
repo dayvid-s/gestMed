@@ -1,3 +1,3 @@
 import { AppDataSource } from '../data-source'
-import { Scale_insertions } from '../entities/Scale_insertion'
-export const scale_insertionsRepository = AppDataSource.getRepository(Scale_insertions)
+import { doctor_duty } from '../entities/Doctor_duty'
+export const doctor_dutyRepository = AppDataSource.getRepository(doctor_duty)

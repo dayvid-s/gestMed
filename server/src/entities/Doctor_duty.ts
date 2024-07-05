@@ -3,8 +3,8 @@ import { User } from './User';
 import { Shift } from './Shift';
 import { Schedule } from './Schedule';
 
-@Entity("scale_insertion")
-export class Scale_insertions {
+@Entity("doctor_duty")
+export class doctor_duty {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -13,7 +13,7 @@ export class Scale_insertions {
 
     @ManyToOne(() => User, user => user.id)
     user: User;
- 
+
     @ManyToOne(() => Shift, shift => shift.id)
     shift: Shift;
 
