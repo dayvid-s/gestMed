@@ -1,6 +1,12 @@
-export type roles = 'Básico' | 'Médico' | 'Coordenador' | 'Master'
-export type genders = 'Masculino' | 'Feminino' | ''
+export type roles = 'Básico' | 'Médico' | 'Coordenador' | 'Master';
+export type genders = 'Masculino' | 'Feminino' | '';
 
+export interface Shift {
+    id: number;
+    name: string;
+    start_time: string;
+    end_time: string;
+}
 
 export interface UserType {
     id: number | null;
@@ -9,8 +15,8 @@ export interface UserType {
     specialization: string | null;
     password: string | null;
     role: roles | null;
+    shifts: Shift[];
 }
-
 
 export type UserData = Omit<UserType, 'id'> & {
     crm: string;
