@@ -1,6 +1,6 @@
-'use client'
-import React, { useState } from 'react';
-import UsersTable from '../../../components/UsersTable';
+"use client";
+import React, { useState } from "react";
+import UsersTable from "../../../components/UsersTable";
 
 export default function Users() {
 
@@ -11,4 +11,4 @@ export default function Users() {
 
     </div>
   );
-};
+}

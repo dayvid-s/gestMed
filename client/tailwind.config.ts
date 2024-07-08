@@ -9,10 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'manrope': ['Manrope', 'sans-serif'],
+        "manrope": ["Manrope", "sans-serif"],
       },
       colors: {
-        green500: 'var(--green500)',
+        green500: "var(--green500)",
       },
 
     },

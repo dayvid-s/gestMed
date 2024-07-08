@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { UserData } from '../@types/userTypes';
-import { api } from '@/services/axiosClient';
+import { api } from "@/services/axiosClient";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { UserData } from "../@types/userTypes";
 
 type UserState = {
     user: UserData | null;
@@ -20,15 +20,15 @@ export const createUser = createAsyncThunk<
     UserData,
     UserData,
     { rejectValue: string }
->('user/createUser', async (userData, { rejectWithValue }) => {
+>("user/createUser", async (userData, { rejectWithValue }) => {
   try {
-    const response = await api.post('/user', userData);
+    const response = await api.post("/user", userData);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
       return rejectWithValue(error.message);
     } else {
-      return rejectWithValue('Erro desconhecido');
+      return rejectWithValue("Erro desconhecido");
     }
   }
 });
@@ -37,7 +37,7 @@ export const deleteUser = createAsyncThunk<
     number,
     number,
     { rejectValue: string }
->('user/deleteUser', async (userId, { rejectWithValue }) => {
+>("user/deleteUser", async (userId, { rejectWithValue }) => {
   try {
     await api.delete(`/user/${userId}`);
     return userId;
@@ -45,7 +45,7 @@ export const deleteUser = createAsyncThunk<
     if (error instanceof Error) {
       return rejectWithValue(error.message);
     } else {
-      return rejectWithValue('Erro desconhecido');
+      return rejectWithValue("Erro desconhecido");
     }
   }
 });
@@ -54,21 +54,21 @@ export const fetchUsers = createAsyncThunk<
     UserData[],
     void,
     { rejectValue: string }
->('user/fetchUsers', async (_, { rejectWithValue }) => {
+>("user/fetchUsers", async (_, { rejectWithValue }) => {
   try {
-    const response = await api.get('/users');
+    const response = await api.get("/users");
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
       return rejectWithValue(error.message);
     } else {
-      return rejectWithValue('Erro desconhecido');
+      return rejectWithValue("Erro desconhecido");
     }
   }
 });
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {},
   extraReducers: builder => {
@@ -88,7 +88,7 @@ const userSlice = createSlice({
         createUser.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.loading = false;
-          state.error = action.payload || 'Erro ao criar usuário';
+          state.error = action.payload || "Erro ao criar usuário";
         },
       )
       .addCase(deleteUser.pending, state => {
@@ -106,7 +106,7 @@ const userSlice = createSlice({
         deleteUser.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.loading = false;
-          state.error = action.payload || 'Erro ao deletar usuário';
+          state.error = action.payload || "Erro ao deletar usuário";
         },
       )
       .addCase(fetchUsers.pending, state => {
@@ -124,7 +124,7 @@ const userSlice = createSlice({
         fetchUsers.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.loading = false;
-          state.error = action.payload || 'Erro ao buscar usuários';
+          state.error = action.payload || "Erro ao buscar usuários";
         },
       );
   },

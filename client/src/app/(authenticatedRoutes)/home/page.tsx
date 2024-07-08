@@ -1,13 +1,7 @@
-'use client'
-import React from 'react';
+"use client";
 
-import Link from 'next/link';
-import { FaFile } from "react-icons/fa";
-import { FaFileSignature } from "react-icons/fa";
-import { FaUserPen } from "react-icons/fa6";
-import { FaUsers } from "react-icons/fa";
 // import { Welcome } from '../../../components/Welcome';
-import { WrapperWithSchedulesOfAllDoctors } from '../../../components/WrapperWithSchedulesOfAllDoctors';
+import { WrapperWithSchedulesOfAllDoctors } from "../../../components/WrapperWithSchedulesOfAllDoctors";
 
 
 export default function Page() {

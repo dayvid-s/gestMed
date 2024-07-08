@@ -1,7 +1,7 @@
-export type roles = 'Básico' | 'Médico' | 'Coordenador' | 'Master';
-export type Shifts = 'SD' | 'SN' | 'SD/SN'
+export type roles = "Básico" | "Médico" | "Coordenador" | "Master";
+export type Shifts = "SD" | "SN" | "SD/SN"
 
-export type genders = 'Masculino' | 'Feminino' | '';
+export type genders = "Masculino" | "Feminino" | "";
 
 // export interface Shift {
 //     id: number;

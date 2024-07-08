@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Pagination } from 'rsuite';
-import { MdDeleteOutline } from "react-icons/md";
+import { deleteUser, fetchUsers } from "@/features/userSlice";
+import { useAppSelector } from "@/utils/useSelectorHook";
+import { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
-import { useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../store';
-import { fetchUsers, deleteUser } from '@/features/userSlice';
-import ActiveItem from './ActiveItem';
-import { useAppSelector } from '@/utils/useSelectorHook';
+import { MdDeleteOutline } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { Pagination, Table } from "rsuite";
+import { AppDispatch, RootState } from "../store";
+import ActiveItem from "./ActiveItem";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -35,7 +35,7 @@ export default function UsersTable() {
     }
   };
 
-  // @ts-ignore
+  // @ts-expect-error because u
   const data = limit === "Todos" ? users : users.slice((page - 1) * limit, page * limit);
 
   return (
@@ -79,15 +79,15 @@ export default function UsersTable() {
 
         <Column resizable width={90} fixed="right">
           <HeaderCell>Ações</HeaderCell>
-          <Cell style={{ padding: '6px' }}>
+          <Cell style={{ padding: "6px" }}>
             {rowData => (
               <div className="flex flex-row ">
                 <MdDeleteOutline
-                  style={{ width: '25px', height: "25px", cursor: 'pointer' }}
+                  style={{ width: "25px", height: "25px", cursor: "pointer" }}
                   onClick={() => handleDeleteUser(rowData.id)}
                 />
                 <CiEdit
-                  style={{ width: '25px', height: "25px", cursor: 'pointer' }}
+                  style={{ width: "25px", height: "25px", cursor: "pointer" }}
                 />
               </div>
             )}
@@ -103,7 +103,7 @@ export default function UsersTable() {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['total', '-', 'limit', '|', 'pager']}
+        layout={["total", "-", "limit", "|", "pager"]}
         total={users.length}
         // @ts-ignore
         limitOptions={[10, 30, 50, "Todos"]}

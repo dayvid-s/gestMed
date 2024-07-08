@@ -5,8 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended"
+        "plugin:@typescript-eslint/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -28,11 +27,15 @@
         ],
         "quotes": [
             "error",
-            "single"
+            "double"
         ],
         "semi": [
             "error",
             "always"
-        ]
+        ],
+
+        "react/react-in-jsx-scope": "off",
+        "no-unused-vars": "error",
+        "no-undef": "error"
     }
 }

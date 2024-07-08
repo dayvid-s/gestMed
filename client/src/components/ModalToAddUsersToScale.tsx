@@ -1,9 +1,9 @@
-import { Form, Modal, SelectPicker } from 'rsuite';
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import Dayvid from '../assets/dayvid 1.png';
-import Image from 'next/image';
-import { Manrope } from 'next/font/google';
-const manrope = Manrope({ subsets: ['latin'] });
+import { Manrope } from "next/font/google";
+import Image from "next/image";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Form, Modal, SelectPicker } from "rsuite";
+import Dayvid from "../assets/dayvid 1.png";
+const manrope = Manrope({ subsets: ["latin"] });
 
 export interface ImodalProps {
     modalIsOpen: boolean;
@@ -14,14 +14,14 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
   const handleClose = () => setIsOpen(false);
 
   const quantityOfDaysOptions = [
-    { label: 'SD', value: 'SD' },
-    { label: 'SN', value: 'SN' },
+    { label: "SD", value: "SD" },
+    { label: "SN", value: "SN" },
   ];
 
   const [doctorInfo, setDoctorInfo] = useState({
-    name: '',
-    especiality: '',
-    quantityOfDays: 'null', // Valor inicial atualizado para 'SD'
+    name: "",
+    especiality: "",
+    quantityOfDays: "null", // Valor inicial atualizado para 'SD'
   });
 
   const handleInputChange = (name: string, value: string) => {
@@ -41,7 +41,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         <Modal.Header>
           <h4 className='text-4xl font-semibold'>Adicionar Médicos na Escala</h4>
         </Modal.Header>
-        <Modal.Body style={{ height: '80vh' }}>
+        <Modal.Body style={{ height: "80vh" }}>
 
 
           <Form>

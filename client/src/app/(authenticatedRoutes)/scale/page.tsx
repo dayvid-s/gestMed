@@ -1,8 +1,8 @@
-'use client'
-import { ChoiceScale } from '@/components/ChoiceScale'
-import { ScalesModel } from '@/components/ScalesModel';
+"use client";
+import { ChoiceScale } from "@/components/ChoiceScale";
+import { ScalesModel } from "@/components/ScalesModel";
 
-import React from 'react';
+import React from "react";
 
 export default function Scale() {
   
@@ -17,4 +17,4 @@ export default function Scale() {
       <ScalesModel/>
     </div>
   );
-};
+}

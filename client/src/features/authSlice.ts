@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { UserType } from '../@types/userTypes';
-import { api } from '../services/axiosClient';
-import Cookies from 'js-cookie';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
+import { UserType } from "../@types/userTypes";
+import { api } from "../services/axiosClient";
 type ChangeUserPayload = {
     user: UserType;
 };
@@ -29,11 +29,11 @@ const initialState: AuthState = {
 };
 
 export const signInAsync = createAsyncThunk(
-  'user/signInAsync',
+  "user/signInAsync",
   async (payload: SignInPayload) => {
     try {
-      console.log('veio aq dados:', payload.email, payload.password);
-      const response = await api.post('/login', {
+      console.log("veio aq dados:", payload.email, payload.password);
+      const response = await api.post("/login", {
         email: payload.email,
         password: payload.password,
       });
@@ -41,21 +41,21 @@ export const signInAsync = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      console.error("Erro ao fazer login:", error);
       throw error;
     }
   }
 );
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     changeUser: (state, action: PayloadAction<ChangeUserPayload>) => {
       state.user = action.payload.user;
     },
     searchUser: (state) => {
-      const userCookie = Cookies.get('auth_user');
-      const tokenCookie = Cookies.get('auth_token');
+      const userCookie = Cookies.get("auth_user");
+      const tokenCookie = Cookies.get("auth_token");
       const isAuthenticated = state.user?.id !== null && initialState.token !== null;
 
       if (!isAuthenticated) {
@@ -66,8 +66,8 @@ export const authSlice = createSlice({
       }
     },
     logoutUser: (state) => {
-      Cookies.remove('auth_user');
-      Cookies.remove('auth_token');
+      Cookies.remove("auth_user");
+      Cookies.remove("auth_token");
 
       state.user = null;
       state.token = null;
@@ -76,23 +76,23 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(signInAsync.fulfilled, (state, action: PayloadAction<AuthState>) => {
-      console.log('resultado da action', action.payload.token);
+      console.log("resultado da action", action.payload.token);
       state.user = action.payload.user;
       state.token = action.payload.token;
       if (state.token) {
 
-        Cookies.set('auth_token', state.token, { expires: 1 / 3 });
-        Cookies.set('auth_user', JSON.stringify(state.user), { expires: 1 / 3 });
-        api.defaults.headers.common['Authorization'] =
+        Cookies.set("auth_token", state.token, { expires: 1 / 3 });
+        Cookies.set("auth_user", JSON.stringify(state.user), { expires: 1 / 3 });
+        api.defaults.headers.common["Authorization"] =
                     `Bearer ${action.payload.token}`;
       }
     })
       .addCase(signInAsync.rejected, (state, action) => {
-        console.error('Erro ao fazer login:', action.error.message);
+        console.error("Erro ao fazer login:", action.error.message);
         state.user = null;
         state.token = null;
-        Cookies.remove('@Auth:token');
-        Cookies.remove('@Auth:user');
+        Cookies.remove("@Auth:token");
+        Cookies.remove("@Auth:user");
       });
   },
 });
