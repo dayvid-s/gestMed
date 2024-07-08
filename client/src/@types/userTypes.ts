@@ -1,5 +1,5 @@
 export type roles = 'Básico' | 'Médico' | 'Coordenador' | 'Master';
-export type Shift = 'SD' | 'SN' | 'SD/SN'
+export type Shifts = 'SD' | 'SN' | 'SD/SN'
 
 export type genders = 'Masculino' | 'Feminino' | '';
 
@@ -17,10 +17,16 @@ export interface UserType {
     specialization: string | null;
     password: string | null;
     role: roles | null;
-    shifts: Shift | null;
+    shift: Shifts | null;
 }
-
-export type UserData = Omit<UserType, 'id'> & {
+export interface UserData {
+    id: number;
+    name: string | null;
+    email: string | null;
+    specialization: string | null;
+    password: string | null;
+    role: roles | null;
+    shift: Shifts | null;
     crm: string;
     uf: string;
     city: string;
@@ -31,6 +37,5 @@ export type UserData = Omit<UserType, 'id'> & {
     bank: string;
     agency: string;
     account: string;
-    specialization: string | null;
     gender: genders;
-};
+}

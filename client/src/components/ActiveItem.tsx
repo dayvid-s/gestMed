@@ -11,13 +11,12 @@ export default function ActiveItem() {
         <div className='flex flex-row align-center white' >
             <Nav className='whitespace-normal' appearance="subtle">
                 <Nav.Item active>Todos</Nav.Item>
-                <Nav.Item >Administradores</Nav.Item>
-                <Nav.Item >Membros básicos</Nav.Item>
-                <Nav.Menu title="Por setor">
-                    <Nav.Item>TI</Nav.Item>
+                <Nav.Item >Usuário Master</Nav.Item>
+                <Nav.Item >Coordernadores</Nav.Item>
+                <Nav.Menu title="Por Especialização">
                     {/* <Nav.Item active>Financeiro</Nav.Item> */}
-                    <Nav.Item>Financeiro</Nav.Item>
-                    <Nav.Item>Setor Oncólogico</Nav.Item>
+                    <Nav.Item>Cardiologista</Nav.Item>
+                    <Nav.Item>Ginecologista</Nav.Item>
                 </Nav.Menu>
 
             </Nav>

@@ -2,7 +2,7 @@ import { Button, Modal } from 'rsuite';
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { UserForm } from './UserForm';
 import { api } from '../services/axiosClient';
-import { Shift, UserData, roles } from '@/@types/userTypes';
+import { Shifts, UserData, roles } from '@/@types/userTypes';
 import { useDispatch } from 'react-redux';
 import { createUser } from '@/features/userSlice';
 import { AppDispatch } from '@/store';
@@ -20,9 +20,10 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     const dispatch = useDispatch<AppDispatch>();
     const handleClose = () => setIsOpen(false);
     const [userRole, setUserRole] = useState<roles | null>(null);
-    const [userShift, setUserShift] = useState<Shift | null>(null);
+    const [userShift, setUserShift] = useState<Shifts | null>(null);
 
     const [userData, setUserData] = useState<UserData>({
+        id: 1,
         name: '',
         email: '',
         crm: '',
@@ -39,7 +40,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         specialization: '',
         role: userRole,
         gender: '',
-        shifts: userShift
+        shift: userShift
     });
     console.log(userData);
 
@@ -52,13 +53,15 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         }));
     };
 
-    const handleShiftChange = (value: roles | null) => {
-        setUserRole(value);
+    const handleShiftChange = (value: Shifts | null) => {
+        setUserShift(value);
         setUserData(prevData => ({
             ...prevData,
-            role: value,
+            shift: value,
         }));
     };
+
+
     const handleSubmit = async () => {
         try {
             // Validações adicionais podem ser realizadas aqui
@@ -80,6 +83,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
                 <Modal.Body style={{ height: "80vh" }} >
                     <UserForm
                         handleRoleChange={handleRoleChange}
+                        handleShiftChange={handleShiftChange}
                         handleInputChange={setUserData}
                         userData={userData}
                     />

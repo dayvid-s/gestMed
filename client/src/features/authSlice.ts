@@ -22,7 +22,8 @@ const initialState: AuthState = {
         name: null,
         specialization: null,
         password: null,
-        role: null
+        role: null,
+        shift: null
     },
     token: null
 };

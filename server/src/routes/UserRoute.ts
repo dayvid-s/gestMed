@@ -10,4 +10,7 @@ router.post("/login", userController.login);
 router.post("/profile", authMiddleware, userController.getProfile);
 router.delete("/delete/:id", authMiddleware, userController.delete);
 router.put("/update/:id", authMiddleware, userController.update);
+router.get("/users", authMiddleware, userController.getAllUsers);
+
+
 export default router;

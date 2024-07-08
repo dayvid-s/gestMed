@@ -1,127 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../services/axiosClient';
-import { Table, Button, Pagination } from 'rsuite';
+import { Table, Pagination } from 'rsuite';
 import { MdDeleteOutline } from "react-icons/md";
-import { Inter } from 'next/font/google'
-const inter = Inter({ subsets: ['latin'] })
-
 import { CiEdit } from "react-icons/ci";
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { fetchUsers, deleteUser } from '@/features/userSlice';
 import ActiveItem from './ActiveItem';
-
+import { useAppSelector } from '@/utils/useSelectorHook';
 
 const { Column, HeaderCell, Cell } = Table;
 
-interface User {
-  id: number;
-  name: string;
-  creationDate: string; // ou Date, dependendo do tipo retornado pelo backend
-  department: string;
-}
-
-async function getData() {
-  try {
-    const response = await api.get('/users');
-
-    return response.data;
-  } catch (error) {
-    throw new Error('Failed to fetch data');
-  }
-}
-
 export default function UsersTable() {
-  const [users, setUsers] = useState<User[]>([]);
-  const defaultData = [
-    {
-      id: 1,
-      firstName: 'Molecule Man',
-      age: 29,
-      postcode: 29,
-      gender: 'Dansdsdsssssssssssss Jukes',
-      email: 'Dan Jukes',
-      lastName: 'Turning tiny',
-    },
-    {
-      id: 2,
-      firstName: 'Madame Uppercut',
-      age: 39,
-      postcode: 39,
-      gender: 'Jane Wilson',
-      email: 'Jane Wilson',
-      lastName: 'Damage resistance',
-    }, {
-      id: 2,
-      firstName: 'Madame Uppercut',
-      age: 39,
-      postcode: 39,
-      gender: 'Jane Wilson',
-      email: 'Jane Wilson',
-      lastName: 'Damage resistance',
-    }, {
-      id: 2,
-      firstName: 'Madame Uppercut',
-      age: 39,
-      postcode: 39,
-      gender: 'Jane Wilson',
-      email: 'Jane Wilson',
-      lastName: 'Damage resistance',
-    }, {
-      id: 2,
-      firstName: 'Madame akdkadka',
-      age: 39,
-      postcode: 39,
-      gender: 'Jane Wilson',
-      email: 'Jane Wilson',
-      lastName: 'Damage resistance',
-    }, {
-      id: 2,
-      firstName: 'Madame Uppercut',
-      age: 39,
-      postcode: 39,
-      gender: 'Jane Wilson',
-      email: 'Jane Wilson',
-      lastName: 'Damage resistance',
-    },
-  ];
+  const dispatch = useDispatch<AppDispatch>();
+  const users = useAppSelector((state: RootState) => state.user.users);
+  const loading = useAppSelector((state: RootState) => state.user.loading);
+
+  const [limit, setLimit] = useState<number>(10);
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getData();
-        setUsers(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
-    fetchData();
-  }, []);
-
-  async function handleDeleteUser(userId: number) {
-    try {
-      await api.delete(`/users/${userId}`);
-      // Atualize a lista de usuários após a exclusão
-      const updatedUsers = users.filter(user => user.id !== userId);
-      setUsers(updatedUsers);
-    } catch (error) {
-      console.error('Failed to delete user', error);
-    }
-  }
-
-  const [limit, setLimit] = React.useState(5);
-  const [page, setPage] = React.useState(1);
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
+  const handleDeleteUser = (userId: number) => {
+    dispatch(deleteUser(userId));
   };
-  const data = defaultData.filter((v, i) => {
-    const start = limit * (page - 1);
-    const end = start + limit;
-    return i >= start && i < end;
-  });
+
+  const handleChangeLimit = (dataKey: number | "Todos") => {
+    setPage(1);
+    if (dataKey === "Todos") {
+      setLimit(users.length);
+    } else {
+      setLimit(dataKey);
+    }
+  };
+
+  // @ts-ignore
+  const data = limit === "Todos" ? users : users.slice((page - 1) * limit, page * limit);
+
   return (
-
-
-    <div className='' >
+    <div className=''>
       <ActiveItem />
 
       <Table
@@ -132,50 +50,51 @@ export default function UsersTable() {
         onRowClick={rowData => {
           console.log(rowData);
         }}
+        loading={loading}
       >
         <Column resizable width={60} align="center" fixed>
           <HeaderCell>Id</HeaderCell>
           <Cell dataKey="id" />
         </Column>
 
-        <Column resizable width={250}
-        >
+        <Column resizable width={250}>
           <HeaderCell>Nome</HeaderCell>
-          <Cell dataKey="firstName" />
+          <Cell dataKey="name" />
         </Column>
 
-        <Column
-          resizable width={350}>
+        <Column resizable width={350}>
           <HeaderCell>Email</HeaderCell>
-          <Cell dataKey="lastName" />
+          <Cell dataKey="email" />
         </Column>
 
         <Column resizable width={200}>
-          <HeaderCell>Setor</HeaderCell>
-          <Cell dataKey="gender" />
-        </Column>
-
-        <Column resizable width={190}>
           <HeaderCell>Permissão</HeaderCell>
-          <Cell dataKey="age" />
+          <Cell dataKey="role" />
         </Column>
 
+        <Column resizable width={200}>
+          <HeaderCell>Especialização</HeaderCell>
+          <Cell dataKey="specialization" />
+        </Column>
 
         <Column resizable width={90} fixed="right">
-          <HeaderCell >Ações</HeaderCell>
-
+          <HeaderCell>Ações</HeaderCell>
           <Cell style={{ padding: '6px' }}>
             {rowData => (
-              <div className="flex flex-row " >
-                <MdDeleteOutline style={{ width: '25', height: "25" }} />
-                <CiEdit style={{ width: '25', height: "25" }} />
-                <Button appearance="link" onClick={() => alert(`id:${rowData.id}`)}>
-                </Button>
+              <div className="flex flex-row ">
+                <MdDeleteOutline
+                  style={{ width: '25px', height: "25px", cursor: 'pointer' }}
+                  onClick={() => handleDeleteUser(rowData.id)}
+                />
+                <CiEdit
+                  style={{ width: '25px', height: "25px", cursor: 'pointer' }}
+                />
               </div>
             )}
           </Cell>
         </Column>
       </Table>
+
       <Pagination
         style={{ marginTop: "20px", marginLeft: "30px", marginRight: "30px" }}
         prev
@@ -184,9 +103,10 @@ export default function UsersTable() {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['total', '-', 'limit', '|', 'pager',]}
-        total={defaultData.length}
-        limitOptions={[10, 30, 50]}
+        layout={['total', '-', 'limit', '|', 'pager']}
+        total={users.length}
+        // @ts-ignore
+        limitOptions={[10, 30, 50, "Todos"]}
         limit={limit}
         activePage={page}
         onChangePage={setPage}

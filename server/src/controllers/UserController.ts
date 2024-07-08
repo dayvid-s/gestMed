@@ -6,11 +6,10 @@ import jwt from 'jsonwebtoken';
 import { roles, genders, UserData } from '../@types/user';
 import { shiftRepository } from '../repositories/shiftRepository';
 
-
 export class UserController {
 	async create(req: Request, res: Response) {
 		const {
-			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender, shifts,
+			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender, shift,
 		} = req.body;
 
 		const userExists = await userRepository.findOneBy({ email });
@@ -37,15 +36,15 @@ export class UserController {
 			});
 
 			if (missingFields.length > 0) {
-				throw new BadRequestError(`Faltam campos na requisição para o cargo/função de "Médico". Certifique-se de fornecer todos os campos obrigatórios: ${missingFields.join(', ')}.`);
+				throw new BadRequestError(`Faltam campos na requisição para o cargo / função de "Médico".Certifique-se de fornecer todos os campos obrigatórios: ${missingFields.join(', ')}.`);
 			}
 
 			if (!validGenders.includes(gender)) {
 				throw new BadRequestError('Gênero inválido. Os valores válidos são: ' + validGenders.join(', '));
 			}
 
-			if (!shifts || !Array.isArray(shifts) || shifts.length === 0) {
-				throw new BadRequestError('Turnos são obrigatórios para médicos.');
+			if (!shift) {
+				throw new BadRequestError('Turno é obrigatório para médicos.');
 			}
 		}
 
@@ -72,20 +71,23 @@ export class UserController {
 			agency,
 			account,
 			gender,
+			shift,
 		});
-
-		if (role === 'Médico') {
-			const shiftEntities = await shiftRepository.createQueryBuilder("shift")
-				.where("shift.name IN (:...names)", { names: shifts })
-				.getMany();
-			newUser.shifts = shiftEntities;
-		}
 
 		await userRepository.save(newUser);
 
 		const { password: _, ...user } = newUser;
 
 		return res.status(201).json(user);
+	}
+
+	async getAllUsers(req: Request, res: Response) {
+		try {
+			const users = await userRepository.find();
+			return res.json(users);
+		} catch (error) {
+			return res.status(500).json({ error: "Failed to fetch users" });
+		}
 	}
 
 	async login(req: Request, res: Response) {
@@ -141,7 +143,7 @@ export class UserController {
 	async update(req: Request, res: Response) {
 		const { id } = req.params;
 		const {
-			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender,
+			name, email, password, specialization, role, crm, uf, city, phone, cpf, rg, address, bank, agency, account, gender, shift,
 		} = req.body;
 
 		const validRoles: roles[] = ['Básico', 'Coordenador', 'Master', 'Médico'];
@@ -183,7 +185,7 @@ export class UserController {
 				});
 
 				if (missingFields.length > 0) {
-					throw new BadRequestError(`Faltam campos na requisição para o cargo/função de "Médico". Certifique-se de fornecer todos os campos obrigatórios: ${missingFields.join(', ')}.`);
+					throw new BadRequestError(`Faltam campos na requisição para o cargo / função de "Médico".Certifique - se de fornecer todos os campos obrigatórios: ${missingFields.join(', ')}.`);
 				}
 
 				if (!validGenders.includes(gender)) {
@@ -201,6 +203,7 @@ export class UserController {
 				user.agency = agency ?? user.agency;
 				user.account = account ?? user.account;
 				user.gender = gender ?? user.gender;
+				user.shift = shift ?? user.shift;
 			}
 
 			await userRepository.save(user);

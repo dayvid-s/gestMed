@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Shift } from './Shift';
 
-@Entity('user') 
+@Entity('user')
 export class User {
-	@PrimaryGeneratedColumn('increment') 
+	@PrimaryGeneratedColumn('increment')
 	id: number;
 
 	@Column({ type: 'varchar', length: 255 })
@@ -16,44 +16,44 @@ export class User {
 	password: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	specialization: string ;
+	specialization: string;
 
 	@Column({ type: 'varchar', length: 255 })
 	role: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	crm: string ;
+	crm: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	uf: string ;
+	uf: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	city: string ;
+	city: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	phone: string ;
+	phone: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	cpf: string ;
+	cpf: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	rg: string ;
+	rg: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	address: string ;
+	address: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	bank: string ;
+	bank: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	agency: string ;
+	agency: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	account: string ;
+	account: string;
 
 	@Column({ type: 'varchar', length: 255, nullable: true })
-	gender: string ;
-	
+	gender: string;
+
 	@CreateDateColumn()
 	created_at: Date;
 
@@ -62,5 +62,5 @@ export class User {
 
 	@ManyToMany(() => Shift)
 	@JoinTable()
-	shifts: Shift[];
+	shift: Shift[];
 }
