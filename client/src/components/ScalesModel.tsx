@@ -1,65 +1,79 @@
-import React, { useState } from 'react';
-import { CreateScaleModal } from './CreateScaleModal';
+import React, { useState, useEffect } from 'react';
 import { AddUsersToScaleModal } from './ModalToAddUsersToScale';
 import { useAppSelector } from '@/utils/useSelectorHook';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { closeSideBar } from '@/features/sideBarSlice';
+import { ScaleBackendModel } from '@/@types/scaleTypes';
 
 export function ScalesModel() {
-    const [modalIsOpen, setModalIsOpen] = useState(false)
-    const dispatch = useDispatch<AppDispatch>();    const selectedScaleModel = useAppSelector((state) => state.scaleOptions.selectedScaleModel?.label);
-    
-    
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const [actualModelScaleInfo, setActualModelScaleInfo] = useState<ScaleBackendModel | null>(null);
+
+    const dispatch = useDispatch<AppDispatch>();
+    const AllScales = useAppSelector((state) => state.scaleModel.scaleModels);
+    const selectedScaleModel = useAppSelector((state) => state.scaleOptions.selectedScaleModel);
+
+    console.log(actualModelScaleInfo, selectedScaleModel)
+    useEffect(() => {
+        if (selectedScaleModel) {
+            const foundScale = AllScales.find(scale => scale.name === selectedScaleModel.value);
+            // @ts-ignore
+            setActualModelScaleInfo(foundScale || null);
+        } else {
+            setActualModelScaleInfo(null);
+        }
+    }, [selectedScaleModel, AllScales]);
+
+    if (!selectedScaleModel) {
+        return (
+            <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
+                <h1 className='text-3xl font-extrabold'>Modelo de escala não selecionado</h1>
+            </div>
+        );
+    }
+
+    const totalDiasEscala = actualModelScaleInfo?.total_of_schedule_days;
+
     var data = new Date();
     var ano = data.getFullYear();
     var mes = data.getMonth() + 1;
-    var totalDiasMes = new Date(ano, mes, 0).getDate();
 
-    var dias = Array.from({ length: totalDiasMes }, (_, i) => i + 1);
+    var dias = Array.from({ length: totalDiasEscala || 0 }, (_, i) => i + 1);
     var diasDaSemana = ['Dom', 'Seg', 'Ter', 'Quar', 'Qui', 'Sex', 'Sáb'];
-    return (
-        <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col	 pb-10 '  >
 
-            <h1 className='text-3xl font-extrabold ' >
-                &lt;{selectedScaleModel}&gt;
+    return (
+        <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
+            <h1 className='text-3xl font-extrabold'>
+                &lt;{selectedScaleModel.label}&gt;
             </h1>
 
             <div className='flex flex-wrap items-start justify-center mt-5'>
-                {dias.map((dia) =>
-
-                    // aqui a coluna 
-                    <div className='flex flex-col ' key={dia}>
-
-
-
-
-                        {/* aqui os 2 textos que indicam a semana  */}
-                        <div className='flex justify-between px-3 w-60 bg-green500 ' >
-                            <h4 className='text-white ' >{diasDaSemana[new Date(ano, mes - 1, dia).getDay()]}</h4>
-                            <h4 className='text-white ' >{dia.toString().padStart(2, '0')}/{mes.toString().padStart(2, '0')}</h4>
+                {dias.map((dia) => (
+                    <div className='flex flex-col' key={dia}>
+                        <div className='flex justify-between px-3 w-60 bg-green500'>
+                            <h4 className='text-white'>
+                                {diasDaSemana[new Date(ano, mes - 1, dia).getDay()]}
+                            </h4>
+                            <h4 className='text-white'>
+                                {dia.toString().padStart(2, '0')}/{mes.toString().padStart(2, '0')}
+                            </h4>
                         </div>
 
-
-                        {/* aqui os cards com info do plantao */}
-
-                        <div className='border-r-2	p-1	border-[#e2e2e2] items-center justify-center   '  >
+                        <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center'>
                             <div
-                                onClick={() => {setModalIsOpen(true), dispatch(closeSideBar())}} title="Adicionar médico nesse plantão"
-                                className=' p-1 bg-[#ffffff] border-2 flex 
-                              hover:bg-slate-200
-                                cursor-pointer	border-[#b7b7b7]	   rounded		min-h-16 items-center justify-center		 ' >
-
-                                <p className='text-4xl text-slate-300' >+</p>
+                                onClick={() => { setModalIsOpen(true); dispatch(closeSideBar()); }}
+                                title="Adicionar médico nesse plantão"
+                                className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
+                                <p className='text-4xl text-slate-300'>+</p>
                             </div>
                         </div>
-
                     </div>
-                )}
+                ))}
             </div>
 
-            <AddUsersToScaleModal
-                setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
+            <AddUsersToScaleModal setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
         </div>
     );
 }

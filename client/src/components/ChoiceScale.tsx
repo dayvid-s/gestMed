@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { fetchAllScaleModels } from "@/features/scaleModelSlice";
 
-import {  clearSelectedScaleModel, setSelectedScaleModel } from "@/features/ScaleModelOptionSlice";
+import { clearSelectedScaleModel, setSelectedScaleModel } from "@/features/ScaleModelOptionSlice";
 import { AppDispatch } from "@/store";
 export function ChoiceScale() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -19,16 +19,17 @@ export function ChoiceScale() {
         dispatch(fetchAllScaleModels());
     }, [dispatch]);
 
-    useEffect(() => {
-        if (scaleModels.length > 0) {
-            const formattedData = scaleModels.map(scale => ({
-                label: scale.name,
-                value: scale.name
-            }));
-            dispatch(setSelectedScaleModel(formattedData[0])); 
-        }
-    }, [scaleModels, dispatch]);
-    
+
+    // useEffect(() => {
+    //     if (scaleModels.length > 0) {
+    //         const formattedData = scaleModels.map(scale => ({
+    //             label: scale.name,
+    //             value: scale.name
+    //         }));
+    //         dispatch(setSelectedScaleModel(formattedData[0])); 
+    //     }
+    // }, [scaleModels, dispatch]);
+
     const handleScaleModelChange = (value: any) => {
         if (value) {
             const selectedOption = scaleModels.find(scale => scale.name === value);
@@ -52,7 +53,7 @@ export function ChoiceScale() {
                     data={scaleModels.map(scale => ({
                         label: scale.name,
                         value: scale.name
-                    }))}                    searchable={true}
+                    }))} searchable={true}
                     style={{ width: 224 }}
                     placeholder="Escolha uma escala"
                 />
