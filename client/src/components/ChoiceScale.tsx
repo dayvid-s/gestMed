@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { SelectPicker } from "rsuite";
 import { CreateScaleModal } from "./CreateScaleModal";
 
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "@/utils/useSelectorHook";
 import { fetchAllScaleModels } from "@/features/scaleModelSlice";
+import { useAppSelector } from "@/utils/useSelectorHook";
+import { useDispatch } from "react-redux";
 
 import { clearSelectedScaleModel, setSelectedScaleModel } from "@/features/ScaleModelOptionSlice";
 import { AppDispatch } from "@/store";
