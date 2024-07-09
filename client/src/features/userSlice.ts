@@ -3,23 +3,21 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserData } from "../@types/userTypes";
 
 type UserState = {
-    user: UserData | null;
-    users: UserData[];
-    loading: boolean;
-    error: string | null;
+  user: UserData | null;
+  loading: boolean;
+  error: string | null;
 };
 
 const initialState: UserState = {
   user: null,
-  users: [],
-  loading: false,   
+  loading: false,
   error: null,
 };
 
 export const createUser = createAsyncThunk<
-    UserData,
-    UserData,
-    { rejectValue: string }
+  UserData,
+  UserData,
+  { rejectValue: string }
 >("user/createUser", async (userData, { rejectWithValue }) => {
   try {
     const response = await api.post("/user", userData);
@@ -34,9 +32,9 @@ export const createUser = createAsyncThunk<
 });
 
 export const deleteUser = createAsyncThunk<
-    number,
-    number,
-    { rejectValue: string }
+  number,
+  number,
+  { rejectValue: string }
 >("user/deleteUser", async (userId, { rejectWithValue }) => {
   try {
     await api.delete(`/user/${userId}`);
@@ -51,9 +49,9 @@ export const deleteUser = createAsyncThunk<
 });
 
 export const fetchUsers = createAsyncThunk<
-    UserData[],
-    void,
-    { rejectValue: string }
+  UserData[],
+  void,
+  { rejectValue: string }
 >("user/fetchUsers", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get("/users");
@@ -96,7 +94,6 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteUser.fulfilled, (state, action: PayloadAction<number>) => {
-        state.users = state.users.filter(user => user.id !== action.payload);
         if (state.user && state.user.id === action.payload) {
           state.user = null;
         }
@@ -115,8 +112,7 @@ const userSlice = createSlice({
       })
       .addCase(
         fetchUsers.fulfilled,
-        (state, action: PayloadAction<UserData[]>) => {
-          state.users = action.payload;
+        (state) => {
           state.loading = false;
         },
       )

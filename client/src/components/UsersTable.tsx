@@ -1,19 +1,45 @@
+import { UserData } from "@/@types/userTypes";
 import { deleteUser, fetchUsers } from "@/features/userSlice";
-import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { Pagination, Table } from "rsuite";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch } from "../store";
 import ActiveItem from "./ActiveItem";
 
 const { Column, HeaderCell, Cell } = Table;
 
 export default function UsersTable() {
   const dispatch = useDispatch<AppDispatch>();
-  const users = useAppSelector((state: RootState) => state.user.users);
-  const loading = useAppSelector((state: RootState) => state.user.loading);
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const action = await dispatch(fetchUsers());
+        if (fetchUsers.fulfilled.match(action)) {
+          setUsers(action.payload);
+        } else {
+          if (fetchUsers.rejected.match(action)) {
+            setError(action.payload || "Erro ao buscar usuários");
+          }
+        }
+      } catch (err) {
+        setError("Erro ao buscar usuários");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
 
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState(1);
