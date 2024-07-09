@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Shift } from './Shift';
 
 @Entity('user')
@@ -60,7 +60,7 @@ export class User {
 	@UpdateDateColumn()
 	updated_at: Date;
 
-	@ManyToMany(() => Shift)
+	@ManyToOne(() => Shift)
 	@JoinTable()
 	shift: Shift[];
 }

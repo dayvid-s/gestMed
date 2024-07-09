@@ -4,15 +4,15 @@ import { AppDispatch } from "@/store";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Modal } from "rsuite";
-import { UserForm } from "./UserForm";
+import { CreateUserForm } from "./CreateUserForm";
 
 
 
 
 
 export interface ImodalProps {
-    modalIsOpen: boolean;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
+  modalIsOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
@@ -80,7 +80,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
           <h4 className='text-4xl ' >Criar Médico</h4>
         </Modal.Header>
         <Modal.Body style={{ height: "80vh" }} >
-          <UserForm
+          <CreateUserForm
             handleRoleChange={handleRoleChange}
             handleShiftChange={handleShiftChange}
             handleInputChange={setUserData}
@@ -89,10 +89,10 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         </Modal.Body>
         <Modal.Footer>
           <Button className='' onClick={handleClose} appearance="ghost">
-                        Cancelar
+            Cancelar
           </Button>
           <Button className='bg-sky-600' onClick={handleSubmit} appearance="primary"  >
-                        Salvar
+            Salvar
           </Button>
         </Modal.Footer>
       </Modal>

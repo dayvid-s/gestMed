@@ -6,8 +6,8 @@ import Dayvid from "../assets/dayvid 1.png";
 const manrope = Manrope({ subsets: ["latin"] });
 
 export interface ImodalProps {
-    modalIsOpen: boolean;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
+  modalIsOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
@@ -96,7 +96,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
               <div className='flex flex-col cursor-pointer ' >
 
                 <p className='text-xl font-extrabold text-white '>
-                                    Dr. Dayvid Santos
+                  Dr. Dayvid Santos
                   {/* {userName} */}
                 </p>
 
@@ -119,7 +119,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
               <div className='flex flex-col cursor-pointer ' >
 
                 <p className='text-xl font-extrabold text-black '>
-                                    Dr. Dayvid Santos
+                  Dr. Dayvid Santos
                   {/* {userName} */}
                 </p>
 
@@ -141,7 +141,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
               <div className='flex flex-col cursor-pointer ' >
 
                 <p className='text-xl font-extrabold text-black '>
-                                    Dr. Dayvid Santos
+                  Dr. Dayvid Santos
                   {/* {userName} */}
                 </p>
 
@@ -163,7 +163,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
               <div className='flex flex-col cursor-pointer ' >
 
                 <p className='text-xl  text-black '>
-                                    Dr. Dayvid Santos
+                  Dr. Dayvid Santos
                   {/* {userName} */}
                 </p>
 
@@ -185,7 +185,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
               <div className='flex flex-col cursor-pointer ' >
 
                 <p className='text-xl font-extrabold text-black '>
-                                    Dr. Dayvid Santos
+                  Dr. Dayvid Santos
                   {/* {userName} */}
                 </p>
 
@@ -209,13 +209,13 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
             className='ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white'
             type="button"
           >
-                        Redefinir
+            Redefinir
           </button>
           <button
             className='ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white'
             type="button"
           >
-                        Adicionar Médicos
+            Adicionar Médicos
           </button>
         </Modal.Footer>
       </Modal>

@@ -4,13 +4,13 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Form, SelectPicker } from "rsuite";
 
 type UserFormProps = {
-    handleInputChange: Dispatch<SetStateAction<UserData>>;
-    userData: UserData;
-    handleShiftChange: (value: Shifts | null) => void;
-    handleRoleChange: (value: roles | null) => void;
+  handleInputChange: Dispatch<SetStateAction<UserData>>;
+  userData: UserData;
+  handleShiftChange: (value: Shifts | null) => void;
+  handleRoleChange: (value: roles | null) => void;
 };
 
-export function UserForm({ handleInputChange, userData, handleShiftChange, handleRoleChange }: UserFormProps) {
+export function CreateUserForm({ handleInputChange, userData, handleShiftChange, handleRoleChange }: UserFormProps) {
   const handleInput = (value: string, event: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = event.target;
     handleInputChange(prevState => ({ ...prevState, [name]: value }));
