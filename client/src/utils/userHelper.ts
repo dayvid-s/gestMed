@@ -1,4 +1,4 @@
-import { roles, Shifts } from "@/@types/userTypes";
+import { roles, } from "@/@types/userTypes";
 
 export const userRoles: roles[] = ["Básico", "Médico", "Coordenador", "Master"];
-export const userShits: Shifts[] = ["SD", "SN", "SD/SN"];
+// export const userShits: Shifts[] = ["SD", "SN", "SD/SN"];

@@ -1,14 +1,11 @@
-import { Shifts, UserData, roles } from "@/@types/userTypes";
+import { Shift, UserData, roles } from "@/@types/userTypes";
+import { fetchShifts } from "@/features/shiftSlice";
 import { createUser } from "@/features/userSlice";
-import { AppDispatch } from "@/store";
-import { Dispatch, SetStateAction, useState } from "react";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal } from "rsuite";
 import { CreateUserForm } from "./CreateUserForm";
-
-
-
-
 
 export interface ImodalProps {
   modalIsOpen: boolean;
@@ -17,9 +14,11 @@ export interface ImodalProps {
 
 export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const { shifts, loading, error } = useSelector((state: RootState) => state.shift);
+
   const handleClose = () => setIsOpen(false);
   const [userRole, setUserRole] = useState<roles | null>(null);
-  const [userShift, setUserShift] = useState<Shifts | null>(null);
+  const [userShift, setUserShift] = useState<Shift | null>(null);
 
   const [userData, setUserData] = useState<UserData>({
     id: 1,
@@ -41,8 +40,12 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     gender: "",
     shift: userShift
   });
+
   console.log(userData);
 
+  useEffect(() => {
+    dispatch(fetchShifts());
+  }, [dispatch]);
 
   const handleRoleChange = (value: roles | null) => {
     setUserRole(value);
@@ -52,7 +55,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     }));
   };
 
-  const handleShiftChange = (value: Shifts | null) => {
+  const handleShiftChange = (value: Shift | null) => {
     setUserShift(value);
     setUserData(prevData => ({
       ...prevData,
@@ -60,13 +63,10 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     }));
   };
 
-
   const handleSubmit = async () => {
     try {
-      // Validações adicionais podem ser realizadas aqui
       await dispatch(createUser(userData)).unwrap();
       console.log("Usuário criado com sucesso");
-      // Atualizações adicionais após a criação do usuário
       handleClose();
     } catch (error) {
       console.error("Falha ao criar usuário", error);
@@ -85,6 +85,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
             handleShiftChange={handleShiftChange}
             handleInputChange={setUserData}
             userData={userData}
+            shifts={shifts}
           />
         </Modal.Body>
         <Modal.Footer>

@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { formStepReducer } from "./features/formStepSlice";
 import { alertReducer } from "./features/alertSlice";
-import { UserReducer } from "./features/userSlice";
 import { AuthReducer } from "./features/authSlice";
-import { ScaleModelReducer } from "./features/scaleModelSlice";
+import { formStepReducer } from "./features/formStepSlice";
 import { ScaleModelOptionReducer } from "./features/ScaleModelOptionSlice";
+import { ScaleModelReducer } from "./features/scaleModelSlice";
+import { ShiftReducer } from "./features/shiftSlice";
 import { sideBarReducer } from "./features/sideBarSlice";
+import { UserReducer } from "./features/userSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     auth: AuthReducer,
     scaleModel: ScaleModelReducer,
     scaleOptions: ScaleModelOptionReducer,
+    shift: ShiftReducer,
     sideBar: sideBarReducer,
   },
 });

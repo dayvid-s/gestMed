@@ -1,20 +1,31 @@
-import { Shifts, UserData, roles } from "@/@types/userTypes";
-import { userRoles, userShits } from "@/utils/userHelper";
+import { Shift, UserData, roles } from "@/@types/userTypes";
+import { userRoles, } from "@/utils/userHelper";
 import React, { Dispatch, SetStateAction } from "react";
 import { Form, SelectPicker } from "rsuite";
 
 type UserFormProps = {
   handleInputChange: Dispatch<SetStateAction<UserData>>;
   userData: UserData;
-  handleShiftChange: (value: Shifts | null) => void;
+  shifts: Shift[];
+  handleShiftChange: (value: Shift | null) => void;
   handleRoleChange: (value: roles | null) => void;
 };
 
-export function CreateUserForm({ handleInputChange, userData, handleShiftChange, handleRoleChange }: UserFormProps) {
+export function CreateUserForm({ handleInputChange, userData, shifts,
+  handleShiftChange, handleRoleChange }: UserFormProps) {
   const handleInput = (value: string, event: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = event.target;
     handleInputChange(prevState => ({ ...prevState, [name]: value }));
   };
+
+  const shiftOptions = shifts?.map(shift => ({
+    id: shift.id,
+    shiftName: shift.name,
+    start_time: shift.start_time,
+    end_time: shift.end_time,
+    label: shift.name,
+    value: shift,
+  }));
 
   return (
     <Form>
@@ -191,7 +202,7 @@ export function CreateUserForm({ handleInputChange, userData, handleShiftChange,
                   name="type"
                   className="max-w-32 sm:max-w-max"
                   value={userData.shift}
-                  data={userShits.map(item => ({ label: item, value: item }))}
+                  data={shiftOptions}
                   onChange={handleShiftChange}
                   placeholder="Selecione o turno"
                 />
