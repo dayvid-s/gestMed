@@ -45,7 +45,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
   useEffect(() => {
     dispatch(fetchShifts());
-  }, [dispatch]);
+  }, []);
 
   const handleRoleChange = (value: roles | null) => {
     setUserRole(value);

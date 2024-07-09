@@ -1,8 +1,11 @@
+import { fetchShifts } from "@/features/shiftSlice";
+import { AppDispatch } from "@/store";
+import { useAppSelector } from "@/utils/useSelectorHook";
 import { Manrope } from "next/font/google";
-import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Form, Modal, SelectPicker } from "rsuite";
-import Dayvid from "../assets/dayvid 1.png";
+import { ListToAddUserInScale } from "./ListToAddUserInScale";
 const manrope = Manrope({ subsets: ["latin"] });
 
 export interface ImodalProps {
@@ -12,16 +15,29 @@ export interface ImodalProps {
 
 export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
   const handleClose = () => setIsOpen(false);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const quantityOfDaysOptions = [
-    { label: "SD", value: "SD" },
-    { label: "SN", value: "SN" },
-  ];
+  const shifts = useAppSelector((state) => state.shift.shifts);
+
+  useEffect(() => {
+    dispatch(fetchShifts());
+  }, []);
+
+
+
+  const shiftOptions = shifts?.map(shift => ({
+    id: shift.id,
+    shiftName: shift.name,
+    start_time: shift.start_time,
+    end_time: shift.end_time,
+    label: shift.name,
+    value: shift,
+  }));
 
   const [doctorInfo, setDoctorInfo] = useState({
     name: "",
     especiality: "",
-    quantityOfDays: "null", // Valor inicial atualizado para 'SD'
+    quantityOfDays: "null",
   });
 
   const handleInputChange = (name: string, value: string) => {
@@ -65,10 +81,10 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
                 <Form.ControlLabel className='font-medium'  >Turno</Form.ControlLabel>
                 <SelectPicker
                   searchable={false}
-                  value={doctorInfo.quantityOfDays}
+                  // value={doctorInfo.quantityOfDays}
                   name="quantityOfDays"
                   // onChange={handleScaleType}
-                  data={quantityOfDaysOptions}
+                  data={shiftOptions}
                 />
               </Form.Group>
               <Form.Group>
@@ -81,126 +97,7 @@ export function AddUsersToScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
             </div>
           </Form>
 
-
-
-
-          <div title="Editar conta" className='flex flex-row flex-wrap items-center justify-start w-full gap-x-6 gap-y-4 ' >
-
-
-            <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row  bg-green500' >
-
-              <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-              {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-              <div className='flex flex-col cursor-pointer ' >
-
-                <p className='text-xl font-extrabold text-white '>
-                  Dr. Dayvid Santos
-                  {/* {userName} */}
-                </p>
-
-                <span className='text-gray-900 ' > Cardiologista</span>
-                <span className='text-slate-950 font-medium ' > 07:00 - 19:00</span>
-
-              </div>
-
-
-
-
-            </div>
-
-            <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-              <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-              {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-              <div className='flex flex-col cursor-pointer ' >
-
-                <p className='text-xl font-extrabold text-black '>
-                  Dr. Dayvid Santos
-                  {/* {userName} */}
-                </p>
-
-                <span className='text-slate-500 ' > Cardiologista</span>
-                <span className='text-slate-500 ' > 07:00 - 19:00</span>
-
-              </div>
-
-
-
-
-            </div>
-            <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-              <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-              {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-              <div className='flex flex-col cursor-pointer ' >
-
-                <p className='text-xl font-extrabold text-black '>
-                  Dr. Dayvid Santos
-                  {/* {userName} */}
-                </p>
-
-                <span className='text-slate-500 ' > Cardiologista</span>
-                <span className='text-slate-500 ' > 07:00 - 19:00</span>
-
-              </div>
-
-
-
-
-            </div>
-            <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-              <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-              {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-              <div className='flex flex-col cursor-pointer ' >
-
-                <p className='text-xl  text-black '>
-                  Dr. Dayvid Santos
-                  {/* {userName} */}
-                </p>
-
-                <span className='text-slate-500 ' > Cardiologista</span>
-                <span className='text-slate-500 ' > 07:00 - 19:00</span>
-
-              </div>
-
-
-
-
-            </div>
-            <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-              <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-              {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-              <div className='flex flex-col cursor-pointer ' >
-
-                <p className='text-xl font-extrabold text-black '>
-                  Dr. Dayvid Santos
-                  {/* {userName} */}
-                </p>
-
-                <span className='text-slate-500 ' > Cardiologista</span>
-                <span className='text-slate-500 ' > 07:00 - 19:00</span>
-
-              </div>
-
-
-
-
-            </div>
-          </div>
-
-
+          <ListToAddUserInScale />
 
 
         </Modal.Body>
