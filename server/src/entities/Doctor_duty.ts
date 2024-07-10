@@ -1,26 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn } from 'typeorm';
-import { User } from './User';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Model_scale } from './Model_Scale';
 import { Shift } from './Shift';
-import { Schedule } from './Schedule';
+import { User } from './User';
 
 @Entity("doctor_duty")
-export class doctor_duty {
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Doctor_duty {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Schedule, schedule => schedule.id)
-    schedule: Schedule;
+  @ManyToOne(() => Model_scale, model_scale => model_scale.id)
+  schedule: Model_scale;
 
-    @ManyToOne(() => User, user => user.id)
-    user: User;
+  @ManyToOne(() => User, user => user.id)
+  user: User;
 
-    @ManyToOne(() => Shift, shift => shift.id)
-    shift: Shift;
+  @ManyToOne(() => Shift, shift => shift.id)
+  shift: Shift;
 
-    @Column('date')
-    schedule_date: string;
+  @Column('date')
+  schedule_date: string;
 
-    @CreateDateColumn()
-    created_at: Date;
+  @CreateDateColumn()
+  created_at: Date;
 }
 

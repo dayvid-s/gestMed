@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express, { Router } from 'express';
 import 'express-async-errors';
-import ScheduleRoute from './routes/ScheduleRoute';
+import ModelScaleRoute from './routes/ModelScaleRoute';
 import UserRoute from './routes/UserRoute';
 
 import { AppDataSource } from './data-source';
@@ -23,7 +23,7 @@ AppDataSource.initialize().then(async () => {
 
 
   app.use(UserRoute);
-  app.use(ScheduleRoute);
+  app.use(ModelScaleRoute);
   app.use(ShiftRoute);
 
   app.use(errorMiddleware)
