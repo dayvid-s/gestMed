@@ -2,45 +2,44 @@ import { useEffect, useState } from "react";
 import { SelectPicker } from "rsuite";
 import { CreateScaleModal } from "./CreateScaleModal";
 
-import { fetchAllScaleModels } from "@/features/scaleModelSlice";
+import { clearSelectedmodelScale, setSelectedmodelScale } from "@/features/ModelScaleOptionSlice";
+import { fetchAllModelScales } from "@/features/ModelScaleSlice";
+import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useDispatch } from "react-redux";
-
-import { clearSelectedScaleModel, setSelectedScaleModel } from "@/features/ScaleModelOptionSlice";
-import { AppDispatch } from "@/store";
 export function ChoiceScale() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const scaleModels = useAppSelector((state) => state.scaleModel.scaleModels);
-  const loading = useAppSelector((state) => state.scaleModel.loading);
-  const error = useAppSelector((state) => state.scaleModel.error);
+  const modelScales = useAppSelector((state) => state.modelScale.ModelScales);
+  const loading = useAppSelector((state) => state.modelScale.loading);
+  const error = useAppSelector((state) => state.modelScale.error);
   useEffect(() => {
-    dispatch(fetchAllScaleModels());
+    dispatch(fetchAllModelScales());
   }, [dispatch]);
 
 
   // useEffect(() => {
-  //     if (scaleModels.length > 0) {
-  //         const formattedData = scaleModels.map(scale => ({
+  //     if (modelScales.length > 0) {
+  //         const formattedData = modelScales.map(scale => ({
   //             label: scale.name,
   //             value: scale.name
   //         }));
-  //         dispatch(setSelectedScaleModel(formattedData[0])); 
+  //         dispatch(setSelectedmodelScale(formattedData[0])); 
   //     }
-  // }, [scaleModels, dispatch]);
+  // }, [modelScales, dispatch]);
 
-  const handleScaleModelChange = (value: any) => {
+  const handlemodelScaleChange = (value: any) => {
     if (value) {
-      const selectedOption = scaleModels.find(scale => scale.name === value);
+      const selectedOption = modelScales.find(scale => scale.name === value);
       if (selectedOption) {
-        dispatch(setSelectedScaleModel({
+        dispatch(setSelectedmodelScale({
           label: selectedOption.name,
           value: selectedOption.name
         }));
       }
     } else {
-      dispatch(clearSelectedScaleModel());
+      dispatch(clearSelectedmodelScale());
     }
   };
 
@@ -48,9 +47,9 @@ export function ChoiceScale() {
     <div>
       <div className="flex-row">
         <SelectPicker
-          onChange={handleScaleModelChange}
+          onChange={handlemodelScaleChange}
           className="mr-10"
-          data={scaleModels.map(scale => ({
+          data={modelScales.map(scale => ({
             label: scale.name,
             value: scale.name
           }))} searchable={true}
@@ -59,15 +58,15 @@ export function ChoiceScale() {
         />
 
         <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
-                    Baixar Escala
+          Baixar Escala
         </button>
 
         <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
-                    Limpar Modelo
+          Limpar Modelo
         </button>
 
         <button onClick={() => { setModalIsOpen(true); }} className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
-                    Criar Escala
+          Criar Escala
         </button>
         {/* <button
                     onClick={() => { setModalIsOpen(true) }}

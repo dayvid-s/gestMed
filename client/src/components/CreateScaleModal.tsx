@@ -1,5 +1,6 @@
 import { QuantityOfDaysTypes, ScaleData } from "@/@types/scaleTypes";
-import { createScaleModel, fetchAllScaleModels } from "@/features/scaleModelSlice";
+
+import { createModelScale, fetchAllModelScales } from "@/features/ModelScaleSlice";
 import { AppDispatch } from "@/store";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,8 +9,8 @@ import { CreateScaleForm } from "./CreateScaleForm";
 
 
 export interface ImodalProps {
-    modalIsOpen: boolean;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
+  modalIsOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
@@ -40,14 +41,14 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
 
   async function handleSubmit() {
     try {
-      await dispatch(createScaleModel({
+      await dispatch(createModelScale({
         name: scaleData.name,
         total_of_schedule_days: scaleData.quantityOfDays,
         is_auto_filled: scaleData.isAutoFilled
       }));
 
       handleClose();
-      dispatch(fetchAllScaleModels());
+      dispatch(fetchAllModelScales());
     } catch (error) {
       console.error("Falha ao criar escala", error);
     }
@@ -70,10 +71,10 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose} appearance="ghost">
-                        Cancelar
+            Cancelar
           </Button>
           <Button className='bg-sky-600' onClick={handleSubmit} appearance="primary">
-                        Salvar
+            Salvar
           </Button>
         </Modal.Footer>
       </Modal>

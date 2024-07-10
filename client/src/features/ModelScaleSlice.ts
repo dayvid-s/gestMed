@@ -3,22 +3,22 @@ import { ScaleData } from "../@types/scaleTypes";
 import { api } from "../services/axiosClient";
 
 type ScaleState = {
-    scaleModels: ScaleData[];
-    loading: boolean;
-    error: string | null;
+  ModelScales: ScaleData[];
+  loading: boolean;
+  error: string | null;
 };
 
 const initialState: ScaleState = {
-  scaleModels: [],
+  ModelScales: [],
   loading: false,
   error: null,
 };
 
-export const fetchAllScaleModels = createAsyncThunk<ScaleData[], void, { rejectValue: string }>(
+export const fetchAllModelScales = createAsyncThunk<ScaleData[], void, { rejectValue: string }>(
   "scalesModel/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get<ScaleData[]>("/schedule");
+      const response = await api.get<ScaleData[]>("/scales/models");
       if (response.status < 300) {
         console.log("Modelos de escala obtidas com sucesso");
         return response.data;
@@ -36,11 +36,11 @@ export const fetchAllScaleModels = createAsyncThunk<ScaleData[], void, { rejectV
   }
 );
 
-export const createScaleModel = createAsyncThunk<ScaleData, { name: string; total_of_schedule_days: number | null; is_auto_filled: boolean }, { rejectValue: string }>(
+export const createModelScale = createAsyncThunk<ScaleData, { name: string; total_of_schedule_days: number | null; is_auto_filled: boolean }, { rejectValue: string }>(
   "scalesModel/create",
   async ({ name, total_of_schedule_days, is_auto_filled }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/schedule", {
+      const response = await api.post("/scales/models", {
         name,
         total_of_schedule_days,
         is_auto_filled,
@@ -63,37 +63,37 @@ export const createScaleModel = createAsyncThunk<ScaleData, { name: string; tota
   }
 );
 
-const scaleModelSlice = createSlice({
-  name: "scaleModel",
+const ModelScaleSlice = createSlice({
+  name: "modelScale",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllScaleModels.fulfilled, (state, action: PayloadAction<ScaleData[]>) => {
+      .addCase(fetchAllModelScales.fulfilled, (state, action: PayloadAction<ScaleData[]>) => {
         state.loading = false;
-        state.scaleModels = action.payload;
+        state.ModelScales = action.payload;
       })
-      .addCase(fetchAllScaleModels.pending, (state) => {
+      .addCase(fetchAllModelScales.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllScaleModels.rejected, (state, action) => {
+      .addCase(fetchAllModelScales.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro desconhecido";
       })
-      .addCase(createScaleModel.pending, (state) => {
+      .addCase(createModelScale.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createScaleModel.fulfilled, (state, action: PayloadAction<ScaleData>) => {
+      .addCase(createModelScale.fulfilled, (state, action: PayloadAction<ScaleData>) => {
         state.loading = false;
-        state.scaleModels.push(action.payload);
+        state.ModelScales.push(action.payload);
       })
-      .addCase(createScaleModel.rejected, (state, action) => {
+      .addCase(createModelScale.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro desconhecido";
       });
   },
 });
 
-export const ScaleModelReducer = scaleModelSlice.reducer;
+export const ModelScaleReducer = ModelScaleSlice.reducer;

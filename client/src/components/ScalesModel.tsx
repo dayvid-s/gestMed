@@ -12,21 +12,21 @@ export function ScalesModel() {
   const [actualModelScaleInfo, setActualModelScaleInfo] = useState<ScaleBackendModel | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-  const AllScales = useAppSelector((state) => state.scaleModel.scaleModels);
-  const selectedScaleModel = useAppSelector((state) => state.scaleOptions.selectedScaleModel);
+  const AllScales = useAppSelector((state) => state.modelScale.ModelScales);
+  const selectedmodelScale = useAppSelector((state) => state.modelScaleOptions.selectedmodelScale);
 
-  console.log(actualModelScaleInfo, selectedScaleModel);
+  console.log(actualModelScaleInfo, selectedmodelScale);
   useEffect(() => {
-    if (selectedScaleModel) {
-      const foundScale = AllScales.find(scale => scale.name === selectedScaleModel.value);
+    if (selectedmodelScale) {
+      const foundScale = AllScales.find(scale => scale.name === selectedmodelScale.value);
       // @ts-ignore
       setActualModelScaleInfo(foundScale || null);
     } else {
       setActualModelScaleInfo(null);
     }
-  }, [selectedScaleModel, AllScales]);
+  }, [selectedmodelScale, AllScales]);
 
-  if (!selectedScaleModel) {
+  if (!selectedmodelScale) {
     return (
       <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
         <h1 className='text-3xl font-extrabold'>Modelo de escala não selecionado</h1>
@@ -46,7 +46,7 @@ export function ScalesModel() {
   return (
     <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
       <h1 className='text-3xl font-extrabold'>
-        &lt;{selectedScaleModel.label}&gt;
+        &lt;{selectedmodelScale.label}&gt;
       </h1>
 
       <div className='flex flex-wrap items-start justify-center mt-5'>

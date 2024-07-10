@@ -20,7 +20,7 @@ export const createUser = createAsyncThunk<
   { rejectValue: string }
 >("user/createUser", async (userData, { rejectWithValue }) => {
   try {
-    const response = await api.post("/user", userData);
+    const response = await api.post("/users", userData);
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
