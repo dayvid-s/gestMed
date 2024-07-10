@@ -12,10 +12,9 @@ export function createDefaultShifts(): Shift[] {
   nightShift.end_time = '07:00:00';
 
   const allDayShift = new Shift();
-  nightShift.name = 'SN/SN';
-  nightShift.start_time = '00:00:00';
-  nightShift.end_time = '23:59:00';
-
+  allDayShift.name = 'SN/SD';
+  allDayShift.start_time = '00:00:00';
+  allDayShift.end_time = '23:59:00';
 
   return [dayShift, nightShift, allDayShift];
 }

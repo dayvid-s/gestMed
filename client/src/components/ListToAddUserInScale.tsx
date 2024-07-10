@@ -1,14 +1,13 @@
 import { UserData } from "@/@types/userTypes";
 import { fetchUsers } from "@/features/userSlice";
-import { dispatch } from "@/store";
+import { AppDispatch } from "@/store";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Dayvid from "../assets/dayvid 1.png";
 
-
 export function ListToAddUserInScale() {
-
-  const [users, setUsers] = useState<UserData[]>([]);
+  const dispatch = useDispatch<AppDispatch>(); const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +18,13 @@ export function ListToAddUserInScale() {
       try {
         const action = await dispatch(fetchUsers());
         if (fetchUsers.fulfilled.match(action)) {
-          setUsers(action.payload);
+          const fetchedUsers = action.payload;
+          const updatedUsers = fetchedUsers.map((user: UserData) => ({
+            ...user,
+            selected: false
+          }));
+
+          setUsers(updatedUsers);
         } else {
           if (fetchUsers.rejected.match(action)) {
             setError(action.payload || "Erro ao buscar usuários");
@@ -39,124 +44,152 @@ export function ListToAddUserInScale() {
 
   return (
 
+    <>
+      <div className='flex flex-row flex-wrap items-center justify-start w-full gap-x-6 gap-y-4 ' >
+        {users.map((user) => {
+          return (
 
 
-    <div title="Editar conta" className='flex flex-row flex-wrap items-center justify-start w-full gap-x-6 gap-y-4 ' >
+            <div key={user.id} className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row  bg-green500' >
+
+              <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
+
+              {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
+
+              <div className='flex flex-col cursor-pointer ' >
+
+                <p className='text-xl font-extrabold text-white '>
+                  {user.name}
+                  {/* {userName} */}
+                </p>
+
+                <span className='text-gray-900 ' > Cardiologista</span>
+                <span className='text-slate-950 font-medium ' >{user.shift?.start_time}</span>
+
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className='flex flex-row flex-wrap items-center justify-start w-full gap-x-6 gap-y-4 ' >
 
 
-      <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row  bg-green500' >
+        <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row  bg-green500' >
 
-        <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
+          <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
 
-        {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
+          {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
 
-        <div className='flex flex-col cursor-pointer ' >
+          <div className='flex flex-col cursor-pointer ' >
 
-          <p className='text-xl font-extrabold text-white '>
-            Dr. Carlos Santos
-            {/* {userName} */}
-          </p>
+            <p className='text-xl font-extrabold text-white '>
+              Dr. Carlos Santos
+              {/* {userName} */}
+            </p>
 
-          <span className='text-gray-900 ' > Cardiologista</span>
-          <span className='text-slate-950 font-medium ' > 07:00 - 19:00</span>
+            <span className='text-gray-900 ' > Cardiologista</span>
+            <span className='text-slate-950 font-medium ' > 07:00 - 19:00</span>
+
+          </div>
+
+
+
 
         </div>
 
+        <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
+
+          <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
+
+          {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
+
+          <div className='flex flex-col cursor-pointer ' >
+
+            <p className='text-xl font-extrabold text-black '>
+              Dr. Dayvid Santos
+              {/* {userName} */}
+            </p>
+
+            <span className='text-slate-500 ' > Cardiologista</span>
+            <span className='text-slate-500 ' > 07:00 - 19:00</span>
+
+          </div>
 
 
 
-      </div>
-
-      <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-        <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-        {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-        <div className='flex flex-col cursor-pointer ' >
-
-          <p className='text-xl font-extrabold text-black '>
-            Dr. Dayvid Santos
-            {/* {userName} */}
-          </p>
-
-          <span className='text-slate-500 ' > Cardiologista</span>
-          <span className='text-slate-500 ' > 07:00 - 19:00</span>
 
         </div>
+        <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
+
+          <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
+
+          {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
+
+          <div className='flex flex-col cursor-pointer ' >
+
+            <p className='text-xl font-extrabold text-black '>
+              Dr. Dayvid Santos
+              {/* {userName} */}
+            </p>
+
+            <span className='text-slate-500 ' > Cardiologista</span>
+            <span className='text-slate-500 ' > 07:00 - 19:00</span>
+
+          </div>
 
 
 
-
-      </div>
-      <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-        <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-        {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-        <div className='flex flex-col cursor-pointer ' >
-
-          <p className='text-xl font-extrabold text-black '>
-            Dr. Dayvid Santos
-            {/* {userName} */}
-          </p>
-
-          <span className='text-slate-500 ' > Cardiologista</span>
-          <span className='text-slate-500 ' > 07:00 - 19:00</span>
 
         </div>
+        <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
+
+          <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
+
+          {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
+
+          <div className='flex flex-col cursor-pointer ' >
+
+            <p className='text-xl  text-black '>
+              Dr. Dayvid Santos
+              {/* {userName} */}
+            </p>
+
+            <span className='text-slate-500 ' > Cardiologista</span>
+            <span className='text-slate-500 ' > 07:00 - 19:00</span>
+
+          </div>
 
 
 
-
-      </div>
-      <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-        <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-        {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-        <div className='flex flex-col cursor-pointer ' >
-
-          <p className='text-xl  text-black '>
-            Dr. Dayvid Santos
-            {/* {userName} */}
-          </p>
-
-          <span className='text-slate-500 ' > Cardiologista</span>
-          <span className='text-slate-500 ' > 07:00 - 19:00</span>
 
         </div>
+        <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
+
+          <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
+
+          {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
+
+          <div className='flex flex-col cursor-pointer ' >
+
+            <p className='text-xl font-extrabold text-black '>
+              Dr. Dayvid Santos
+              {/* {userName} */}
+            </p>
+
+            <span className='text-slate-500 ' > Cardiologista</span>
+            <span className='text-slate-500 ' > 07:00 - 19:00</span>
+
+          </div>
 
 
 
-
-      </div>
-      <div className='p-5 border-2 border-bg[#green500] rounded-md flex flex-row' >
-
-        <Image quality={100} className="mr-2 cursor-pointer h-18 w-18 " src={Dayvid} alt="Foto de perfil" />
-
-        {/* <MdAccountCircle className="ml-auto text-black w-7 h-7 " /> */}
-
-        <div className='flex flex-col cursor-pointer ' >
-
-          <p className='text-xl font-extrabold text-black '>
-            Dr. Dayvid Santos
-            {/* {userName} */}
-          </p>
-
-          <span className='text-slate-500 ' > Cardiologista</span>
-          <span className='text-slate-500 ' > 07:00 - 19:00</span>
 
         </div>
-
-
-
-
       </div>
-    </div>
 
+
+    </>
 
   );
 }
