@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { alertReducer } from "./features/alertSlice";
 import { AuthReducer } from "./features/authSlice";
+import { DoctorReducer } from "./features/doctorSclice";
 import { formStepReducer } from "./features/formStepSlice";
 import { ScaleModelOptionReducer } from "./features/ScaleModelOptionSlice";
 import { ScaleModelReducer } from "./features/scaleModelSlice";
@@ -18,6 +19,7 @@ export const store = configureStore({
     scaleOptions: ScaleModelOptionReducer,
     shift: ShiftReducer,
     sideBar: sideBarReducer,
+    doctor: DoctorReducer
   },
 });
 

@@ -81,6 +81,23 @@ export class UserController {
   }
 
 
+  async getAllDoctors(req: Request, res: Response) {
+    try {
+      const doctors = await userRepository.find({
+        where: { role: 'Médico' },
+        select: [
+          'id', 'name', 'email', 'specialization', 'role', 'crm', 'uf', 'city',
+          'phone', 'cpf', 'rg', 'address', 'bank', 'agency', 'account', 'gender',
+          'created_at', 'updated_at', 'shift'
+        ],
+        relations: ['shift']
+      });
+      return res.json(doctors);
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to fetch doctors" });
+    }
+  }
+
   async getAllUsers(req: Request, res: Response) {
     try {
       const users = await userRepository.find({

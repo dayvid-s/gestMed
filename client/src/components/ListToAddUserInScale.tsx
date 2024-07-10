@@ -1,4 +1,5 @@
 import { UserData } from "@/@types/userTypes";
+import { fetchDoctors } from "@/features/doctorSclice";
 import { fetchUsers } from "@/features/userSlice";
 import { AppDispatch } from "@/store";
 import Image from "next/image";
@@ -7,7 +8,8 @@ import { useDispatch } from "react-redux";
 import Dayvid from "../assets/dayvid 1.png";
 
 export function ListToAddUserInScale() {
-  const dispatch = useDispatch<AppDispatch>(); const [users, setUsers] = useState<UserData[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,9 +18,10 @@ export function ListToAddUserInScale() {
       setLoading(true);
       setError(null);
       try {
-        const action = await dispatch(fetchUsers());
-        if (fetchUsers.fulfilled.match(action)) {
-          const fetchedUsers = action.payload;
+        const action = await dispatch(fetchDoctors());
+        if (fetchDoctors.fulfilled.match(action)) {
+          const fetchedUsers: UserData[] = action.payload;
+
           const updatedUsers = fetchedUsers.map((user: UserData) => ({
             ...user,
             selected: false
@@ -64,7 +67,10 @@ export function ListToAddUserInScale() {
                 </p>
 
                 <span className='text-gray-900 ' > Cardiologista</span>
-                <span className='text-slate-950 font-medium ' >{user.shift?.start_time}</span>
+                <span className='text-slate-950 font-medium '>
+                  {user.shift?.start_time.substring(0, 5)} - {user.shift?.end_time.substring(0, 5)}
+                </span>
+
 
               </div>
             </div>

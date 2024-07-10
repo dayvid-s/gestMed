@@ -41,7 +41,6 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     shift: userShift
   });
 
-  console.log(userData);
 
   useEffect(() => {
     dispatch(fetchShifts());
