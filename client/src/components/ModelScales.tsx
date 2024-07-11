@@ -34,7 +34,7 @@ export function ScalesModel() {
     );
   }
 
-  const totalDiasEscala = actualModelScaleInfo?.total_of_schedule_days;
+  const totalDiasEscala = actualModelScaleInfo?.total_of_scale_days;
 
   const data = new Date();
   const ano = data.getFullYear();

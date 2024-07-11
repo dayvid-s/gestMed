@@ -43,7 +43,7 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
     try {
       await dispatch(createModelScale({
         name: scaleData.name,
-        total_of_schedule_days: scaleData.quantityOfDays,
+        total_of_scale_days: scaleData.quantityOfDays,
         is_auto_filled: scaleData.isAutoFilled
       }));
 

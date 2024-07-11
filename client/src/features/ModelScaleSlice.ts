@@ -36,13 +36,14 @@ export const fetchAllModelScales = createAsyncThunk<ScaleData[], void, { rejectV
   }
 );
 
-export const createModelScale = createAsyncThunk<ScaleData, { name: string; total_of_schedule_days: number | null; is_auto_filled: boolean }, { rejectValue: string }>(
+export const createModelScale = createAsyncThunk<ScaleData, { name: string; total_of_scale_days: number | null; is_auto_filled: boolean }, { rejectValue: string }>(
   "scalesModel/create",
-  async ({ name, total_of_schedule_days, is_auto_filled }, { rejectWithValue }) => {
+  async ({ name, total_of_scale_days, is_auto_filled }, { rejectWithValue }) => {
     try {
+      console.log(name, total_of_scale_days, is_auto_filled);
       const response = await api.post("/scales/models", {
         name,
-        total_of_schedule_days,
+        total_of_scale_days,
         is_auto_filled,
       });
       if (response.status < 300) {
