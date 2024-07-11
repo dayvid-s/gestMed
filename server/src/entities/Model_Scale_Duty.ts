@@ -3,13 +3,13 @@ import { Model_scale } from './Model_Scale';
 import { Shift } from './Shift';
 import { User } from './User';
 
-@Entity("doctor_duty")
-export class Doctor_duty {
+@Entity("model_scale_duty")
+export class Model_scale_duty {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Model_scale, model_scale => model_scale.id)
-  schedule: Model_scale;
+  scale: Model_scale;
 
   @ManyToOne(() => User, user => user.id)
   user: User;
@@ -18,7 +18,7 @@ export class Doctor_duty {
   shift: Shift;
 
   @Column('date')
-  schedule_date: string;
+  scale_date: string;
 
   @CreateDateColumn()
   created_at: Date;
