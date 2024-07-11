@@ -18,7 +18,7 @@ export class Model_scale_duty {
   shift: Shift;
 
   @Column('date')
-  scale_date: string;
+  scale_date: Date;
 
   @CreateDateColumn()
   created_at: Date;
