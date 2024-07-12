@@ -39,3 +39,8 @@ export interface UserData {
   account: string;
   gender: genders;
 }
+
+
+export interface UserDataWithSelected extends UserData {
+  selected: boolean;
+}

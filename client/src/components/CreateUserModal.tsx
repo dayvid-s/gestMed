@@ -17,7 +17,7 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
   const { shifts, loading, error } = useSelector((state: RootState) => state.shift);
 
   const handleClose = () => setIsOpen(false);
-  const [userRole, setUserRole] = useState<roles | null>(null);
+  const [userRole, setUserRole] = useState<roles | null>("Médico");
   const [userShift, setUserShift] = useState<Shift | null>(null);
 
   const [userData, setUserData] = useState<UserData>({
