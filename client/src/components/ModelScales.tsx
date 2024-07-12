@@ -1,4 +1,6 @@
+import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
 import { ScaleBackendModel } from "@/@types/scaleTypes";
+import { fetchModelScaleDuties } from "@/features/ModelScaleDutySlice";
 import { closeSideBar } from "@/features/sideBarSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
@@ -8,12 +10,42 @@ import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
 
 export function ScalesModel() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const [actualModelScaleInfo, setActualModelScaleInfo] = useState<ScaleBackendModel | null>(null);
+  const [modelScaleDuties, setModelScaleDuties] = useState<ModelScaleDuty[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const AllScales = useAppSelector((state) => state.modelScale.ModelScales);
   const selectedmodelScale = useAppSelector((state) => state.modelScaleOptions.selectedmodelScale);
+  useEffect(() => { console.log(modelScaleDuties); }, [modelScaleDuties]);
+  useEffect(() => {
+    fetchModelScaleDutiesData();
+  }, []);
+
+  const fetchModelScaleDutiesData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const action = await dispatch(fetchModelScaleDuties());
+      if (fetchModelScaleDuties.fulfilled.match(action)) {
+        const fetchedModelScaleDuties = action.payload as ModelScaleDuty[];
+
+
+        setModelScaleDuties(fetchedModelScaleDuties);
+      } else {
+        if (fetchModelScaleDuties.rejected.match(action)) {
+          setError(action.payload || "Erro ao buscar plantões da escala modelo");
+        }
+      }
+    } catch (err) {
+      setError("Erro ao buscar plantões da escala modelo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   useEffect(() => {
     if (selectedmodelScale) {
