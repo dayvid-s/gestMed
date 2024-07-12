@@ -13,10 +13,10 @@ export interface ModelScaleDuty {
 
 export interface ModelScaleDutyInBackend {
   id?: number;
-  scale_id: number;
-  user_id: number;
-  shift_id: number;
-  scale_date: number;
+  scale_id: number | null;
+  user_id: number | null;
+  shift_id: number | null;
+  scale_date: number | null;
   created_at?: Date;
   updated_at?: Date;
 }

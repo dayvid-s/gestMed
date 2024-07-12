@@ -18,9 +18,9 @@ const manrope = Manrope({ subsets: ["latin"] });
 export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  scale_id: number;
-  shift_id: number;
-  scale_date: number
+  scale_id: number | undefined;
+  shift_id: number | null;
+  scale_date: number | null
 
 }
 

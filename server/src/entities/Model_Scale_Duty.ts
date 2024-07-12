@@ -17,7 +17,7 @@ export class Model_scale_duty {
   @ManyToOne(() => Shift, shift => shift.id)
   shift: Shift;
 
-  @Column('date')
+  @Column('int')
   scale_date: number;
 
   @CreateDateColumn()

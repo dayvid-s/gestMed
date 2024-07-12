@@ -19,7 +19,7 @@ export class ModelScaleDutyController {
     const user = await userRepository.findOneBy({ id: userId });
     const shift = await shiftRepository.findOneBy({ id: shiftId });
 
-    if (!scale) throw new NotFoundError('Escala não encontrada.');
+    if (!scale) throw new NotFoundError('Escala modelo não encontrada.');
     if (!user) throw new NotFoundError('Usuário não encontrado.');
     if (!shift) throw new NotFoundError('Turno não encontrado.');
 
@@ -65,7 +65,7 @@ export class ModelScaleDutyController {
         scale,
         user,
         shift,
-        scale_date: new Date(scale_date),
+        scale_date,
       });
 
       const savedDuty = await model_scale_duty_Repository.save(newDuty);
