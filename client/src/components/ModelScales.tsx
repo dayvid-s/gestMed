@@ -4,7 +4,7 @@ import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AddUsersToScaleModal } from "./ModalToAddUsersToScale";
+import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
 
 export function ScalesModel() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -15,7 +15,6 @@ export function ScalesModel() {
   const AllScales = useAppSelector((state) => state.modelScale.ModelScales);
   const selectedmodelScale = useAppSelector((state) => state.modelScaleOptions.selectedmodelScale);
 
-  console.log(actualModelScaleInfo, selectedmodelScale);
   useEffect(() => {
     if (selectedmodelScale) {
       const foundScale = AllScales.find(scale => scale.name === selectedmodelScale.value);
@@ -34,13 +33,13 @@ export function ScalesModel() {
     );
   }
 
-  const totalDiasEscala = actualModelScaleInfo?.total_of_scale_days;
+  const totalScaleDays = actualModelScaleInfo?.total_of_scale_days;
 
-  const data = new Date();
-  const ano = data.getFullYear();
-  const mes = data.getMonth() + 1;
+  const date = new Date();
+  const yearn = date.getFullYear();
+  const month = date.getMonth() + 1;
 
-  const dias = Array.from({ length: totalDiasEscala || 0 }, (_, i) => i + 1);
+  const dias = Array.from({ length: totalScaleDays || 0 }, (_, i) => i + 1);
   const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
 
   return (
@@ -50,14 +49,14 @@ export function ScalesModel() {
       </h1>
 
       <div className='flex flex-wrap items-start justify-center mt-5'>
-        {dias.map((dia) => (
-          <div className='flex flex-col' key={dia}>
+        {dias.map((day) => (
+          <div className='flex flex-col' key={day}>
             <div className='flex justify-between px-3 w-60 bg-green500'>
               <h4 className='text-white'>
-                {diasDaSemana[new Date(ano, mes - 1, dia).getDay()]}
+                {diasDaSemana[new Date(yearn, month - 1, day).getDay()]}
               </h4>
               <h4 className='text-white'>
-                {dia.toString().padStart(2, "0")}/{mes.toString().padStart(2, "0")}
+                {day.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
               </h4>
             </div>
 
@@ -129,7 +128,7 @@ export function ScalesModel() {
         ))}
       </div>
 
-      <AddUsersToScaleModal setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
+      <ModalToAddUsersToScale setIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
     </div>
   );
 }

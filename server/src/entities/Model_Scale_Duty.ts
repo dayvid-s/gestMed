@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Model_scale } from './Model_Scale';
 import { Shift } from './Shift';
 import { User } from './User';
@@ -18,9 +18,13 @@ export class Model_scale_duty {
   shift: Shift;
 
   @Column('date')
-  scale_date: Date;
+  scale_date: number;
 
   @CreateDateColumn()
   created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
 }
 

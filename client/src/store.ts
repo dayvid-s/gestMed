@@ -3,12 +3,12 @@ import { alertReducer } from "./features/alertSlice";
 import { AuthReducer } from "./features/authSlice";
 import { DoctorReducer } from "./features/doctorSclice";
 import { formStepReducer } from "./features/formStepSlice";
+import { ModelScaleDutyReducer } from "./features/ModelScaleDutySlice";
+import { modelScaleOptionsReducer } from "./features/ModelScaleOptionSlice";
 import { ModelScaleReducer } from "./features/ModelScaleSlice";
 import { ShiftReducer } from "./features/shiftSlice";
 import { sideBarReducer } from "./features/sideBarSlice";
 import { UserReducer } from "./features/userSlice";
-
-import { modelScaleOptionsReducer } from "./features/ModelScaleOptionSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +18,7 @@ export const store = configureStore({
     auth: AuthReducer,
     modelScale: ModelScaleReducer,
     modelScaleOptions: modelScaleOptionsReducer,
+    modelScaleDuty: ModelScaleDutyReducer,
     shift: ShiftReducer,
     sideBar: sideBarReducer,
     doctor: DoctorReducer
