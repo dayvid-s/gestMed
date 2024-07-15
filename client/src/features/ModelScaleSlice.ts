@@ -20,7 +20,6 @@ export const fetchAllModelScales = createAsyncThunk<ScaleData[], void, { rejectV
     try {
       const response = await api.get<ScaleData[]>("/scales/models");
       if (response.status < 300) {
-        console.log("Modelos de escala obtidas com sucesso");
         return response.data;
       } else {
         console.error("Falha ao obter escalas", response);
@@ -40,7 +39,6 @@ export const createModelScale = createAsyncThunk<ScaleData, { name: string; tota
   "scalesModel/create",
   async ({ name, total_of_scale_days, is_auto_filled }, { rejectWithValue }) => {
     try {
-      console.log(name, total_of_scale_days, is_auto_filled);
       const response = await api.post("/scales/models", {
         name,
         total_of_scale_days,

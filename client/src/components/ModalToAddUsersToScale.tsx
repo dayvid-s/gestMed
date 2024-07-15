@@ -175,7 +175,9 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
             error={error}
           />
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="flex" >
+
+          <p className="font-semibold">Obs: Os médicos serão adicionados no plantão noturno, dia {scale_date}.</p>
           <button
             className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
