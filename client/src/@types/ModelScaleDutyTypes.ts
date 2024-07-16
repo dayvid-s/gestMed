@@ -6,14 +6,14 @@ export interface ModelScaleDuty {
   scale: ScaleData;
   user: UserData;
   shift: Shift;
-  scale_date: Date;
+  scale_date: number;
   created_at: Date;
   updated_at: Date;
 }
 
 export interface ModelScaleDutyInBackend {
   id?: number;
-  scale_id: number | null;
+  scale_id: number | undefined;
   user_id: number | null;
   shift_id: number | null;
   scale_date: number | null;
