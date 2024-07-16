@@ -131,7 +131,7 @@ export function ScalesModel() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
-
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day, 4)}
