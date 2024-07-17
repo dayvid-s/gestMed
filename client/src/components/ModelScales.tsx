@@ -79,12 +79,14 @@ export function ScalesModel() {
 
   const totalScaleDays = actualModelScaleInfo?.total_of_scale_days;
   const date = new Date();
-  const yearn = date.getFullYear();
+  const year = date.getFullYear();
   const month = date.getMonth() + 1;
 
-  const dias = Array.from({ length: totalScaleDays || 0 }, (_, i) => i + 1);
-  const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
-
+  const dias = Array.from({ length: totalScaleDays || 0 }, (_, i) => ({
+    dutyDay: i + 1,
+    allDutiesAtDay: 0,
+  })); const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
+  console.log(dias, "dias");
   return (
     <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
       <h1 className='text-3xl font-extrabold'>
@@ -93,22 +95,22 @@ export function ScalesModel() {
 
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {dias.map((day) => (
-          <div className='flex flex-col' key={day}>
+          <div className='flex flex-col' key={day.dutyDay}>
             <div className='flex justify-between px-3 w-60 bg-green500'>
               <h4 className='text-white'>
-                {diasDaSemana[new Date(yearn, month - 1, day).getDay()]}
+                {diasDaSemana[new Date(year, month - 1, day.dutyDay).getDay()]}
               </h4>
               <h4 className='text-white'>
-                {day.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
+                {day.dutyDay.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
               </h4>
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} IdOfShiftOfScaleDuty={1} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                onClick={() => handleWithModalOpen(day, 1)}
+                onClick={() => handleWithModalOpen(day.dutyDay, 1)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
@@ -116,14 +118,14 @@ export function ScalesModel() {
 
 
               <div
-                onClick={() => handleWithModalOpen(day, 2)}
+                onClick={() => handleWithModalOpen(day.dutyDay, 2)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
               </div>
 
               <div
-                onClick={() => handleWithModalOpen(day, 3)}
+                onClick={() => handleWithModalOpen(day.dutyDay, 3)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
@@ -131,24 +133,24 @@ export function ScalesModel() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} IdOfShiftOfScaleDuty={2} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                onClick={() => handleWithModalOpen(day, 4)}
+                onClick={() => handleWithModalOpen(day.dutyDay, 4)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
               </div>
 
               <div
-                onClick={() => handleWithModalOpen(day, 5)}
+                onClick={() => handleWithModalOpen(day.dutyDay, 5)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
               </div>
 
               <div
-                onClick={() => handleWithModalOpen(day, 6)}
+                onClick={() => handleWithModalOpen(day.dutyDay, 6)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
