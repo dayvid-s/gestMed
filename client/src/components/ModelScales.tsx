@@ -86,7 +86,6 @@ export function ScalesModel() {
     dutyDay: i + 1,
     allDutiesAtDay: 0,
   })); const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
-  console.log(dias, "dias");
   return (
     <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
       <h1 className='text-3xl font-extrabold'>
@@ -106,7 +105,7 @@ export function ScalesModel() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} IdOfShiftOfScaleDuty={1} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
@@ -133,7 +132,7 @@ export function ScalesModel() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} IdOfShiftOfScaleDuty={2} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day.dutyDay, 4)}

@@ -1,17 +1,30 @@
 import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
 
+interface dayOfScaleDutyProps {
+  dutyDay: number;
+  allDutiesAtDay: number;
+}
 interface ModelScaleDutyProps {
-  dayOfScaleDuty: number | null;
+  dayOfScaleDuty: dayOfScaleDutyProps;
   IdOfShiftOfScaleDuty: number | null;
   allModelScaleDuties: ModelScaleDuty[]
+  allDaysOfScaleDuty: dayOfScaleDutyProps[]
+
 }
 
-export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allModelScaleDuties }: ModelScaleDutyProps) {
+export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allModelScaleDuties, allDaysOfScaleDuty }: ModelScaleDutyProps) {
   // obs: tem como saber o maximo de plantoes que cada dia tem. apenas salvando o valor do total de cada plantao aqui. 
   // assim como tem como adicionar campos em branco, aqui, baseado na sentença anterior.
 
-  // console.log(dayOfScaleDuty)
-  let modelScaleDutiesOfTheDay = allModelScaleDuties.filter((modelScaleDuty) => modelScaleDuty.scale_date === dayOfScaleDuty && IdOfShiftOfScaleDuty === modelScaleDuty.shift.id)
+  const modelScaleDutiesOfTheDay = allModelScaleDuties.filter((modelScaleDuty) => modelScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === modelScaleDuty.shift.id);
+
+
+  allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
+
+    allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
+    modelScaleDutiesOfTheDay.length / 2;
+
+  // console.log(allDaysOfScaleDuty, "all days off the sc");
 
   return (
     <div className='flex flex-col ' >
@@ -37,7 +50,7 @@ export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMo
           </div>
 
 
-        )
+        );
 
       })
 
@@ -45,6 +58,6 @@ export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMo
 
 
     </div>
-  )
+  );
 
 }
