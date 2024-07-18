@@ -1,4 +1,5 @@
 import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { useEffect, useRef } from "react";
 
 interface dayOfScaleDutyProps {
   dutyDay: number;
@@ -7,8 +8,8 @@ interface dayOfScaleDutyProps {
 interface ModelScaleDutyProps {
   dayOfScaleDuty: dayOfScaleDutyProps;
   IdOfShiftOfScaleDuty: number | null;
-  allModelScaleDuties: ModelScaleDuty[]
-  allDaysOfScaleDuty: dayOfScaleDutyProps[]
+  allModelScaleDuties: ModelScaleDuty[];
+  allDaysOfScaleDuty: dayOfScaleDutyProps[];
 
 }
 
@@ -17,14 +18,18 @@ export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMo
   // assim como tem como adicionar campos em branco, aqui, baseado na sentença anterior.
 
   const modelScaleDutiesOfTheDay = allModelScaleDuties.filter((modelScaleDuty) => modelScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === modelScaleDuty.shift.id);
+  const renderCount = useRef(0);
 
+  useEffect(() => {
+    if (renderCount.current < 1) {
+      allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
+        allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
+        modelScaleDutiesOfTheDay.length;
+    }
 
-  allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
+    renderCount.current++;
+  }, []);
 
-    allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
-    modelScaleDutiesOfTheDay.length / 2;
-
-  // console.log(allDaysOfScaleDuty, "all days off the sc");
 
   return (
     <div className='flex flex-col ' >
