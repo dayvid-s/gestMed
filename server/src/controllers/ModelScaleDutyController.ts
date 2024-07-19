@@ -9,15 +9,15 @@ import { userRepository } from '../repositories/userRepository';
 
 export class ModelScaleDutyController {
   async create(req: Request, res: Response) {
-    const { scaleId, userId, shiftId, scale_date } = req.body;
+    const { scale_id, user_id, shift_id, scale_date } = req.body;
 
-    if (!scaleId || !userId || !shiftId || !scale_date) {
+    if (!scale_id || !user_id || !shift_id || !scale_date) {
       throw new BadRequestError('Faltam campos na requisição. Certifique-se de fornecer todos os campos obrigatórios.');
     }
 
-    const scale = await model_scaleRepository.findOneBy({ id: scaleId });
-    const user = await userRepository.findOneBy({ id: userId });
-    const shift = await shiftRepository.findOneBy({ id: shiftId });
+    const scale = await model_scaleRepository.findOneBy({ id: scale_id });
+    const user = await userRepository.findOneBy({ id: user_id });
+    const shift = await shiftRepository.findOneBy({ id: shift_id });
 
     if (!scale) throw new NotFoundError('Escala modelo não encontrada.');
     if (!user) throw new NotFoundError('Usuário não encontrado.');
@@ -40,6 +40,8 @@ export class ModelScaleDutyController {
   async createBatch(req: Request, res: Response) {
     const duties = req.body;
 
+
+
     if (!Array.isArray(duties) || duties.length === 0) {
       throw new BadRequestError('Requisição deve conter um array de plantões.');
     }
@@ -47,15 +49,23 @@ export class ModelScaleDutyController {
     const createdDuties = [];
 
     for (const duty of duties) {
-      const { scaleId, userId, shiftId, scale_date } = duty;
+      const { scale_id, user_id, shift_id, scale_date } = duty;
 
-      if (!scaleId || !userId || !shiftId || !scale_date) {
-        throw new BadRequestError('Faltam campos na requisição.');
+      if (!scale_id) {
+        throw new BadRequestError('Campo "scale_id" está faltando na requisição.');
       }
-
-      const scale = await model_scaleRepository.findOneBy({ id: scaleId });
-      const user = await userRepository.findOneBy({ id: userId });
-      const shift = await shiftRepository.findOneBy({ id: shiftId });
+      if (!user_id) {
+        throw new BadRequestError('Campo "user_id" está faltando na requisição.');
+      }
+      if (!shift_id) {
+        throw new BadRequestError('Campo "shift_id" está faltando na requisição.');
+      }
+      if (!scale_date) {
+        throw new BadRequestError('Campo "scale_date" está faltando na requisição.');
+      }
+      const scale = await model_scaleRepository.findOneBy({ id: scale_id });
+      const user = await userRepository.findOneBy({ id: user_id });
+      const shift = await shiftRepository.findOneBy({ id: shift_id });
 
       if (!scale) throw new NotFoundError('Escala modelo não encontrada.');
       if (!user) throw new NotFoundError('Usuário não encontrado.');
@@ -96,15 +106,15 @@ export class ModelScaleDutyController {
 
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    const { scaleId, userId, shiftId, scale_date } = req.body;
+    const { scale_id, user_id, shift_id, scale_date } = req.body;
 
     const modelScaleDuty = await model_scale_duty_Repository.findOneBy({ id: parseInt(id, 10) });
 
     if (!modelScaleDuty) throw new NotFoundError('Plantão de escala modelo não encontrado.');
 
-    const scale = await model_scaleRepository.findOneBy({ id: scaleId });
-    const user = await userRepository.findOneBy({ id: userId });
-    const shift = await shiftRepository.findOneBy({ id: shiftId });
+    const scale = await model_scaleRepository.findOneBy({ id: scale_id });
+    const user = await userRepository.findOneBy({ id: user_id });
+    const shift = await shiftRepository.findOneBy({ id: shift_id });
 
     if (!scale) throw new NotFoundError('Escala modelo não encontrada.');
     if (!user) throw new NotFoundError('Usuário não encontrado.');

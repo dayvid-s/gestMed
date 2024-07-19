@@ -6,11 +6,10 @@ import { fetchShifts } from "@/features/shiftSlice";
 import { fetchUsers } from "@/features/userSlice";
 import { AppDispatch } from "@/store";
 import { removeProperty } from "@/utils/ObjectManipulation";
-import { useAppSelector } from "@/utils/useSelectorHook";
 import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Modal, SelectPicker } from "rsuite";
+import { Form, Modal } from "rsuite";
 import { ListToAddUserInScale } from "./ListToAddUserInScale";
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -35,7 +34,6 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
   const handleClose = () => setIsOpen(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const shifts = useAppSelector((state) => state.shift.shifts);
 
   const [users, setUsers] = useState<UserDataWithSelected[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -72,14 +70,6 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
     }
   };
 
-  const shiftOptions = shifts?.map((shift) => ({
-    id: shift.id,
-    shiftName: shift.name,
-    start_time: shift.start_time,
-    end_time: shift.end_time,
-    label: shift.name,
-    value: shift,
-  }));
 
   const handleInputChange = (name: string, value: string) => {
     setQueryInfo((prevState) => ({
@@ -100,11 +90,13 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
     try {
       const newModelScaleDuties: ModelScaleDutyInBackend[] = users.map((user) => ({
 
+        scale_id: scale_id,
         user_id: user.id,
-        scale_id,
-        scale_date,
-        shift_id,
+        shift_id: shift_id,
+        scale_date: scale_date,
       }));
+
+      console.log(newModelScaleDuties, "new");
 
       await dispatch(createModelScaleDuty(newModelScaleDuties)).unwrap();
       handleClose();
@@ -126,11 +118,11 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
         <Modal.Header>
           <h4 className="text-4xl font-semibold">Adicionar Médicos na Escala</h4>
         </Modal.Header>
-        <Modal.Body style={{ height: "80vh" }}>
+        <Modal.Body style={{ height: "80vh", overflowX: "hidden" }}>
           <Form>
-            <div className="flex flex-col sm:flex-row flex-wrap gap-y-3.5 justify-between items-center">
+            <div className="flex flex-col sm:flex-row flex-wrap items-baseline ml-2">
               <Form.Group controlId="name">
-                <Form.ControlLabel className="font-medium">
+                <Form.ControlLabel className="font-medium ">
                   Nome do Médico
                 </Form.ControlLabel>
                 <Form.Control
@@ -139,26 +131,14 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
                   onChange={(value) => handleInputChange("name", value)}
                 />
               </Form.Group>
-              <Form.Group>
-                <Form.ControlLabel className="font-medium">
+              <Form.Group className="ml-10" >
+                <Form.ControlLabel className=" mlfont-medium">
                   Especialidade
                 </Form.ControlLabel>
                 <Form.Control
                   name="speciality"
                   value={queryInfo.especiality}
                   onChange={(value) => handleInputChange("especiality", value)}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.ControlLabel className="font-medium">
-                  Turno
-                </Form.ControlLabel>
-                <SelectPicker
-                  searchable={false}
-                  name="quantityOfDays"
-                  data={shiftOptions}
-                  // @ts-expect-error shift não é nulo
-                  onChange={(value) => handleInputChange("quantityOfDays", value)}
                 />
               </Form.Group>
               {/* <Checkbox
@@ -177,7 +157,10 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
         </Modal.Body>
         <Modal.Footer className="flex" >
 
-          <p className="font-semibold">Obs: Os médicos serão adicionados no plantão {shift_id === 1 ? "diurno" : "noturno"}, dia {scale_date}.</p>
+          <p className="font-medium">
+            Obs: Os médicos serão adicionados no plantão <span className="font-bold">{shift_id === 1 ? "diurno" : "noturno"}</span>, dia <span className="font-bold">{scale_date}</span>.
+          </p>
+
           <button
             className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
@@ -186,10 +169,13 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
             Redefinir
           </button>
           <button
-            className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            className=" flex flex-row ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={handleWithcreateScaleModelDuty}
           >
+            <div className="w-6 bg-white rounded-xl mr-1">
+              <p className="text-black font-semibold">0</p>
+            </div>
             Adicionar Médicos
           </button>
         </Modal.Footer>

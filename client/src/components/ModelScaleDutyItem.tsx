@@ -41,16 +41,16 @@ export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMo
 
 
       {/* aqui os cards com info do plantao */}
-      {modelScaleDutiesOfTheDay.map(() => {
+      {modelScaleDutiesOfTheDay.map((duty) => {
+        console.log(duty, "duty");
         return (
           <div className='border-r-2	p-2	border-[#e2e2e2]  '  >
             <div
               title="Mostrar informações desse plantão"
               className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
-
-              <p className='font-bold '>Dr. Dayvid Santos </p>
-              <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
-              <p  >Cardiologista</p>
+              <p className='font-bold '>{duty.user.name}</p>
+              <p className='font-bold '>{duty.shift?.start_time.substring(0, 5)} - {duty.shift?.end_time.substring(0, 5)} ({duty.shift.name})</p>
+              <p  >{duty.user.specialization}  Cardiologista</p>
             </div>
           </div>
 
