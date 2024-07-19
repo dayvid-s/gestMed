@@ -20,11 +20,9 @@ export interface ImodalProps {
   scale_id: number | undefined;
   shift_id: number | null;
   scale_date: number | null
-
 }
 
 export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, scale_id, shift_id }: ImodalProps) {
-
   const [queryInfo, setQueryInfo] = useState({
     name: "",
     especiality: "",
@@ -34,15 +32,21 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
   const handleClose = () => setIsOpen(false);
   const dispatch = useDispatch<AppDispatch>();
 
-
   const [users, setUsers] = useState<UserDataWithSelected[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [userToAddInScaleModel, setUserToAddInScaleModel] = useState<UserDataWithSelected[]>([]);
 
   useEffect(() => {
     dispatch(fetchShifts());
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const filteredUsers = users.filter((user) => user.selected);
+    setUserToAddInScaleModel(filteredUsers.map(obj => removeProperty(obj, "selected")));
+  }, [users]);
+
 
   const fetchData = async () => {
     setLoading(true);
@@ -51,12 +55,10 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
       const action = await dispatch(fetchDoctors());
       if (fetchDoctors.fulfilled.match(action)) {
         const fetchedUsers = action.payload as UserDataWithSelected[];
-
         const updatedUsers = fetchedUsers.map((user) => ({
           ...user,
           selected: false,
         }));
-
         setUsers(updatedUsers);
       } else {
         if (fetchUsers.rejected.match(action)) {
@@ -70,7 +72,6 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
     }
   };
 
-
   const handleInputChange = (name: string, value: string) => {
     setQueryInfo((prevState) => ({
       ...prevState,
@@ -78,18 +79,9 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
     }));
   };
 
-
-
   const handleWithcreateScaleModelDuty = async () => {
-    let userToAddInScaleModel = users.filter((user) => user.selected);
-    userToAddInScaleModel = userToAddInScaleModel.map(obj => removeProperty(obj, "selected"));
-
-    console.log(userToAddInScaleModel);
-
-
     try {
-      const newModelScaleDuties: ModelScaleDutyInBackend[] = users.map((user) => ({
-
+      const newModelScaleDuties: ModelScaleDutyInBackend[] = userToAddInScaleModel.map((user) => ({
         scale_id: scale_id,
         user_id: user.id,
         shift_id: shift_id,
@@ -99,11 +91,16 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
       console.log(newModelScaleDuties, "new");
 
       await dispatch(createModelScaleDuty(newModelScaleDuties)).unwrap();
+      resetForm();
       handleClose();
     } catch (error) {
       console.error("Falha ao criar plantão de escala modelo", error);
     }
+  };
 
+  const resetForm = () => {
+    setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" });
+    setUsers(users.map(user => ({ ...user, selected: false })));
   };
 
   return (
@@ -141,14 +138,10 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
                   onChange={(value) => handleInputChange("especiality", value)}
                 />
               </Form.Group>
-              {/* <Checkbox
-                                    checked={doctorInfo.isAutoFilled}
-                                    onChange={handleIsAutoFilledChange}>
-                                    Preencher Automaticamente
-                                </Checkbox> */}
             </div>
           </Form>
           <ListToAddUserInScale
+            usersSelected={userToAddInScaleModel}
             users={users}
             setUsers={setUsers}
             loading={loading}
@@ -156,27 +149,27 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
           />
         </Modal.Body>
         <Modal.Footer className="flex" >
-
           <p className="font-medium">
             Obs: Os médicos serão adicionados no plantão <span className="font-bold">{shift_id === 1 ? "diurno" : "noturno"}</span>, dia <span className="font-bold">{scale_date}</span>.
           </p>
-
           <button
             className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
-            onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
+            onClick={resetForm}
           >
             Redefinir
           </button>
           <button
-            className=" flex flex-row ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            className="flex flex-row ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={handleWithcreateScaleModelDuty}
           >
-            <div className="w-6 bg-white rounded-xl mr-1">
-              <p className="text-black font-semibold">0</p>
-            </div>
-            Adicionar Médicos
+            {userToAddInScaleModel.length > 0 &&
+              <div className="w-6 bg-white rounded-xl mr-1">
+                <p className="text-black font-semibold">{userToAddInScaleModel.length}</p>
+              </div>
+            }
+            Adicionar {userToAddInScaleModel.length > 1 ? "Médicos" : "Médico"}
           </button>
         </Modal.Footer>
       </Modal>

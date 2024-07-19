@@ -6,6 +6,8 @@ import Dayvid from "../assets/dayvid 1.png";
 interface ListToAddUserInScaleProps {
   users: UserDataWithSelected[];
   setUsers: Dispatch<SetStateAction<UserDataWithSelected[]>>;
+  usersSelected: UserDataWithSelected[];
+
   loading: boolean;
   error: string | null;
 }

@@ -31,7 +31,7 @@ export function ScalesModel() {
 
   useEffect(() => {
     fetchModelScaleDutiesData();
-  }, []);
+  }, [modalIsOpen]);
 
   const fetchModelScaleDutiesData = async () => {
     setLoading(true);
