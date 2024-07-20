@@ -1,0 +1,70 @@
+import { Request, Response } from 'express';
+import { main_scaleRepository } from '../repositories/Main_ScaleRepository';
+export class MainScaleController {
+  async create(req: Request, res: Response) {
+    const { total_of_scale_days } = req.body;
+
+    if (total_of_scale_days === undefined) {
+      return res.status(400).json({ message: 'O total de dias da escala principal é obrigatório' });
+    }
+
+    try {
+
+      const newMainScale = main_scaleRepository.create({ total_of_scale_days });
+      await main_scaleRepository.save(newMainScale);
+
+      return res.status(201).json(newMainScale);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    const { id } = req.params;
+    const { total_of_scale_days } = req.body;
+
+    try {
+      const mainScaleId = parseInt(id, 10);
+
+      if (isNaN(mainScaleId)) {
+        return res.status(400).json({ message: 'ID inválido' });
+      }
+
+      const mainScale = await main_scaleRepository.findOneBy({ id: parseInt(id) });
+
+      if (!mainScale) {
+        return res.status(404).json({ message: 'Escala não encontrada' });
+      }
+
+      mainScale.total_of_scale_days = total_of_scale_days ?? mainScale.total_of_scale_days;
+
+      await main_scaleRepository.save(mainScale);
+
+      return res.status(200).json(mainScale);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  }
+
+  async getById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const mainScaleId = parseInt(id, 10);
+
+    try {
+
+      const mainScale = await main_scaleRepository.findOneBy({ id: parseInt(id) });
+
+      if (!mainScale) {
+        return res.status(404).json({ message: 'Escala não encontrada' });
+      }
+
+      return res.status(200).json(mainScale);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  }
+}
