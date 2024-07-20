@@ -6,6 +6,7 @@ import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { GenericButton } from "./GenericButton";
 import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
 import { ModelScaleDutyItem } from "./ModelScaleDutyItem";
 interface actualModelScaleDutyInfoProps {
@@ -87,10 +88,15 @@ export function ScalesModel() {
     allDutiesAtDay: 0,
   })); const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
   return (
-    <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10'>
-      <h1 className='text-3xl font-extrabold'>
-        &lt;{selectedmodelScale.label}&gt;
-      </h1>
+    <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10 '>
+      <div className="flex flex-row w-full justify-center" >
+        <h1 className='text-3xl font-extrabold self-center justify-self-center'>
+          &lt;{selectedmodelScale.label}&gt;
+        </h1>
+      </div>
+      <div className="ml-auto mr-2 ">
+        <GenericButton />
+      </div>
 
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {dias.map((day) => (
