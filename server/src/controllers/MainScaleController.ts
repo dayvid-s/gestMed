@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { main_scaleRepository } from '../repositories/Main_ScaleRepository';
+import { main_scale_Repository } from '../repositories/main_scale_Repository';
 export class MainScaleController {
   async create(req: Request, res: Response) {
     const { total_of_scale_days } = req.body;
@@ -10,8 +10,8 @@ export class MainScaleController {
 
     try {
 
-      const newMainScale = main_scaleRepository.create({ total_of_scale_days });
-      await main_scaleRepository.save(newMainScale);
+      const newMainScale = main_scale_Repository.create({ total_of_scale_days });
+      await main_scale_Repository.save(newMainScale);
 
       return res.status(201).json(newMainScale);
     } catch (error) {
@@ -31,7 +31,7 @@ export class MainScaleController {
         return res.status(400).json({ message: 'ID inválido' });
       }
 
-      const mainScale = await main_scaleRepository.findOneBy({ id: parseInt(id) });
+      const mainScale = await main_scale_Repository.findOneBy({ id: parseInt(id) });
 
       if (!mainScale) {
         return res.status(404).json({ message: 'Escala não encontrada' });
@@ -39,7 +39,7 @@ export class MainScaleController {
 
       mainScale.total_of_scale_days = total_of_scale_days ?? mainScale.total_of_scale_days;
 
-      await main_scaleRepository.save(mainScale);
+      await main_scale_Repository.save(mainScale);
 
       return res.status(200).json(mainScale);
     } catch (error) {
@@ -55,7 +55,7 @@ export class MainScaleController {
 
     try {
 
-      const mainScale = await main_scaleRepository.findOneBy({ id: parseInt(id) });
+      const mainScale = await main_scale_Repository.findOneBy({ id: parseInt(id) });
 
       if (!mainScale) {
         return res.status(404).json({ message: 'Escala não encontrada' });
