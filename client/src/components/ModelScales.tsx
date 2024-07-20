@@ -98,6 +98,7 @@ export function ScalesModel() {
         <GenericButton />
       </div>
 
+
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {dias.map((day) => (
           <div className='flex flex-col' key={day.dutyDay}>

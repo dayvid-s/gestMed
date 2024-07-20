@@ -1,23 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Alert {
-    value: boolean;
+interface AlertState {
+  message: string;
+  type: "success" | "error" | "info";
+  placement: "topStart" | "topEnd" | "bottomStart" | "bottomEnd";
+  isOpen: boolean;
 }
 
-const initialState: Alert = {
-  value: false
+const initialState: AlertState = {
+  message: "",
+  type: "info",
+  placement: "topStart",
+  isOpen: false,
 };
 
-export const alert = createSlice({
-  name: "openAlert",
+const alertSlice = createSlice({
+  name: "alert",
   initialState,
   reducers: {
-    handleWithAlert: (state) => {
-      state.value = !state.value;
+    showAlert(state, action: PayloadAction<{ message: string; type: AlertState["type"]; placement: AlertState["placement"] }>) {
+      state.message = action.payload.message;
+      state.type = action.payload.type;
+      state.placement = action.payload.placement;
+      state.isOpen = true;
     },
-  }
+    hideAlert(state) {
+      state.isOpen = false;
+    },
+  },
 });
 
-
-export const { handleWithAlert } = alert.actions;
-export const alertReducer = alert.reducer;
+export const { showAlert, hideAlert } = alertSlice.actions;
+export const alertReducer = alertSlice.reducer;

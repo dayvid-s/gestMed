@@ -3,7 +3,6 @@ import { UserDataWithSelected } from "@/@types/userTypes";
 import { fetchDoctors } from "@/features/doctorSclice";
 import { createModelScaleDuty } from "@/features/ModelScaleDutySlice";
 import { fetchShifts } from "@/features/shiftSlice";
-import { fetchUsers } from "@/features/userSlice";
 import { AppDispatch } from "@/store";
 import { removeProperty } from "@/utils/ObjectManipulation";
 import { Manrope } from "next/font/google";
@@ -19,7 +18,7 @@ export interface ImodalProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   scale_id: number | undefined;
   shift_id: number | null;
-  scale_date: number | null
+  scale_date: number | null;
 }
 
 export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, scale_id, shift_id }: ImodalProps) {
@@ -32,7 +31,7 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
   const handleClose = () => setIsOpen(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [users, setUsers] = useState<UserDataWithSelected[]>([]);
+  const [doctors, setDoctors] = useState<UserDataWithSelected[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [userToAddInScaleModel, setUserToAddInScaleModel] = useState<UserDataWithSelected[]>([]);
@@ -40,13 +39,12 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
   useEffect(() => {
     dispatch(fetchShifts());
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    const filteredUsers = users.filter((user) => user.selected);
+    const filteredUsers = doctors.filter((user) => user.selected);
     setUserToAddInScaleModel(filteredUsers.map(obj => removeProperty(obj, "selected")));
-  }, [users]);
-
+  }, [doctors]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -59,14 +57,14 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
           ...user,
           selected: false,
         }));
-        setUsers(updatedUsers);
+        setDoctors(updatedUsers);
       } else {
-        if (fetchUsers.rejected.match(action)) {
-          setError(action.payload || "Erro ao buscar usuários");
+        if (fetchDoctors.rejected.match(action)) {
+          setError(action.payload || "Erro ao buscar doutores");
         }
       }
     } catch (err) {
-      setError("Erro ao buscar usuários");
+      setError("Erro ao buscar doutores");
     } finally {
       setLoading(false);
     }
@@ -100,7 +98,7 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
 
   const resetForm = () => {
     setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" });
-    setUsers(users.map(user => ({ ...user, selected: false })));
+    setDoctors(doctors.map(doctor => ({ ...doctor, selected: false })));
   };
 
   return (
@@ -142,8 +140,8 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
           </Form>
           <ListToAddUserInScale
             usersSelected={userToAddInScaleModel}
-            users={users}
-            setUsers={setUsers}
+            users={doctors}
+            setUsers={setDoctors}
             loading={loading}
             error={error}
           />
