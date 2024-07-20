@@ -113,11 +113,11 @@ export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, sca
         onClose={handleClose}
       >
         <Modal.Header>
-          <h4 className="text-4xl font-semibold">Adicionar Médicos na Escala</h4>
+          <h4 className="text-4xl font-semibold">Adicionar Médicos na Escala Modelo</h4>
         </Modal.Header>
-        <Modal.Body style={{ height: "80vh", overflowX: "hidden" }}>
+        <Modal.Body style={{ height: "80vh", padding: "10px" }}>
           <Form>
-            <div className="flex flex-col sm:flex-row flex-wrap items-baseline ml-2">
+            <div className="flex flex-col sm:flex-row flex-wrap items-baseline ">
               <Form.Group controlId="name">
                 <Form.ControlLabel className="font-medium ">
                   Nome do Médico

@@ -28,7 +28,7 @@ export function ListToAddUserInScale({
 
   return (
     <>
-      <div className="ml-2 flex flex-row flex-wrap items-center justify-start w-full gap-x-6 gap-y-4">
+      <div className="flex flex-row flex-wrap items-center justify-start w-full gap-x-6 gap-y-4">
         {loading ? (
           <p>Carregando...</p>
         ) : error ? (
