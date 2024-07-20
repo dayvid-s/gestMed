@@ -36,8 +36,8 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 const sideBarItems = {
   pages: [
-    { name: "Horários", icon: <HomeIcon />, path: "/home" },
-    { name: "Escala", icon: <DateRangeIcon />, path: "/scale" },
+    { name: "Plantões", icon: <HomeIcon />, path: "/home" },
+    { name: "Escala Modelo", icon: <DateRangeIcon />, path: "/scale" },
 
     { name: "Médicos", icon: <PeopleIcon />, path: "/users" },
     { name: "Relatórios", icon: <SearchIcon />, path: "" },
@@ -51,7 +51,7 @@ const drawerWidth = 240;
 
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
-    open?: boolean;
+  open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
   overflow: "auto",
@@ -72,7 +72,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
+  open?: boolean;
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -108,7 +108,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
 
   const dispatch = useDispatch<AppDispatch>();
   const handleLogout = () => {
-        
+
     dispatch(logoutUser());
     router.push("/");
   };
@@ -124,7 +124,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
           <Toolbar sx={{ zIndex: 300 }} >
             <IconButton
               aria-label="open drawer"
-              onClick={() =>{dispatch(openSideBar());}}
+              onClick={() => { dispatch(openSideBar()); }}
               edge="start"
               sx={{ zIndex: 300, mr: 2, ...(open && { display: "none" }) }}
             >
@@ -147,7 +147,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                 {user?.role === "Médico" ?
                   <span className='text-slate-500	' > {user.specialization}</span>
                   :
-                  <span className='text-slate-500	'>{ user?.role}</span>
+                  <span className='text-slate-500	'>{user?.role}</span>
                 }
               </div>
 
@@ -212,7 +212,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
               ))}
             </List>
             <button onClick={handleLogout} className="w-40 px-4 py-2 mt-20 ml-5 font-bold text-black bg-white rounded hover:bg-blue-700 ">
-                            Sair da Conta
+              Sair da Conta
             </button>
           </div>
         </Drawer>
