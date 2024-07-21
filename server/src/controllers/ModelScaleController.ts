@@ -81,13 +81,18 @@ export class ModelScaleController {
       console.log(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
-  }
+  };
 
   async getById(req: Request, res: Response) {
     const { id } = req.params;
+    const parsedId = parseInt(id);
+
+    if (isNaN(parsedId)) {
+      return res.status(400).json({ message: 'ID inválido' });
+    }
 
     try {
-      const scale = await model_scaleRepository.findOneBy({ id: parseInt(id) });
+      const scale = await model_scaleRepository.findOneBy({ id: parsedId });
 
       if (!scale) {
         return res.status(404).json({ message: 'Escala não encontrada' });

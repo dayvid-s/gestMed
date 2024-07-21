@@ -1,11 +1,17 @@
 import { Request, Response } from 'express';
 import { main_scale_Repository } from '../repositories/main_scale_Repository';
+import { model_scale_duty_Repository } from '../repositories/model_scale_DutyRepository';
 export class MainScaleController {
   async create(req: Request, res: Response) {
-    const { total_of_scale_days } = req.body;
+    const { total_of_scale_days, model_scale_id } = req.body;
 
     if (total_of_scale_days === undefined) {
       return res.status(400).json({ message: 'O total de dias da escala principal é obrigatório' });
+    }
+
+    // para amanha: crie plantões da escala principal e consuma - os no frontend.e depois disso crie a funcionalidade de criar e scala principal, passando como parametro a escala ModelScaleController.
+    if (model_scale_id != undefined) {
+      const modelScaleDuties = await model_scale_duty_Repository.find({ relations: ['scale', 'user', 'shift'] });
     }
 
     try {

@@ -4,6 +4,10 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const ano = data.getFullYear();
   const mes = data.getMonth() + 1;
   const totalDiasMes = new Date(ano, mes, 0).getDate();
+  const meses = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
 
   const dias = Array.from({ length: totalDiasMes }, (_, i) => i + 1);
   const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
@@ -11,13 +15,13 @@ export function WrapperWithSchedulesOfAllDoctors() {
     <div className='bg-[#F8F8F8] items-center flex b rounded-lg flex-col	  '  >
 
       <h1 className='text-3xl font-extrabold ' >
-                &lt;Janeiro&gt;
+        Plantões de &lt;{meses[mes]}&gt;
       </h1>
 
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {dias.map((dia) =>
 
-        // aqui a coluna 
+          // aqui a coluna 
           <div className='flex flex-col ' key={dia}>
 
 
