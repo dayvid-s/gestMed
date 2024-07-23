@@ -1,92 +1,130 @@
+import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { ScaleBackendModel } from "@/@types/scaleTypes";
+import { fetchModelScaleDuties } from "@/features/ModelScaleDutySlice";
+import { closeSideBar } from "@/features/sideBarSlice";
+import { AppDispatch } from "@/store";
+import { useAppSelector } from "@/utils/useSelectorHook";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
+import { ModelScaleDutyItem } from "./ModelScaleDutyItem";
+
+interface actualModelScaleDutyInfoProps {
+  dayOfScaleDuty: number | null;
+  shiftOfScaleDuty: number | null;
+}
 
 export function WrapperWithSchedulesOfAllDoctors() {
-  const data = new Date();
-  const ano = data.getFullYear();
-  const mes = data.getMonth() + 1;
-  const totalDiasMes = new Date(ano, mes, 0).getDate();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [actualModelScaleInfo, setActualModelScaleInfo] = useState<ScaleBackendModel | null>(null);
+  const [modelScaleDuties, setModelScaleDuties] = useState<ModelScaleDuty[]>([]);
+  const [actualModelScaleDutyInfo, setActualModelScaleDutyInfo] = useState<actualModelScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const AllScales = useAppSelector((state) => state.modelScale.ModelScales);
+
+  useEffect(() => {
+    fetchMainScaleDutiesData();
+  }, [modalIsOpen]);
+
+  const fetchMainScaleDutiesData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const action = await dispatch(fetchModelScaleDuties());
+      if (fetchModelScaleDuties.fulfilled.match(action)) {
+        const fetchedModelScaleDuties = action.payload as ModelScaleDuty[];
+        setModelScaleDuties(fetchedModelScaleDuties);
+      } else {
+        if (fetchModelScaleDuties.rejected.match(action)) {
+          setError("Erro ao buscar plantões da escala modelo");
+        }
+      }
+    } catch (err) {
+      setError("Erro ao buscar plantões da escala modelo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  function handleWithModalOpen(dayOfScaleDuty: number, shiftOfScaleDuty: number) {
+    dispatch(closeSideBar());
+    setActualModelScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
+    setModalIsOpen(true);
+  }
+
+
+  const totalScaleDays = actualModelScaleInfo?.total_of_scale_days;
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+
+  const dias = Array.from({ length: totalScaleDays || 0 }, (_, i) => ({
+    dutyDay: i + 1,
+    allDutiesAtDay: 0,
+  }));
+
+  const diasDaSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
   const meses = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
-  const dias = Array.from({ length: totalDiasMes }, (_, i) => i + 1);
-  const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
   return (
-    <div className='bg-[#F8F8F8] items-center flex b rounded-lg flex-col	  '  >
-
-      <h1 className='text-3xl font-extrabold ' >
-        Plantões de &lt;{meses[mes]}&gt;
+    <div className='bg-[#F8F8F8] items-center flex rounded-lg flex-col'>
+      <h1 className='text-3xl font-extrabold'>
+        &lt;{meses[month - 1]}&gt;
       </h1>
 
       <div className='flex flex-wrap items-start justify-center mt-5'>
-        {dias.map((dia) =>
-
-          // aqui a coluna 
-          <div className='flex flex-col ' key={dia}>
-
-
-
-
-            {/* aqui os 2 textos que indicam a semana  */}
-            <div className='flex justify-between px-3 w-60 bg-green500 ' >
-              <h4 className='text-white ' >{diasDaSemana[new Date(ano, mes - 1, dia).getDay()]}</h4>
-              <h4 className='text-white ' >{dia.toString().padStart(2, "0")}/{mes.toString().padStart(2, "0")}</h4>
+        {dias.map((day) => (
+          <div className='flex flex-col' key={day.dutyDay}>
+            <div className='flex justify-between px-3 w-60 bg-green500'>
+              <h4 className='text-white'>
+                {diasDaSemana[new Date(year, month - 1, day.dutyDay).getDay()]}
+              </h4>
+              <h4 className='text-white'>
+                {day.dutyDay.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
+              </h4>
             </div>
 
+            <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={1} />
 
-            {/* aqui os cards com info do plantao */}
-
-            <div className='border-r-2	p-2	border-[#e2e2e2]  '  >
+            <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                title="Mostrar informações desse plantão"
-                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
-
-                <p className='font-bold '>Dr. Dayvid Santos </p>
-                <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
-                <p  >Cardiologista</p>
+                onClick={() => handleWithModalOpen(day.dutyDay, 1)}
+                title="Adicionar médico nesse plantão"
+                className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
+                <p className='text-4xl text-slate-300'>+</p>
               </div>
             </div>
 
-
-            <div className='border-r-2	p-2	border-[#e2e2e2]'  >
+            <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={2} />
+            <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                title="Mostrar informações desse plantão"
-                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
-
-                <p className='font-bold '>Dr. Dayvid Santos </p>
-                <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
-                <p  >Cardiologista</p>
+                onClick={() => handleWithModalOpen(day.dutyDay, 2)}
+                title="Adicionar médico nesse plantão"
+                className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
+                <p className='text-4xl text-slate-300'>+</p>
               </div>
             </div>
-
-
-            <div className='border-r-2	p-2	border-[#e2e2e2]'  >
-              <div
-                title="Mostrar informações desse plantão"
-                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
-
-                <p className='font-bold '>Dr. Dayvid Santos </p>
-                <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
-                <p  >Cardiologista</p>
-              </div>
-            </div>
-
-            <div className='border-r-2	p-2	border-[#e2e2e2]'  >
-              <div
-                title="Mostrar informações desse plantão"
-                className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' >
-
-                <p className='font-bold '>Dr. Dayvid Santos </p>
-                <p className='font-bold '>07:00 - 19:00 (SD/SN)</p>
-                <p  >Cardiologista</p>
-              </div>
-            </div>
-
           </div>
-        )}
+        ))}
       </div>
 
-
+      <ModalToAddUsersToScale
+        scale_id={actualModelScaleInfo?.id}
+        scale_date={actualModelScaleDutyInfo?.dayOfScaleDuty}
+        shift_id={actualModelScaleDutyInfo?.shiftOfScaleDuty}
+        setIsOpen={setModalIsOpen}
+        modalIsOpen={modalIsOpen}
+      />
     </div>
   );
 }
