@@ -1,5 +1,5 @@
 import { fetchMainScaleDuties } from "@/features/MainScaleDutySlice";
-import { fetchAllMainScales } from "@/features/MainScaleSlice";
+import { fetchMainScale } from "@/features/MainScaleSlice";
 import { closeSideBar } from "@/features/sideBarSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
@@ -21,14 +21,12 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const mainScaleDuties = useAppSelector((state) => state.mainScaleDuty.mainScaleDuties);
 
   useEffect(() => {
-    if (mainScale.length === 0) {
-      dispatch(fetchAllMainScales());
-    }
-  }, [dispatch, mainScale]);
+    dispatch(fetchMainScale());
+  }, []);
 
   useEffect(() => {
     dispatch(fetchMainScaleDuties());
-  }, [dispatch, modalIsOpen]);
+  }, [modalIsOpen]);
 
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());
