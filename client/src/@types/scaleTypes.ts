@@ -17,3 +17,10 @@ export interface ScaleBackendModel {
   created_at: string;
   updated_at: string;
 }
+
+export interface MainScaleBackendModel {
+  id: number;
+  total_of_scale_days: number;
+  created_at: string;
+  updated_at: string;
+}

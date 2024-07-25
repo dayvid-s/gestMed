@@ -1,91 +1,76 @@
-import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
-import { ScaleBackendModel } from "@/@types/scaleTypes";
-import { fetchModelScaleDuties } from "@/features/ModelScaleDutySlice";
+import { fetchMainScaleDuties } from "@/features/MainScaleDutySlice";
+import { fetchAllMainScales } from "@/features/MainScaleSlice";
 import { closeSideBar } from "@/features/sideBarSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
-import { ModelScaleDutyItem } from "./ModelScaleDutyItem";
 
-interface actualModelScaleDutyInfoProps {
+interface actualMainScaleDutyInfoProps {
   dayOfScaleDuty: number | null;
   shiftOfScaleDuty: number | null;
 }
 
 export function WrapperWithSchedulesOfAllDoctors() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [actualModelScaleInfo, setActualModelScaleInfo] = useState<ScaleBackendModel | null>(null);
-  const [modelScaleDuties, setModelScaleDuties] = useState<ModelScaleDuty[]>([]);
-  const [actualModelScaleDutyInfo, setActualModelScaleDutyInfo] = useState<actualModelScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [actualMainScaleDutyInfo, setActualMainScaleDutyInfo] = useState<actualMainScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
 
   const dispatch = useDispatch<AppDispatch>();
-  const AllScales = useAppSelector((state) => state.modelScale.ModelScales);
+  const { mainScale, loading, error } = useAppSelector((state) => state.mainScale);
+  const mainScaleDuties = useAppSelector((state) => state.mainScaleDuty.mainScaleDuties);
 
   useEffect(() => {
-    fetchMainScaleDutiesData();
-  }, [modalIsOpen]);
-
-  const fetchMainScaleDutiesData = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const action = await dispatch(fetchModelScaleDuties());
-      if (fetchModelScaleDuties.fulfilled.match(action)) {
-        const fetchedModelScaleDuties = action.payload as ModelScaleDuty[];
-        setModelScaleDuties(fetchedModelScaleDuties);
-      } else {
-        if (fetchModelScaleDuties.rejected.match(action)) {
-          setError("Erro ao buscar plantões da escala modelo");
-        }
-      }
-    } catch (err) {
-      setError("Erro ao buscar plantões da escala modelo");
-    } finally {
-      setLoading(false);
+    if (mainScale.length === 0) {
+      dispatch(fetchAllMainScales());
     }
+  }, [dispatch, mainScale]);
+
+  useEffect(() => {
+    dispatch(fetchMainScaleDuties());
+  }, [dispatch, modalIsOpen]);
+
+  const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
+    dispatch(closeSideBar());
+    setActualMainScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
+    setModalIsOpen(true);
   };
 
-  function handleWithModalOpen(dayOfScaleDuty: number, shiftOfScaleDuty: number) {
-    dispatch(closeSideBar());
-    setActualModelScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
-    setModalIsOpen(true);
-  }
-
-
-  const totalScaleDays = actualModelScaleInfo?.total_of_scale_days;
+  const totalScaleDays = mainScale[0]?.total_of_scale_days ?? 0;
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
 
-  const dias = Array.from({ length: totalScaleDays || 0 }, (_, i) => ({
+  const daysArray = Array.from({ length: totalScaleDays }, (_, i) => ({
     dutyDay: i + 1,
     allDutiesAtDay: 0,
   }));
 
-  const diasDaSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-
-  const meses = [
+  const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const months = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
+  if (loading) {
+    return <p>Carregando escalas...</p>;
+  }
+
+  if (error) {
+    return <p>Erro ao carregar escalas: {error}</p>;
+  }
+
   return (
     <div className='bg-[#F8F8F8] items-center flex rounded-lg flex-col'>
       <h1 className='text-3xl font-extrabold'>
-        &lt;{meses[month - 1]}&gt;
+        &lt;{months[month - 1]}&gt;
       </h1>
-
       <div className='flex flex-wrap items-start justify-center mt-5'>
-        {dias.map((day) => (
+        {daysArray.map((day) => (
           <div className='flex flex-col' key={day.dutyDay}>
             <div className='flex justify-between px-3 w-60 bg-green500'>
               <h4 className='text-white'>
-                {diasDaSemana[new Date(year, month - 1, day.dutyDay).getDay()]}
+                {daysOfWeek[new Date(year, month - 1, day.dutyDay).getDay()]}
               </h4>
               <h4 className='text-white'>
                 {day.dutyDay.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
@@ -93,7 +78,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={1} />
+            {/* <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} /> */}
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
@@ -105,7 +90,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={2} />
+            {/* <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} /> */}
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day.dutyDay, 2)}
@@ -119,9 +104,9 @@ export function WrapperWithSchedulesOfAllDoctors() {
       </div>
 
       <ModalToAddUsersToScale
-        scale_id={actualModelScaleInfo?.id}
-        scale_date={actualModelScaleDutyInfo?.dayOfScaleDuty}
-        shift_id={actualModelScaleDutyInfo?.shiftOfScaleDuty}
+        scale_id={mainScaleDuties[0]?.id}
+        scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
+        shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
         setIsOpen={setModalIsOpen}
         modalIsOpen={modalIsOpen}
       />
