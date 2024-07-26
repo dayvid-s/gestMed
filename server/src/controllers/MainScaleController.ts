@@ -9,23 +9,21 @@ export class MainScaleController {
       return res.status(400).json({ message: 'O total de dias da escala principal é obrigatório' });
     }
 
-    // para amanha: crie plantões da escala principal e consuma - os no frontend.e depois disso crie a funcionalidade de criar e scala principal, passando como parametro a escala ModelScaleController.
-    if (model_scale_id != undefined) {
-      const modelScaleDuties = await model_scale_duty_Repository.find({ relations: ['scale', 'user', 'shift'] });
-    }
-
     try {
+      const existingMainScale = await main_scale_Repository.find();
+      if (existingMainScale) {
+        return res.status(400).json({ message: 'Já existe uma escala principal. Só é permitida uma escala principal.' });
+      }
 
       const newMainScale = main_scale_Repository.create({ total_of_scale_days });
       await main_scale_Repository.save(newMainScale);
 
       return res.status(201).json(newMainScale);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
   }
-
   async update(req: Request, res: Response) {
     const { id } = req.params;
     const { total_of_scale_days } = req.body;
@@ -49,15 +47,42 @@ export class MainScaleController {
       console.log(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
+  }
 
 
-
-  } async getAll(req: Request, res: Response) {
+  async getAll(req: Request, res: Response) {
     try {
       const mainScales = await main_scale_Repository.find();
       return res.status(200).json(mainScales);
     } catch (error) {
       console.log(error);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  }
+  async copyDutiesFromTheModelScale(req: Request, res: Response) {
+    try {
+      const { model_scale_id } = req.params;
+
+      if (!model_scale_id) {
+        return res.status(400).json({ message: 'O ID da escala modelo é obrigatório' });
+      }
+
+      const scaleId = parseInt(model_scale_id, 10);
+      if (isNaN(scaleId)) {
+        return res.status(400).json({ message: 'O ID da escala modelo deve ser um número válido' });
+      }
+
+      const modelScaleDuties = await model_scale_duty_Repository.find({
+        where: { scale: { id: scaleId } },
+        relations: ['scale', 'user', 'shift'],
+      });
+
+      // Lógica para manipular os dados obtidos
+      // e, possivelmente, copiar os plantões para uma nova escala.
+
+      return res.status(200).json(modelScaleDuties);
+    } catch (error) {
+      console.error(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
   }

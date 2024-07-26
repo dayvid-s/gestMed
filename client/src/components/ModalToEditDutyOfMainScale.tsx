@@ -88,6 +88,18 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalPro
         <Modal.Footer className="flex" >
 
 
+          <button className='border-2 rounded-lg w-44 h-10 bg-[#8a133f] hover:bg-[#cd497b] text-white m-3' type='submit'>
+            Excluir Plantão
+          </button>
+
+          <button
+            className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            type="button"
+            onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
+          >
+            Mudar Turno
+          </button>
+
           <button
             className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"

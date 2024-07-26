@@ -57,8 +57,8 @@ export function ChoiceScale() {
           placeholder="Escolha uma escala"
         />
 
-        <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
-          Baixar Escala
+        <button className='border-2 rounded-lg w-44 h-10 bg-[#8a133f] hover:bg-[#cd497b] text-white m-3' type='submit'>
+          Excluir Escala
         </button>
 
         <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
