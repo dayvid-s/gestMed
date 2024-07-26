@@ -21,7 +21,7 @@ export interface ImodalProps {
   scale_date: number | null;
 }
 
-export function ModalToAddUsersToScale({ modalIsOpen, setIsOpen, scale_date, scale_id, shift_id }: ImodalProps) {
+export function ModalToAddUsersToModelScale({ modalIsOpen, setIsOpen, scale_date, scale_id, shift_id }: ImodalProps) {
   const [queryInfo, setQueryInfo] = useState({
     name: "",
     especiality: "",

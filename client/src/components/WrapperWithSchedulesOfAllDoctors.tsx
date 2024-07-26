@@ -1,3 +1,4 @@
+import { MainScaleDuty } from "@/@types/MainScaleDutyTypes";
 import { fetchMainScaleDuties } from "@/features/MainScaleDutySlice";
 import { fetchMainScale } from "@/features/MainScaleSlice";
 import { closeSideBar } from "@/features/sideBarSlice";
@@ -5,7 +6,8 @@ import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
+import { MainScaleDutyItem } from "./MainScaleDutyItem";
+import { ModalToAddUsersToMainScale } from "./ModalToAddUsersToMainScale";
 
 interface actualMainScaleDutyInfoProps {
   dayOfScaleDuty: number | null;
@@ -18,15 +20,30 @@ export function WrapperWithSchedulesOfAllDoctors() {
 
   const dispatch = useDispatch<AppDispatch>();
   const { mainScale, loading, error } = useAppSelector((state) => state.mainScale);
-  const mainScaleDuties = useAppSelector((state) => state.mainScaleDuty.mainScaleDuties);
+  const [mainScaleDuties, setMainScaleDuties] = useState<MainScaleDuty[]>([]);
 
   useEffect(() => {
     dispatch(fetchMainScale());
   }, []);
 
   useEffect(() => {
-    dispatch(fetchMainScaleDuties());
+    fetchMainScaleDutiesData()
   }, [modalIsOpen]);
+
+
+
+  const fetchMainScaleDutiesData = async () => {
+    try {
+      const action = await dispatch(fetchMainScaleDuties());
+      if (fetchMainScaleDuties.fulfilled.match(action)) {
+        const fetchedMainScaleDuties = action.payload as MainScaleDuty[];
+        setMainScaleDuties(fetchedMainScaleDuties);
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  };
+  console.log(mainScaleDuties)
 
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());
@@ -76,7 +93,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
-            {/* <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} /> */}
+            <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
@@ -88,7 +105,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
-            {/* <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day.dutyDay} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} /> */}
+            <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day.dutyDay, 2)}
@@ -101,8 +118,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
         ))}
       </div>
 
-      <ModalToAddUsersToScale
-        scale_id={mainScaleDuties[0]?.id}
+      <ModalToAddUsersToMainScale
         scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
         shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
         setIsOpen={setModalIsOpen}

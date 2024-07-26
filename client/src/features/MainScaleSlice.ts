@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MainScaleBackendModel, ScaleData } from "../@types/scaleTypes";
+import { MainScaleBackendModel } from "../@types/scaleTypes";
 import { api } from "../services/axiosClient";
 
 type MainScaleState = {
@@ -14,7 +14,7 @@ const initialState: MainScaleState = {
   error: null,
 };
 
-export const fetchAllMainScales = createAsyncThunk<MainScaleBackendModel[], void, { rejectValue: string }>(
+export const fetchMainScale = createAsyncThunk<MainScaleBackendModel[], void, { rejectValue: string }>(
   "mainScale/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
@@ -35,7 +35,7 @@ export const fetchAllMainScales = createAsyncThunk<MainScaleBackendModel[], void
   }
 );
 
-export const createMainScale = createAsyncThunk<ScaleData, { total_of_scale_days: number; model_scale_id?: number }, { rejectValue: string }>(
+export const createMainScale = createAsyncThunk<MainScaleBackendModel, { total_of_scale_days: number; model_scale_id?: number }, { rejectValue: string }>(
   "mainScale/create",
   async ({ total_of_scale_days, model_scale_id }, { rejectWithValue }) => {
     try {
@@ -67,15 +67,15 @@ const MainScaleSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllMainScales.fulfilled, (state, action: PayloadAction<MainScaleBackendModel[]>) => {
+      .addCase(fetchMainScale.fulfilled, (state, action: PayloadAction<MainScaleBackendModel[]>) => {
         state.loading = false;
-        state.mainScale = action.payload; // Atribui o array recebido ao estado
+        state.mainScale = action.payload;
       })
-      .addCase(fetchAllMainScales.pending, (state) => {
+      .addCase(fetchMainScale.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllMainScales.rejected, (state, action) => {
+      .addCase(fetchMainScale.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro desconhecido";
       })
@@ -83,10 +83,11 @@ const MainScaleSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createMainScale.fulfilled, (state, action: PayloadAction<MainScaleBackendModel>) => {
-        state.loading = false;
-        state.mainScale.push(action.payload);
-      })
+      .addCase(createMainScale.fulfilled,
+        (state, action: PayloadAction<MainScaleBackendModel>) => {
+          state.loading = false;
+          state.mainScale.push(action.payload);
+        })
       .addCase(createMainScale.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro desconhecido";

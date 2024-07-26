@@ -7,7 +7,7 @@ import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GenericButton } from "./GenericButton";
-import { ModalToAddUsersToScale } from "./ModalToAddUsersToScale";
+import { ModalToAddUsersToModelScale } from "./ModalToAddUsersToModelScale";
 import { ModelScaleDutyItem } from "./ModelScaleDutyItem";
 interface actualModelScaleDutyInfoProps {
   dayOfScaleDuty: number | null;
@@ -138,7 +138,7 @@ export function ScalesModel() {
         ))}
       </div>
 
-      <ModalToAddUsersToScale
+      <ModalToAddUsersToModelScale
         scale_id={actualModelScaleInfo?.id}
         scale_date={actualModelScaleDutyInfo?.dayOfScaleDuty}
         shift_id={actualModelScaleDutyInfo?.shiftOfScaleDuty}

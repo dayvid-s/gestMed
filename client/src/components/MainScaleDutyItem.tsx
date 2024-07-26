@@ -1,24 +1,22 @@
-import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { MainScaleDuty } from "@/@types/MainScaleDutyTypes";
 import { useEffect, useRef, useState } from "react";
-import { ModalToEditDutyOfModelScale } from "./ModalToEditDutyOfModelScale";
+import { ModalToEditDutyOfMainScale } from "./ModalToEditDutyOfMainScale";
 
 interface dayOfScaleDutyProps {
   dutyDay: number;
   allDutiesAtDay: number;
 }
-interface ModelScaleDutyProps {
+interface MainScaleDutyProps {
   dayOfScaleDuty: dayOfScaleDutyProps;
   IdOfShiftOfScaleDuty: number | null;
-  allModelScaleDuties: ModelScaleDuty[];
+  allMainScaleDuties: MainScaleDuty[];
   allDaysOfScaleDuty: dayOfScaleDutyProps[];
 
 }
 
-export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allModelScaleDuties, allDaysOfScaleDuty }: ModelScaleDutyProps) {
-  // obs: tem como saber o maximo de plantoes que cada dia tem. apenas salvando o valor do total de cada plantao aqui. 
-  // assim como tem como adicionar campos em branco, aqui, baseado na sentença anterior.
+export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMainScaleDuties, allDaysOfScaleDuty }: MainScaleDutyProps) {
 
-  const modelScaleDutiesOfTheDay = allModelScaleDuties.filter((modelScaleDuty) => modelScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === modelScaleDuty.shift.id);
+  const mainScaleDutiesOfTheDay = allMainScaleDuties.filter((mainScaleDuty) => mainScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === mainScaleDuty.shift.id);
   const renderCount = useRef(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -27,7 +25,7 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMod
     if (renderCount.current < 1) {
       allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
         allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
-        modelScaleDutiesOfTheDay.length;
+        mainScaleDutiesOfTheDay.length;
     }
 
     renderCount.current++;
@@ -44,14 +42,14 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMod
 
 
       {/* aqui os cards com info do plantao */}
-      {modelScaleDutiesOfTheDay.map((duty) => {
+      {mainScaleDutiesOfTheDay.map((duty) => {
         return (
           <div className='border-r-2	p-2	border-[#e2e2e2]  '  >
             <div
               title="Mostrar informações desse plantão"
               className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' onClick={() => setModalIsOpen(true)} >
               <p className='font-bold '>{duty.user.name}</p>
-              <ModalToEditDutyOfModelScale
+              <ModalToEditDutyOfMainScale
                 modelScaleDutyInfo={duty}
                 setIsOpen={setModalIsOpen}
                 modalIsOpen={modalIsOpen}
