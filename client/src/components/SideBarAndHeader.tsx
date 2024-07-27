@@ -190,7 +190,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
             <Divider />
             <List className="mt-10" >
               {sideBarItems.pages.map((page, index) => (
-                <Link key={page.name} href={page.path} passHref>
+                <Link onClick={() => { dispatch(closeSideBar()); }} key={page.name} href={page.path} passHref>
                   <ListItemButton>
                     <ListItemIcon sx={{ color: "#fff" }}  >{page.icon}</ListItemIcon>
                     {/* <ListItemText  primary={page.name} /> */}
@@ -202,7 +202,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
             <Divider />
             <List>
               {sideBarItems.configuration.map((page, index) => (
-                <Link key={page.name} href={page.path} passHref>
+                <Link onClick={() => { dispatch(closeSideBar()); }} key={page.name} href={page.path} passHref>
                   <ListItemButton>
                     <ListItemIcon sx={{ color: "#fff" }} >{page.icon}</ListItemIcon>
                     <h1 className='font-bold text-white text-xl ' >{page.name}</h1>

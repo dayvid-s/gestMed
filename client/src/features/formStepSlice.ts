@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface FormStepSLiceProps {
-    actualStep: number;
+  actualStep: number;
 
 }
 const initialState: FormStepSLiceProps = {
@@ -14,7 +14,6 @@ export const formStepSLice = createSlice({
   reducers: {
     increaseStep: (state) => {
       state.actualStep += 1;
-      console.log(state.actualStep);
     },
     decreaseStep: (state) => {
       state.actualStep -= 1;

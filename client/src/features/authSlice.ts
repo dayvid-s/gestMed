@@ -3,17 +3,17 @@ import Cookies from "js-cookie";
 import { UserType } from "../@types/userTypes";
 import { api } from "../services/axiosClient";
 type ChangeUserPayload = {
-    user: UserType;
+  user: UserType;
 };
 
 
 type AuthState = {
-    user: UserType | null
-    token: string | null
+  user: UserType | null
+  token: string | null
 }
 type SignInPayload = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 };
 const initialState: AuthState = {
   user: {
@@ -32,7 +32,6 @@ export const signInAsync = createAsyncThunk(
   "user/signInAsync",
   async (payload: SignInPayload) => {
     try {
-      console.log("veio aq dados:", payload.email, payload.password);
       const response = await api.post("/login", {
         email: payload.email,
         password: payload.password,
@@ -76,7 +75,6 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(signInAsync.fulfilled, (state, action: PayloadAction<AuthState>) => {
-      console.log("resultado da action", action.payload.token);
       state.user = action.payload.user;
       state.token = action.payload.token;
       if (state.token) {
@@ -84,7 +82,7 @@ export const authSlice = createSlice({
         Cookies.set("auth_token", state.token, { expires: 1 / 3 });
         Cookies.set("auth_user", JSON.stringify(state.user), { expires: 1 / 3 });
         api.defaults.headers.common["Authorization"] =
-                    `Bearer ${action.payload.token}`;
+          `Bearer ${action.payload.token}`;
       }
     })
       .addCase(signInAsync.rejected, (state, action) => {

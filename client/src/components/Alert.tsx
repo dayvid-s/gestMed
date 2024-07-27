@@ -25,15 +25,12 @@ export function Alert() {
   );
 
   useEffect(() => {
-    console.log("chamou");
     handlePush();
   }, [isOpen]);
 
 
   const handlePush = () => {
-    console.log("entrou na ");
     // if (message && type) {
-    console.log("veio aq");
     toaster.push(message, { placement });
 
 

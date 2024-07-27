@@ -85,7 +85,6 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
         scale_date: scale_date,
       }));
 
-      console.log(newMainScaleDuties, "new");
 
       await dispatch(createMainScaleDuty(newMainScaleDuties)).unwrap();
       resetForm();

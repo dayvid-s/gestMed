@@ -1,5 +1,6 @@
 import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
 import { ScaleBackendModel } from "@/@types/scaleTypes";
+import { copyDutiesFromModel } from "@/features/MainScaleSlice";
 import { fetchModelScaleDuties } from "@/features/ModelScaleDutySlice";
 import { closeSideBar } from "@/features/sideBarSlice";
 import { AppDispatch } from "@/store";
@@ -23,6 +24,23 @@ export function ScalesModel() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  function transformModelScaleInMainScale() {
+    if (actualModelScaleInfo?.id) {
+      dispatch(copyDutiesFromModel({ model_scale_id: actualModelScaleInfo.id }))
+        .then((result) => {
+          if (copyDutiesFromModel.fulfilled.match(result)) {
+            // console.log('Escala modelo transformada em escala principal com sucesso', result.payload);
+          } else if (copyDutiesFromModel.rejected.match(result)) {
+            console.error('Falha ao transformar escala modelo em escala principal', result.error.message);
+          }
+        });
+    } else {
+      console.error('ID da escala modelo não disponível');
+    }
+
+
+  }
+
   const dispatch = useDispatch<AppDispatch>();
   const AllScales = useAppSelector((state) => state.modelScale.ModelScales);
   const selectedmodelScale = useAppSelector((state) => state.modelScaleOptions.selectedmodelScale);
@@ -32,7 +50,7 @@ export function ScalesModel() {
 
   useEffect(() => {
     fetchModelScaleDutiesData();
-  }, [modalIsOpen]);
+  }, [modalIsOpen, actualModelScaleInfo]);
 
   const fetchModelScaleDutiesData = async () => {
     setLoading(true);
@@ -40,8 +58,9 @@ export function ScalesModel() {
     try {
       const action = await dispatch(fetchModelScaleDuties());
       if (fetchModelScaleDuties.fulfilled.match(action)) {
-        const fetchedModelScaleDuties = action.payload as ModelScaleDuty[];
-        setModelScaleDuties(fetchedModelScaleDuties);
+        const fetchedModelScaleDuties: ModelScaleDuty[] = action.payload;
+        const filteredDuties = fetchedModelScaleDuties.filter(duty => duty?.scale?.name === actualModelScaleInfo?.name);
+        setModelScaleDuties(filteredDuties);
       } else {
         if (fetchModelScaleDuties.rejected.match(action)) {
           setError("Erro ao buscar plantões da escala modelo");
@@ -95,7 +114,7 @@ export function ScalesModel() {
         </h1>
       </div>
       <div className="ml-auto mr-2 ">
-        <GenericButton />
+        <GenericButton onClick={transformModelScaleInMainScale} title="Adicionar Como Principal" />
       </div>
 
 

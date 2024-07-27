@@ -32,7 +32,6 @@ export default function Login() {
 
 
   const handleLogin = async (event: FormEvent) => {
-    console.log(user);
     event.preventDefault();
     dispatch(signInAsync(user));
   };

@@ -43,7 +43,6 @@ export function WrapperWithSchedulesOfAllDoctors() {
       console.log(err)
     }
   };
-  console.log(mainScaleDuties)
 
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());

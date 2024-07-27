@@ -44,7 +44,7 @@ export const createMainScale = createAsyncThunk<MainScaleBackendModel, { total_o
         model_scale_id,
       });
       if (response.status < 300) {
-        console.log("Escala principal criada com sucesso");
+        // console.log("Escala principal criada com sucesso");
         return response.data;
       } else {
         console.error("Falha ao criar escala principal", response);
@@ -52,6 +52,28 @@ export const createMainScale = createAsyncThunk<MainScaleBackendModel, { total_o
       }
     } catch (error) {
       console.error("Falha ao criar escala principal", error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
+  }
+);
+
+export const copyDutiesFromModel = createAsyncThunk<MainScaleBackendModel[], { model_scale_id: number }, { rejectValue: string }>(
+  "mainScale/copyDutiesFromModel",
+  async ({ model_scale_id }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/scales/main/duties/copy-from-model/${model_scale_id}`);
+      if (response.status < 300) {
+        return response.data;
+      } else {
+        console.error("Falha ao transformar escala modelo em escala principal", response);
+        return rejectWithValue("Falha transformar escala modelo em escala principal");
+      }
+    } catch (error) {
+      console.error("Erro transformar escala modelo em escala principal", error);
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       } else {
@@ -83,12 +105,23 @@ const MainScaleSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createMainScale.fulfilled,
-        (state, action: PayloadAction<MainScaleBackendModel>) => {
-          state.loading = false;
-          state.mainScale.push(action.payload);
-        })
+      .addCase(createMainScale.fulfilled, (state, action: PayloadAction<MainScaleBackendModel>) => {
+        state.loading = false;
+        state.mainScale.push(action.payload);
+      })
       .addCase(createMainScale.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Erro desconhecido";
+      })
+      .addCase(copyDutiesFromModel.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(copyDutiesFromModel.fulfilled, (state, action: PayloadAction<MainScaleBackendModel[]>) => {
+        state.loading = false;
+        state.mainScale = action.payload;
+      })
+      .addCase(copyDutiesFromModel.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro desconhecido";
       });

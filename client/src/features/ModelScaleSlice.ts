@@ -45,7 +45,7 @@ export const createModelScale = createAsyncThunk<ScaleData, { name: string; tota
         is_auto_filled,
       });
       if (response.status < 300) {
-        console.log("Modelo de escala criado com sucesso");
+        // console.log("Modelo de escala criado com sucesso");
         return response.data;
       } else {
         console.error("Falha ao criar escala", response);

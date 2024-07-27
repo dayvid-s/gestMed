@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import { main_scale_duty_Repository } from '../repositories/main_scale_duty_Repository';
 import { main_scale_Repository } from '../repositories/main_scale_Repository';
 import { model_scale_duty_Repository } from '../repositories/model_scale_DutyRepository';
+import { model_scaleRepository } from '../repositories/model_scaleRepository';
 export class MainScaleController {
   async create(req: Request, res: Response) {
     const { total_of_scale_days, model_scale_id } = req.body;
@@ -59,7 +61,9 @@ export class MainScaleController {
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
   }
-  async copyDutiesFromTheModelScale(req: Request, res: Response) {
+
+
+  async transformModelScaleIntoMainScale(req: Request, res: Response) {
     try {
       const { model_scale_id } = req.params;
 
@@ -72,15 +76,37 @@ export class MainScaleController {
         return res.status(400).json({ message: 'O ID da escala modelo deve ser um número válido' });
       }
 
+      const modelScaleInfo = await model_scaleRepository.findOneBy({ id: scaleId });
+      if (!modelScaleInfo) {
+        return res.status(404).json({ message: 'Escala modelo não encontrada' });
+      }
+
+      const updatedMainScale = {
+        id: 1,
+        total_of_scale_days: modelScaleInfo.total_of_scale_days
+      };
+
+      await main_scale_Repository.save(updatedMainScale);
+
       const modelScaleDuties = await model_scale_duty_Repository.find({
         where: { scale: { id: scaleId } },
         relations: ['scale', 'user', 'shift'],
       });
 
-      // Lógica para manipular os dados obtidos
-      // e, possivelmente, copiar os plantões para uma nova escala.
+      await main_scale_duty_Repository.clear();
 
-      return res.status(200).json(modelScaleDuties);
+      const mainScaleId = 1;
+      for (let modelScaleDuty of modelScaleDuties) {
+        const newDuty = main_scale_duty_Repository.create({
+          scale: { id: mainScaleId },
+          user: { id: modelScaleDuty.user.id },
+          shift: { id: modelScaleDuty.shift.id },
+          scale_date: modelScaleDuty.scale_date,
+        });
+        await main_scale_duty_Repository.save(newDuty);
+      }
+
+      return res.status(200).json({ message: 'Escala modelo transformada em escala principal com sucesso' });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });
