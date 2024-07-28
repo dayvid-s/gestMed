@@ -3,7 +3,7 @@ import SideBarAndHeader from "../../components/SideBarAndHeader";
 // import { GeistSans } from "geist/font/sans";
 
 interface AuthenticatedLayoutProps {
-    children: ReactElement;
+  children: ReactElement;
 }
 
 export default function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {

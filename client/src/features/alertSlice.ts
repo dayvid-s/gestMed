@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AlertState {
-  message: string;
+  title: string;
   type: "success" | "error" | "info";
   placement: "topStart" | "topEnd" | "bottomStart" | "bottomEnd";
   isOpen: boolean;
 }
 
 const initialState: AlertState = {
-  message: "",
+  title: "",
   type: "info",
   placement: "topStart",
   isOpen: false,
@@ -18,11 +18,13 @@ const alertSlice = createSlice({
   name: "alert",
   initialState,
   reducers: {
-    showAlert(state, action: PayloadAction<{ message: string; type: AlertState["type"]; placement: AlertState["placement"] }>) {
-      state.message = action.payload.message;
+    showAlert(state, action: PayloadAction<{ type: AlertState["type"]; placement: AlertState["placement"]; title: string }>) {
       state.type = action.payload.type;
       state.placement = action.payload.placement;
       state.isOpen = true;
+      state.title = action.payload.title
+
+      // state.isOpen = false
     },
     hideAlert(state) {
       state.isOpen = false;

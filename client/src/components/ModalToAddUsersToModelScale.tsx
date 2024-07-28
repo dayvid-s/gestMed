@@ -1,5 +1,6 @@
 import { ModelScaleDutyInBackend } from "@/@types/ModelScaleDutyTypes";
 import { UserDataWithSelected } from "@/@types/userTypes";
+import { showAlert } from "@/features/alertSlice";
 import { fetchDoctors } from "@/features/doctorSclice";
 import { createModelScaleDuty } from "@/features/ModelScaleDutySlice";
 import { fetchShifts } from "@/features/shiftSlice";
@@ -80,21 +81,28 @@ export function ModalToAddUsersToModelScale({ modalIsOpen, setIsOpen, scale_date
   const handleWithcreateScaleModelDuty = async () => {
     try {
       const newModelScaleDuties: ModelScaleDutyInBackend[] = userToAddInScaleModel.map((user) => ({
-        scale_id: scale_id,
+        scale_id,
         user_id: user.id,
-        shift_id: shift_id,
-        scale_date: scale_date,
+        shift_id,
+        scale_date,
       }));
 
-      console.log(newModelScaleDuties, "new");
-
       await dispatch(createModelScaleDuty(newModelScaleDuties)).unwrap();
+      dispatch(showAlert({
+        placement: "bottomEnd", type: "success", title:
+          userToAddInScaleModel.length > 1 ?
+            `${userToAddInScaleModel.length} médicos adicionado na escala modelo` :
+            "Médico adicionado à escala modelo"
+      }));
+
       resetForm();
       handleClose();
     } catch (error) {
       console.error("Falha ao criar plantão de escala modelo", error);
+      dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Erro ao criar plantão de escala modelo" }));
     }
   };
+
 
   const resetForm = () => {
     setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" });
@@ -115,7 +123,7 @@ export function ModalToAddUsersToModelScale({ modalIsOpen, setIsOpen, scale_date
         </Modal.Header>
         <Modal.Body style={{ height: "80vh", padding: "10px" }}>
           <Form>
-            <div className="flex flex-col sm:flex-row flex-wrap items-baseline ">
+            <div className="flex flex-col flex-wrap items-baseline sm:flex-row ">
               <Form.Group controlId="name">
                 <Form.ControlLabel className="font-medium ">
                   Nome do Médico
@@ -163,8 +171,8 @@ export function ModalToAddUsersToModelScale({ modalIsOpen, setIsOpen, scale_date
             onClick={handleWithcreateScaleModelDuty}
           >
             {userToAddInScaleModel.length > 0 &&
-              <div className="w-6 bg-white rounded-xl mr-1">
-                <p className="text-black font-semibold">{userToAddInScaleModel.length}</p>
+              <div className="w-6 mr-1 bg-white rounded-xl">
+                <p className="font-semibold text-black">{userToAddInScaleModel.length}</p>
               </div>
             }
             Adicionar {userToAddInScaleModel.length > 1 ? "Médicos" : "Médico"}

@@ -1,4 +1,5 @@
 "use client";
+import { Alert } from "@/components/Alert";
 import { ChoiceScale } from "@/components/ChoiceScale";
 import { ScalesModel } from "@/components/ModelScales";
 
@@ -14,6 +15,8 @@ export default function Scale() {
       <ChoiceScale />
 
       <ScalesModel />
+      <Alert />
+
     </div>
   );
 }

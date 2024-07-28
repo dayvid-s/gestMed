@@ -1,5 +1,6 @@
 import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
 import { ScaleBackendModel } from "@/@types/scaleTypes";
+import { showAlert } from "@/features/alertSlice";
 import { copyDutiesFromModel } from "@/features/MainScaleSlice";
 import { fetchModelScaleDuties } from "@/features/ModelScaleDutySlice";
 import { closeSideBar } from "@/features/sideBarSlice";
@@ -23,21 +24,23 @@ export function ScalesModel() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [optionAddAsMainScale, setOptionAddAsMainScale] = useState(true);
+
 
   function transformModelScaleInMainScale() {
     if (actualModelScaleInfo?.id) {
       dispatch(copyDutiesFromModel({ model_scale_id: actualModelScaleInfo.id }))
         .then((result) => {
           if (copyDutiesFromModel.fulfilled.match(result)) {
-            // console.log('Escala modelo transformada em escala principal com sucesso', result.payload);
+            dispatch(showAlert({ placement: "bottomEnd", type: "success", title: "Escala modelo transformada em escala principal com sucesso" }))
+            setOptionAddAsMainScale(false)
           } else if (copyDutiesFromModel.rejected.match(result)) {
-            console.error('Falha ao transformar escala modelo em escala principal', result.error.message);
+            dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao transformar escala modelo em escala principal" }))
           }
         });
     } else {
       console.error('ID da escala modelo não disponível');
     }
-
 
   }
 
@@ -55,18 +58,23 @@ export function ScalesModel() {
   const fetchModelScaleDutiesData = async () => {
     setLoading(true);
     setError(null);
+    setOptionAddAsMainScale(true)
+
     try {
       const action = await dispatch(fetchModelScaleDuties());
+
       if (fetchModelScaleDuties.fulfilled.match(action)) {
         const fetchedModelScaleDuties: ModelScaleDuty[] = action.payload;
-        const filteredDuties = fetchedModelScaleDuties.filter(duty => duty?.scale?.name === actualModelScaleInfo?.name);
+        const filteredDuties = fetchedModelScaleDuties.filter(
+          duty => duty?.scale?.name === actualModelScaleInfo?.name
+        );
         setModelScaleDuties(filteredDuties);
       } else {
-        if (fetchModelScaleDuties.rejected.match(action)) {
-          setError("Erro ao buscar plantões da escala modelo");
-        }
+        dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Erro ao buscar plantões da escala modelo" }));
+        setError("Erro ao buscar plantões da escala modelo");
       }
     } catch (err) {
+      dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Erro ao buscar plantões da escala modelo" }));
       setError("Erro ao buscar plantões da escala modelo");
     } finally {
       setLoading(false);
@@ -102,10 +110,13 @@ export function ScalesModel() {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
 
-  const dias = Array.from({ length: totalScaleDays || 0 }, (_, i) => ({
+  const days = Array.from({ length: totalScaleDays || 0 }, (_, i) => ({
     dutyDay: i + 1,
     allDutiesAtDay: 0,
   })); const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
+
+
+
   return (
     <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10 '>
       <div className="flex flex-row w-full justify-center" >
@@ -113,14 +124,17 @@ export function ScalesModel() {
           &lt;{selectedmodelScale.label}&gt;
         </h1>
       </div>
-      <div className="ml-auto mr-2 ">
-        <GenericButton onClick={transformModelScaleInMainScale} title="Adicionar Como Principal" />
-      </div>
 
-
+      {
+        optionAddAsMainScale ?
+          <div className="ml-auto mr-2 ">
+            <GenericButton onClick={transformModelScaleInMainScale} title="Adicionar Como Principal" />
+          </div>
+          : null
+      }
       <div className='flex flex-wrap items-start justify-center mt-5'>
-        {dias.map((day) => (
-          <div className='flex flex-col' key={day.dutyDay}>
+        {days.map((day) => (
+          <div className='flex flex-col mb-5' key={day.dutyDay}>
             <div className='flex justify-between px-3 w-60 bg-green500'>
               <h4 className='text-white'>
                 {diasDaSemana[new Date(year, month - 1, day.dutyDay).getDay()]}
@@ -131,7 +145,7 @@ export function ScalesModel() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={1} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
@@ -143,7 +157,7 @@ export function ScalesModel() {
             </div>
 
             <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={dias} IdOfShiftOfScaleDuty={2} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day.dutyDay, 2)}

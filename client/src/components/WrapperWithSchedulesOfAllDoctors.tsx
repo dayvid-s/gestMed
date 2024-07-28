@@ -81,7 +81,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
       </h1>
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {daysArray.map((day) => (
-          <div className='flex flex-col' key={day.dutyDay}>
+          <div className='flex flex-col mb-5' key={day.dutyDay}>
             <div className='flex justify-between px-3 w-60 bg-green500'>
               <h4 className='text-white'>
                 {daysOfWeek[new Date(year, month - 1, day.dutyDay).getDay()]}
