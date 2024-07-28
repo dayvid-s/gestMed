@@ -1,7 +1,7 @@
 "use client";
 import { ScaleBackendModel } from "@/@types/scaleTypes";
 import { ChoiceModalScale } from "@/components/ChoiceModalScale";
-import { ScalesModel } from "@/components/ModelScales";
+import { ModelScales } from "@/components/ModelScales";
 import { useState } from "react";
 
 
@@ -15,7 +15,7 @@ export default function Scale() {
 
       <ChoiceModalScale actualModelScaleInfo={actualModelScaleInfo} setActualModelScaleInfo={setActualModelScaleInfo} />
 
-      <ScalesModel actualModelScaleInfo={actualModelScaleInfo} setActualModelScaleInfo={setActualModelScaleInfo} />
+      <ModelScales actualModelScaleInfo={actualModelScaleInfo} setActualModelScaleInfo={setActualModelScaleInfo} />
 
     </div>
   );

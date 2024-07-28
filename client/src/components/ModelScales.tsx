@@ -20,7 +20,7 @@ interface scalesModelProps {
   actualModelScaleInfo: ScaleBackendModel | null;
   setActualModelScaleInfo: React.Dispatch<React.SetStateAction<ScaleBackendModel | null>>;
 }
-export function ScalesModel({ actualModelScaleInfo, setActualModelScaleInfo }: scalesModelProps) {
+export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: scalesModelProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [modelScaleDuties, setModelScaleDuties] = useState<ModelScaleDuty[]>([]);
