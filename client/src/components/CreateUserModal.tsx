@@ -1,4 +1,5 @@
 import { Shift, UserData, roles } from "@/@types/userTypes";
+import { showAlert } from "@/features/alertSlice";
 import { fetchShifts } from "@/features/shiftSlice";
 import { createUser } from "@/features/userSlice";
 import { AppDispatch, RootState } from "@/store";
@@ -65,10 +66,14 @@ export function CreateUserModal({ modalIsOpen, setIsOpen }: ImodalProps) {
   const handleSubmit = async () => {
     try {
       await dispatch(createUser(userData)).unwrap();
-      // console.log("Usuário criado com sucesso");
+
+      dispatch(showAlert({
+        placement: "bottomEnd", type: "success", title: "Usuário criado com sucesso"
+      }));
+
       handleClose();
     } catch (error) {
-      console.error("Falha ao criar usuário", error);
+      dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao criar usuário" }));
     }
   };
 

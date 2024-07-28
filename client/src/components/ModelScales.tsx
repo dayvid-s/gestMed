@@ -16,9 +16,13 @@ interface actualModelScaleDutyInfoProps {
   shiftOfScaleDuty: number | null;
 }
 
-export function ScalesModel() {
+interface scalesModelProps {
+  actualModelScaleInfo: ScaleBackendModel | null;
+  setActualModelScaleInfo: React.Dispatch<React.SetStateAction<ScaleBackendModel | null>>;
+}
+export function ScalesModel({ actualModelScaleInfo, setActualModelScaleInfo }: scalesModelProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [actualModelScaleInfo, setActualModelScaleInfo] = useState<ScaleBackendModel | null>(null);
+
   const [modelScaleDuties, setModelScaleDuties] = useState<ModelScaleDuty[]>([]);
   const [actualModelScaleDutyInfo, setActualModelScaleDutyInfo] = useState<actualModelScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
 
@@ -119,8 +123,8 @@ export function ScalesModel() {
 
   return (
     <div className='bg-[#F8F8F8] items-center flex py-5 rounded-3xl flex-col pb-10 '>
-      <div className="flex flex-row w-full justify-center" >
-        <h1 className='text-3xl font-extrabold self-center justify-self-center'>
+      <div className="flex flex-row justify-center w-full" >
+        <h1 className='self-center text-3xl font-extrabold justify-self-center'>
           &lt;{selectedmodelScale.label}&gt;
         </h1>
       </div>
@@ -144,7 +148,7 @@ export function ScalesModel() {
               </h4>
             </div>
 
-            <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
+            <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Diurno</h1>
             <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
@@ -156,7 +160,7 @@ export function ScalesModel() {
               </div>
             </div>
 
-            <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
+            <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Noturno</h1>
             <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div

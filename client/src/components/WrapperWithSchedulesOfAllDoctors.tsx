@@ -1,4 +1,5 @@
 import { MainScaleDuty } from "@/@types/MainScaleDutyTypes";
+import { showAlert } from "@/features/alertSlice";
 import { fetchMainScaleDuties } from "@/features/MainScaleDutySlice";
 import { fetchMainScale } from "@/features/MainScaleSlice";
 import { closeSideBar } from "@/features/sideBarSlice";
@@ -23,7 +24,11 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const [mainScaleDuties, setMainScaleDuties] = useState<MainScaleDuty[]>([]);
 
   useEffect(() => {
-    dispatch(fetchMainScale());
+    dispatch(fetchMainScale()).then((result) => {
+      if (fetchMainScale.rejected.match(result)) {
+        dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao buscar plantões" }))
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -38,11 +43,14 @@ export function WrapperWithSchedulesOfAllDoctors() {
       if (fetchMainScaleDuties.fulfilled.match(action)) {
         const fetchedMainScaleDuties = action.payload as MainScaleDuty[];
         setMainScaleDuties(fetchedMainScaleDuties);
+      } else if (fetchMainScaleDuties.rejected.match(action)) {
+        dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao buscar plantões" }));
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
+
 
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());
@@ -91,7 +99,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
               </h4>
             </div>
 
-            <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Diurno</h1>
+            <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Diurno</h1>
             <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
@@ -103,7 +111,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
               </div>
             </div>
 
-            <h1 className="text-2xl font-semibold self-center text-green500 mt-3">Plantão Noturno</h1>
+            <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Noturno</h1>
             <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div

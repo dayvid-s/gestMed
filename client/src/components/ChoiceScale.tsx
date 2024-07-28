@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import { SelectPicker } from "rsuite";
 import { CreateScaleModal } from "./CreateScaleModal";
 
+import { ScaleBackendModel } from "@/@types/scaleTypes";
 import { clearSelectedmodelScale, setSelectedmodelScale } from "@/features/ModelScaleOptionSlice";
 import { fetchAllModelScales } from "@/features/ModelScaleSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useDispatch } from "react-redux";
-export function ChoiceScale() {
+
+
+interface choiceScaleProps {
+  actualModelScaleInfo: ScaleBackendModel | null;
+  setActualModelScaleInfo: React.Dispatch<React.SetStateAction<ScaleBackendModel | null>>;
+}
+
+export function ChoiceScale({ actualModelScaleInfo, setActualModelScaleInfo }: choiceScaleProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -18,6 +26,14 @@ export function ChoiceScale() {
     dispatch(fetchAllModelScales());
   }, [dispatch]);
 
+
+  function excludeModelScale() {
+    if (actualModelScaleInfo?.id) {
+    } else {
+      console.error('ID da escala modelo não disponível');
+    }
+
+  }
 
   // useEffect(() => {
   //     if (modelScales.length > 0) {

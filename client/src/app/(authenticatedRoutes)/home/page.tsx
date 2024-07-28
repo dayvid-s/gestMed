@@ -10,8 +10,6 @@ export default function Page() {
     <div >
       {/* <Welcome /> */}
 
-      {/* componente filho */}
-
       <section className='mt-4 '>
         <WrapperWithSchedulesOfAllDoctors />
 

@@ -1,5 +1,6 @@
 import { MainScaleDutyInBackend } from "@/@types/MainScaleDutyTypes";
 import { UserDataWithSelected } from "@/@types/userTypes";
+import { showAlert } from "@/features/alertSlice";
 import { fetchDoctors } from "@/features/doctorSclice";
 import { createMainScaleDuty } from "@/features/MainScaleDutySlice";
 import { fetchShifts } from "@/features/shiftSlice";
@@ -33,7 +34,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
   const [doctors, setDoctors] = useState<UserDataWithSelected[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [userToAddInScaleMain, setUserToAddInScaleMain] = useState<UserDataWithSelected[]>([]);
+  const [userToAddInMainScale, setUserToAddInScaleMain] = useState<UserDataWithSelected[]>([]);
 
   useEffect(() => {
     dispatch(fetchShifts());
@@ -78,7 +79,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
 
   const handleWithcreateScaleMainDuty = async () => {
     try {
-      const newMainScaleDuties: MainScaleDutyInBackend[] = userToAddInScaleMain.map((user) => ({
+      const newMainScaleDuties: MainScaleDutyInBackend[] = userToAddInMainScale.map((user) => ({
         scale_id: 1,
         user_id: user.id,
         shift_id: shift_id,
@@ -87,10 +88,18 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
 
 
       await dispatch(createMainScaleDuty(newMainScaleDuties)).unwrap();
+      dispatch(showAlert({
+        placement: "bottomEnd", type: "success", title:
+          userToAddInMainScale.length > 1 ?
+            `${userToAddInMainScale.length} médicos adicionados no plantao` :
+            "Médico adicionado no plantão"
+      }));
+
       resetForm();
       handleClose();
     } catch (error) {
       console.error("Falha ao criar plantão da escala principal", error);
+      dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao criar plantão da escala principal" }));
     }
   };
 
@@ -113,7 +122,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
         </Modal.Header>
         <Modal.Body style={{ height: "80vh", padding: "10px" }}>
           <Form>
-            <div className="flex flex-col sm:flex-row flex-wrap items-baseline ">
+            <div className="flex flex-col flex-wrap items-baseline sm:flex-row ">
               <Form.Group controlId="name">
                 <Form.ControlLabel className="font-medium ">
                   Nome do Médico
@@ -137,7 +146,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
             </div>
           </Form>
           <ListToAddUserInScale
-            usersSelected={userToAddInScaleMain}
+            usersSelected={userToAddInMainScale}
             users={doctors}
             setUsers={setDoctors}
             loading={loading}
@@ -160,12 +169,12 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
             type="button"
             onClick={handleWithcreateScaleMainDuty}
           >
-            {userToAddInScaleMain.length > 0 &&
-              <div className="w-6 bg-white rounded-xl mr-1">
-                <p className="text-black font-semibold">{userToAddInScaleMain.length}</p>
+            {userToAddInMainScale.length > 0 &&
+              <div className="w-6 mr-1 bg-white rounded-xl">
+                <p className="font-semibold text-black">{userToAddInMainScale.length}</p>
               </div>
             }
-            Adicionar {userToAddInScaleMain.length > 1 ? "Médicos" : "Médico"}
+            Adicionar {userToAddInMainScale.length > 1 ? "Médicos" : "Médico"}
           </button>
         </Modal.Footer>
       </Modal>
