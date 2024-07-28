@@ -3,8 +3,9 @@ import { SelectPicker } from "rsuite";
 import { CreateScaleModal } from "./CreateScaleModal";
 
 import { ScaleBackendModel } from "@/@types/scaleTypes";
+import { showAlert } from "@/features/alertSlice";
 import { clearSelectedmodelScale, setSelectedmodelScale } from "@/features/ModelScaleOptionSlice";
-import { fetchAllModelScales } from "@/features/ModelScaleSlice";
+import { deleteModelScale, fetchAllModelScales } from "@/features/ModelScaleSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import { useDispatch } from "react-redux";
@@ -15,7 +16,7 @@ interface choiceScaleProps {
   setActualModelScaleInfo: React.Dispatch<React.SetStateAction<ScaleBackendModel | null>>;
 }
 
-export function ChoiceScale({ actualModelScaleInfo, setActualModelScaleInfo }: choiceScaleProps) {
+export function ChoiceModalScale({ actualModelScaleInfo, setActualModelScaleInfo }: choiceScaleProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -26,13 +27,40 @@ export function ChoiceScale({ actualModelScaleInfo, setActualModelScaleInfo }: c
     dispatch(fetchAllModelScales());
   }, [dispatch]);
 
+  async function excludeModelScale() {
+    try {
+      if (!actualModelScaleInfo?.id) {
+        console.error('ID da escala modelo não disponível');
+        return dispatch(showAlert({
+          placement: "bottomEnd",
+          type: "error",
+          title: "ID da escala modelo não disponível"
+        }));
+      }
 
-  function excludeModelScale() {
-    if (actualModelScaleInfo?.id) {
-    } else {
-      console.error('ID da escala modelo não disponível');
+      const action = await dispatch(deleteModelScale(actualModelScaleInfo.id));
+
+      if (deleteModelScale.fulfilled.match(action)) {
+        dispatch(showAlert({
+          placement: "bottomEnd",
+          type: "success",
+          title: "Escala modelo excluída com sucesso"
+        }));
+      } else if (deleteModelScale.rejected.match(action)) {
+        dispatch(showAlert({
+          placement: "bottomEnd",
+          type: "error",
+          title: "Erro ao excluir escala modelo"
+        }));
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(showAlert({
+        placement: "bottomEnd",
+        type: "error",
+        title: "Falha ao excluir escala modelo"
+      }));
     }
-
   }
 
   // useEffect(() => {
@@ -72,18 +100,23 @@ export function ChoiceScale({ actualModelScaleInfo, setActualModelScaleInfo }: c
           style={{ width: 224 }}
           placeholder="Escolha uma escala"
         />
-
-        <button className='border-2 rounded-lg w-44 h-10 bg-[#8a133f] hover:bg-[#cd497b] text-white m-3' type='submit'>
-          Excluir Escala
-        </button>
-
-        <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
-          Limpar Modelo
-        </button>
-
         <button onClick={() => { setModalIsOpen(true); }} className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
           Criar Escala
         </button>
+
+        {
+          actualModelScaleInfo ?
+            <>
+              <button className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>
+                Limpar Modelo
+              </button>
+
+              <button onClick={excludeModelScale} className='border-2 rounded-lg w-44 h-10 bg-[#8a133f] hover:bg-[#cd497b] text-white m-3' type='submit'>
+                Excluir Escala
+              </button>
+            </>
+            : null
+        }
         {/* <button
                     onClick={() => { setModalIsOpen(true) }}
                     className='border-2 rounded-lg w-44 h-10 bg-[#025959] hover:bg-[#078b8b] text-white m-3' type='submit'>Salvar Alterações</button> */}

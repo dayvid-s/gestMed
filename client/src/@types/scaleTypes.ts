@@ -1,6 +1,7 @@
 export type QuantityOfDaysTypes = 7 | 30;
 
 export interface ScaleData {
+  id?: number;
   name: string;
   isAutoFilled: boolean;
   quantityOfDays: QuantityOfDaysTypes | null;

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { model_scaleRepository } from '../repositories/model_scaleRepository';
+import { model_scale_duty_Repository } from '../repositories/model_scale_DutyRepository';
 
 export class ModelScaleController {
   async create(req: Request, res: Response) {
@@ -64,9 +65,16 @@ export class ModelScaleController {
         return res.status(404).json({ message: 'Escala não encontrada' });
       }
 
+      const duties = await model_scale_duty_Repository.find({ where: { id: scale.id } });
+
+      if (duties.length > 0) {
+        await model_scale_duty_Repository.remove(duties);
+      }
+
       await model_scaleRepository.remove(scale);
 
-      return res.status(200).json({ message: 'Escala removida com sucesso' });
+
+      return res.status(200).json({ message: 'Escala modelo removida com sucesso' });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: 'Erro interno do servidor' });

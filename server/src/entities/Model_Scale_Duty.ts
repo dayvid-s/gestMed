@@ -8,7 +8,7 @@ export class Model_scale_duty {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Model_scale, model_scale => model_scale.id)
+  @ManyToOne(() => Model_scale, model_scale => model_scale.id, { onDelete: 'CASCADE' })
   scale: Model_scale;
 
   @ManyToOne(() => User, user => user.id)

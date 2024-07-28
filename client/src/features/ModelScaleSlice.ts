@@ -45,7 +45,6 @@ export const createModelScale = createAsyncThunk<ScaleData, { name: string; tota
         is_auto_filled,
       });
       if (response.status < 300) {
-        // console.log("Modelo de escala criado com sucesso");
         return response.data;
       } else {
         console.error("Falha ao criar escala", response);
@@ -53,6 +52,29 @@ export const createModelScale = createAsyncThunk<ScaleData, { name: string; tota
       }
     } catch (error) {
       console.error("Falha ao criar escala", error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
+  }
+);
+
+export const deleteModelScale = createAsyncThunk<void, number, { rejectValue: string }>(
+  "scalesModel/delete",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/scales/models/${id}`);
+      if (response.status < 300) {
+        // Escala modelo removida com sucesso
+        return;
+      } else {
+        console.error("Falha ao remover escala", response);
+        return rejectWithValue("Falha ao remover escala");
+      }
+    } catch (error) {
+      console.error("Falha ao remover escala", error);
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       } else {
@@ -89,6 +111,18 @@ const ModelScaleSlice = createSlice({
         state.ModelScales.push(action.payload);
       })
       .addCase(createModelScale.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Erro desconhecido";
+      })
+      .addCase(deleteModelScale.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ModelScales = state.ModelScales.filter(scale => scale.id !== action.meta.arg);
+      })
+      .addCase(deleteModelScale.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteModelScale.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro desconhecido";
       });

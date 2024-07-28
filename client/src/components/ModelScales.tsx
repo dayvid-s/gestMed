@@ -139,7 +139,7 @@ export function ScalesModel({ actualModelScaleInfo, setActualModelScaleInfo }: s
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {days.map((day) => (
           <div className='flex flex-col mb-5' key={day.dutyDay}>
-            <div className='flex justify-between px-3 w-60 bg-green500'>
+            <div className='flex justify-between px-3 w-64 bg-green500'>
               <h4 className='text-white'>
                 {diasDaSemana[new Date(year, month - 1, day.dutyDay).getDay()]}
               </h4>
@@ -147,8 +147,9 @@ export function ScalesModel({ actualModelScaleInfo, setActualModelScaleInfo }: s
                 {day.dutyDay.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
               </h4>
             </div>
-
-            <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Diurno</h1>
+            <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
+              <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Diurno</h1>
+            </div>
             <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
@@ -160,7 +161,9 @@ export function ScalesModel({ actualModelScaleInfo, setActualModelScaleInfo }: s
               </div>
             </div>
 
-            <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Noturno</h1>
+            <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
+              <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Noturno</h1>
+            </div>
             <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
