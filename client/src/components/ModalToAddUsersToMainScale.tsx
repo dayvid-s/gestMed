@@ -16,7 +16,10 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 export interface ImodalProps {
   modalIsOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<{
+    modalToAddUserInModal: boolean;
+    modalToRequestDuty: boolean
+  }>>;
   shift_id: number | null;
   scale_date: number | null;
 }
@@ -28,7 +31,9 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
     quantityOfDays: "null",
   });
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen((prev) => ({ ...prev, modalToAddUserInModal: false }));
+  };
   const dispatch = useDispatch<AppDispatch>();
 
   const [doctors, setDoctors] = useState<UserDataWithSelected[]>([]);

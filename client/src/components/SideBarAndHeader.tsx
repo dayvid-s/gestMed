@@ -34,21 +34,9 @@ import { useDispatch } from "react-redux";
 const manrope = Manrope({ subsets: ["latin"] });
 
 
-const sideBarItems = {
-  pages: [
-    { name: "Plantões", icon: <HomeIcon />, path: "/home" },
-    { name: "Escala Modelo", icon: <DateRangeIcon />, path: "/scale" },
 
-    { name: "Médicos", icon: <PeopleIcon />, path: "/users" },
-    { name: "Relatórios", icon: <SearchIcon />, path: "" },
-  ],
-  configuration: [
-    { name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" },
-  ],
-};
+
 const drawerWidth = 240;
-
-
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -111,6 +99,22 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
 
     dispatch(logoutUser());
     router.push("/");
+  };
+
+
+
+  const sideBarItems = {
+    pages: user?.role === "Médico"
+      ? [{ name: "Plantões", icon: <HomeIcon />, path: "/home" }]
+      : [
+        { name: "Plantões", icon: <HomeIcon />, path: "/home" },
+        { name: "Escala Modelo", icon: <DateRangeIcon />, path: "/scale" },
+        { name: "Médicos", icon: <PeopleIcon />, path: "/users" },
+        { name: "Relatórios", icon: <SearchIcon />, path: "" },
+      ],
+    configuration: user?.role === "Médico"
+      ? [{ name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }]
+      : [{ name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }],
   };
 
   return (
@@ -211,7 +215,7 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                 </Link>
               ))}
             </List>
-            <button onClick={handleLogout} className="w-40 px-4 py-2 mt-20 ml-5 font-bold text-black bg-white rounded hover:bg-blue-700 ">
+            <button onClick={handleLogout} className="w-40 px-4 py-2 mt-20 ml-5 font-bold text-black bg-white rounded hover:bg-slate-200 ">
               Sair da Conta
             </button>
           </div>

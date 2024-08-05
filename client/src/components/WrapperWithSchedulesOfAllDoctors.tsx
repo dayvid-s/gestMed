@@ -16,7 +16,10 @@ interface actualMainScaleDutyInfoProps {
 }
 
 export function WrapperWithSchedulesOfAllDoctors() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalInfo, setModalInfo] = useState({
+    modalToAddUserInModal: false,
+    modalToRequestDuty: false
+  });
   const [actualMainScaleDutyInfo, setActualMainScaleDutyInfo] = useState<actualMainScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
 
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +36,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
 
   useEffect(() => {
     fetchMainScaleDutiesData()
-  }, [modalIsOpen]);
+  }, [modalInfo]);
 
 
 
@@ -55,7 +58,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());
     setActualMainScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
-    setModalIsOpen(true);
+    setModalInfo((prev) => ({ ...prev, modalToAddUserInModal: true }));
   };
 
   const totalScaleDays = mainScale[0]?.total_of_scale_days ?? 0;
@@ -132,8 +135,8 @@ export function WrapperWithSchedulesOfAllDoctors() {
       <ModalToAddUsersToMainScale
         scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
         shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
-        setIsOpen={setModalIsOpen}
-        modalIsOpen={modalIsOpen}
+        setIsOpen={setModalInfo}
+        modalIsOpen={modalInfo.modalToAddUserInModal}
       />
     </div>
   );
