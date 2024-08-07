@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
+import { BadRequestError, NotFoundError } from '../helpers/api-errors';
 import { shiftRepository } from '../repositories/shiftRepository';
-import { BadRequestError, NotFoundError } from '../helpers/api-erros';
 
 export class ShiftController {
     async create(req: Request, res: Response) {
