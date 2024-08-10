@@ -44,7 +44,7 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
       {/* aqui os cards com info do plantao */}
       {mainScaleDutiesOfTheDay.map((duty) => {
         return (
-          <div className='border-r-2	p-2	border-[#e2e2e2]  '  >
+          <div key={duty.id} className='border-r-2	p-2	border-[#e2e2e2]  '  >
             <div
               title="Mostrar informações desse plantão"
               className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' onClick={() => setModalIsOpen(true)} >

@@ -3,12 +3,14 @@ import { useAppSelector } from '@/utils/useSelectorHook';
 import { useDispatch } from 'react-redux';
 import { Button, Modal } from 'rsuite';
 
-export function ModalOfConfirmation() {
+export function ModalOfConfirmation({ functionToExecut }: { functionToExecut: () => void }) {
   const dispatch = useDispatch();
-  const { isOpen, title, message, onConfirm, type } = useAppSelector((state) => state.modalConfirmation);
+  const { isOpen, title, message, type } = useAppSelector((state) => state.modalConfirmation);
 
   const handleConfirm = () => {
-    onConfirm();
+    if (functionToExecut) {
+      functionToExecut();
+    }
     dispatch(closeModal());
   };
 

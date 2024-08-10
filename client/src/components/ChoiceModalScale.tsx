@@ -81,8 +81,7 @@ export function ChoiceModalScale({ actualModelScaleInfo, setActualModelScaleInfo
   return (
     <div>
       <div className="flex-row">
-        <ModalOfConfirmation
-        />
+        <ModalOfConfirmation functionToExecut={excludeModelScale} />
         <SelectPicker
           onChange={handleModelScaleChange}
           className="mr-10"
@@ -108,7 +107,6 @@ export function ChoiceModalScale({ actualModelScaleInfo, setActualModelScaleInfo
               <button onClick={() => dispatch(openModal({
                 title: 'Confirmar Exclusão',
                 message: `Você tem certeza que deseja excluir "${actualModelScaleInfo?.name}"?`,
-                onConfirm: excludeModelScale,
                 type: 'Delete'
               }))} className='border-2 rounded-lg w-44 h-10 bg-[#8a133f] hover:bg-[#cd497b] text-white m-3' type='button'>
                 Excluir Escala
