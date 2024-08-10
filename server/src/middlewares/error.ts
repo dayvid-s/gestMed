@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { ApiError } from '../helpers/api-erros';
+import { ApiError } from '../helpers/api-errors';
 
 // Middleware de erro para capturar e retornar erros JSON
 export const errorMiddleware = (

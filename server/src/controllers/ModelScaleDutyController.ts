@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { BadRequestError, NotFoundError } from '../helpers/api-erros';
+import { BadRequestError, NotFoundError } from '../helpers/api-errors';
 
 
 import { model_scale_duty_Repository } from '../repositories/model_scale_DutyRepository';

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { genders, roles } from '../@types/user';
-import { BadRequestError, NotFoundError } from '../helpers/api-erros';
+import { BadRequestError, NotFoundError } from '../helpers/api-errors';
 import { userRepository } from '../repositories/userRepository';
 
 export class UserController {
