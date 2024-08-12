@@ -1,5 +1,6 @@
 import { QuantityOfDaysTypes, ScaleData } from "@/@types/scaleTypes";
 
+import { showAlert } from "@/features/alertSlice";
 import { createModelScale, fetchAllModelScales } from "@/features/ModelScaleSlice";
 import { AppDispatch } from "@/store";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -38,14 +39,21 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
       }));
     }
   };
-
   async function handleSubmit() {
     try {
-      await dispatch(createModelScale({
+      const action = await dispatch(createModelScale({
         name: scaleData.name,
         total_of_scale_days: scaleData.quantityOfDays,
         is_auto_filled: scaleData.isAutoFilled
       }));
+
+      if (createModelScale.fulfilled.match(action)) {
+        dispatch(showAlert({
+          placement: "bottomEnd",
+          type: "success",
+          title: "Escala modelo criada com sucesso"
+        }));
+      }
 
       handleClose();
       dispatch(fetchAllModelScales());
@@ -53,7 +61,6 @@ export function CreateScaleModal({ modalIsOpen, setIsOpen }: ImodalProps) {
       console.error("Falha ao criar escala", error);
     }
   }
-
 
   return (
     <>
