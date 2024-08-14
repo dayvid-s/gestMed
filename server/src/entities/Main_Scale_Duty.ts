@@ -11,8 +11,8 @@ export class Main_scale_duty {
   @ManyToOne(() => Main_scale, main_scale => main_scale.id)
   scale: Main_scale;
 
-  @ManyToOne(() => User, user => user.id)
-  user: User;
+  @ManyToOne(() => User, user => user.id, { nullable: true })
+  user: User | null;
 
   @ManyToOne(() => Shift, shift => shift.id)
   shift: Shift;
@@ -25,8 +25,4 @@ export class Main_scale_duty {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-
-
 }
-

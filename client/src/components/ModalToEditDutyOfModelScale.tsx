@@ -5,7 +5,6 @@ import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Modal } from "rsuite";
-import { ListToAddUserInScale } from "./ListToAddUserInScale";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -74,12 +73,12 @@ export function ModalToEditDutyOfModelScale({ modalIsOpen, setIsOpen }: ImodalPr
                                 </Checkbox> */}
             </div>
           </Form>
-          <ListToAddUserInScale
+          {/* <ListToAddUserInScale
             users={users}
             setUsers={setUsers}
             loading={loading}
             error={error}
-          />
+          /> */}
         </Modal.Body>
         <Modal.Footer className="flex" >
 

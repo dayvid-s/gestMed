@@ -5,8 +5,6 @@ import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Modal } from "rsuite";
-import HoldButton from "./HoldButton";
-import { ListToAddUserInScale } from "./ListToAddUserInScale";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -77,45 +75,30 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalPro
           </Form>
 
 
-          <HoldButton />
-          <ListToAddUserInScale
+          {/* <ListToAddUserInScale
             users={users}
             setUsers={setUsers}
             loading={loading}
             error={error}
-          />
+          /> */}
         </Modal.Body>
-        <Modal.Footer className="flex" >
+        <Modal.Footer className="flex justify-end " >
 
 
-          <button className='border-2 rounded-lg w-44 h-10 bg-[#8a133f] hover:bg-[#cd497b] text-white m-3' type='submit'>
+          <button className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-10 text-white ' type='submit'>
             Excluir Plantão
           </button>
 
           <button
-            className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            className="  mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
           >
             Mudar Turno
           </button>
 
-          <button
-            className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
-            type="button"
-            onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
-          >
-            Redefinir
-          </button>
-          <button
-            className=" flex flex-row ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
-            type="button"
-          // onClick={handleWithcreateScaleModelDuty}
-          >
-            <div className="w-6 bg-white rounded-xl mr-1">
-              <p className="text-black font-semibold">0</p>
-            </div>
-            Adicionar Médicos
+          <button className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white ' type='submit'>
+            Remover Médico
           </button>
         </Modal.Footer>
       </Modal>

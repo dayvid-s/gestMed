@@ -4,7 +4,7 @@ import { Shift, UserData } from "./userTypes";
 export interface ModelScaleDuty {
   id: number;
   scale: ScaleData;
-  user: UserData;
+  user: UserData | null;
   shift: Shift;
   scale_date: number;
   created_at: Date;
