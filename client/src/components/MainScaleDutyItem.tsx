@@ -49,14 +49,15 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
               title="Mostrar informações desse plantão"
               className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' onClick={() => setModalIsOpen(true)} >
               <p className='font-bold '>{duty.user?.name}</p>
-              <ModalToEditDutyOfMainScale
-                modelScaleDutyInfo={duty}
-                setIsOpen={setModalIsOpen}
-                modalIsOpen={modalIsOpen}
-              />
               <p className='font-bold '>{duty.shift?.start_time.substring(0, 5)} - {duty.shift?.end_time.substring(0, 5)} ({duty.shift.name})</p>
               <p  >{duty.user?.specialization}  Cardiologista</p>
             </div>
+            <ModalToEditDutyOfMainScale
+              modelScaleDutyInfo={duty}
+              setIsOpen={setModalIsOpen}
+              modalIsOpen={modalIsOpen}
+
+            />
           </div>
 
 
