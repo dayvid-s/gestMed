@@ -81,7 +81,9 @@ export class MainScaleDutyController {
   }
 
   async getAll(req: Request, res: Response) {
-    const mainScaleDuties = await main_scale_duty_Repository.find({ relations: ['scale', 'user', 'shift'] });
+    const mainScaleDuties = await main_scale_duty_Repository.find({
+      relations: ['scale', 'user', 'user.shift', 'shift']
+    });
     return res.status(200).json(mainScaleDuties);
   }
 

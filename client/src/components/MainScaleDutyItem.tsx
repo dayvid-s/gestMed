@@ -53,7 +53,7 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
               <p  >{duty.user?.specialization}  Cardiologista</p>
             </div>
             <ModalToEditDutyOfMainScale
-              modelScaleDutyInfo={duty}
+              mainScaleDutyInfo={duty}
               setIsOpen={setModalIsOpen}
               modalIsOpen={modalIsOpen}
 

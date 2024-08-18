@@ -4,17 +4,18 @@ import { AppDispatch } from "@/store";
 import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Modal } from "rsuite";
+import { Modal } from "rsuite";
+import { PreviewOfDoctor } from "./PreviewOfDoctor";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
 export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  modelScaleDutyInfo: ModelScaleDuty
+  mainScaleDutyInfo: ModelScaleDuty
 }
 
-export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalProps) {
+export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo }: ImodalProps) {
 
   const [queryInfo, setQueryInfo] = useState({
     name: "",
@@ -44,7 +45,10 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalPro
           <h4 className="text-4xl font-semibold">Editar Plantão</h4>
         </Modal.Header>
         <Modal.Body style={{ height: "80vh", overflowX: "hidden" }}>
-          <Form>
+
+
+
+          {/* <Form>
             <div className="flex flex-col sm:flex-row flex-wrap items-baseline ml-2">
               <Form.Group controlId="name">
                 <Form.ControlLabel className="font-medium ">
@@ -71,8 +75,9 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalPro
                                     onChange={handleIsAutoFilledChange}>
                                     Preencher Automaticamente
                                 </Checkbox> */}
-            </div>
-          </Form>
+          {/* </div>
+          </Form> */}
+
 
 
           {/* <ListToAddUserInScale
@@ -81,12 +86,26 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalPro
             loading={loading}
             error={error}
           /> */}
+
+
+          <PreviewOfDoctor shift={mainScaleDutyInfo.shift} user={mainScaleDutyInfo?.user} />
         </Modal.Body>
         <Modal.Footer className="flex justify-end " >
 
+          <button className='border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white ' type='submit'>
+            Remover Médico
+          </button>
 
-          <button className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-10 text-white ' type='submit'>
+          <button className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-5 text-white ' type='submit'>
             Excluir Plantão
+          </button>
+
+          <button
+            className="  mr-5 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            type="button"
+            onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
+          >
+            Mudar Turno
           </button>
 
           <button
@@ -94,12 +113,10 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen }: ImodalPro
             type="button"
             onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
           >
-            Mudar Turno
+            Mudar Médico
           </button>
 
-          <button className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white ' type='submit'>
-            Remover Médico
-          </button>
+
         </Modal.Footer>
       </Modal>
     </div>
