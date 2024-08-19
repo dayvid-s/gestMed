@@ -17,7 +17,7 @@ const manrope = Manrope({ subsets: ["latin"] });
 export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<{
-    modalToAddUserInModal: boolean;
+    modalToAddUserInDuty: boolean;
     modalToRequestDuty: boolean
   }>>;
   shift_id: number | null;
@@ -32,7 +32,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
   });
 
   const handleClose = () => {
-    setIsOpen((prev) => ({ ...prev, modalToAddUserInModal: false }));
+    setIsOpen((prev) => ({ ...prev, modalToAddUserInDuty: false }));
   };
   const dispatch = useDispatch<AppDispatch>();
 

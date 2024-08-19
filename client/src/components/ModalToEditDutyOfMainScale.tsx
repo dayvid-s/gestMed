@@ -1,10 +1,13 @@
 import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
-import { UserDataWithSelected } from "@/@types/userTypes";
+import { deleteMainScaleDuty } from "@/features/MainScaleDutySlice";
+import { openModal } from "@/features/ModalOfConfirmationSlice";
+import { showAlert } from "@/features/alertSlice";
 import { AppDispatch } from "@/store";
 import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "rsuite";
+import { ModalOfConfirmation } from "./ModalOfConfirmation";
 import { PreviewOfDoctor } from "./PreviewOfDoctor";
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -12,25 +15,68 @@ const manrope = Manrope({ subsets: ["latin"] });
 export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  mainScaleDutyInfo: ModelScaleDuty
+  mainScaleDutyInfo: ModelScaleDuty | null;
+  fetchDuties: () => Promise<void>
 }
 
-export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo }: ImodalProps) {
-
+export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo, fetchDuties }: ImodalProps) {
   const [queryInfo, setQueryInfo] = useState({
     name: "",
     especiality: "",
     quantityOfDays: "null",
   });
 
-  const handleClose = () => setIsOpen(false);
   const dispatch = useDispatch<AppDispatch>();
 
+  const handleClose = () => setIsOpen(false);
 
-  const [users, setUsers] = useState<UserDataWithSelected[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  async function excludeMainScaleDuty() {
 
+
+    if (!mainScaleDutyInfo?.id) {
+      console.error("ID do plantão não disponível");
+      return dispatch(showAlert({
+        placement: "bottomEnd",
+        type: "error",
+        title: "ID do plantão não disponível",
+      }));
+    }
+
+
+    const action = await dispatch(deleteMainScaleDuty(mainScaleDutyInfo?.id != undefined ? mainScaleDutyInfo.id : 0));
+    const alertType: "success" | "error" = deleteMainScaleDuty.fulfilled.match(action)
+      ? "success"
+      : "error";
+
+    dispatch(showAlert({
+      placement: "bottomEnd",
+      type: alertType,
+      title: alertType === "success"
+        ? "Plantão excluído com sucesso"
+        : "Erro ao excluir plantão",
+    }));
+    fetchDuties()
+    setIsOpen(false);
+  }
+
+  const handleDeleteDuty = () => {
+    setIsOpen(false);
+
+    if (mainScaleDutyInfo?.id !== undefined) {
+      dispatch(openModal({
+        title: "Confirmar Exclusão",
+        message: "Você tem certeza que deseja excluir esse plantão?",
+        type: "Delete",
+      }));
+    } else {
+      console.error("ID do plantão não disponível");
+      dispatch(showAlert({
+        placement: "bottomEnd",
+        type: "error",
+        title: "ID do plantão não disponível",
+      }));
+    }
+  };
 
   return (
     <div className={manrope.className}>
@@ -45,80 +91,42 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
           <h4 className="text-4xl font-semibold">Editar Plantão</h4>
         </Modal.Header>
         <Modal.Body style={{ height: "80vh", overflowX: "hidden" }}>
-
-
-
-          {/* <Form>
-            <div className="flex flex-col sm:flex-row flex-wrap items-baseline ml-2">
-              <Form.Group controlId="name">
-                <Form.ControlLabel className="font-medium ">
-                  Nome do Médico
-                </Form.ControlLabel>
-                <Form.Control
-                  name="name"
-                  value={queryInfo.name}
-                // onChange={(value) => handleInputChange("name", value)}
-                />
-              </Form.Group>
-              <Form.Group className="ml-10" >
-                <Form.ControlLabel className=" mlfont-medium">
-                  Especialidade
-                </Form.ControlLabel>
-                <Form.Control
-                  name="speciality"
-                  value={queryInfo.especiality}
-                // onChange={(value) => handleInputChange("especiality", value)}
-                />
-              </Form.Group>
-              {/* <Checkbox
-                                    checked={doctorInfo.isAutoFilled}
-                                    onChange={handleIsAutoFilledChange}>
-                                    Preencher Automaticamente
-                                </Checkbox> */}
-          {/* </div>
-          </Form> */}
-
-
-
-          {/* <ListToAddUserInScale
-            users={users}
-            setUsers={setUsers}
-            loading={loading}
-            error={error}
-          /> */}
-
-
-          <PreviewOfDoctor shift={mainScaleDutyInfo.shift} user={mainScaleDutyInfo?.user} />
+          {mainScaleDutyInfo && (
+            <PreviewOfDoctor shift={mainScaleDutyInfo.shift} user={mainScaleDutyInfo.user} />
+          )}
         </Modal.Body>
-        <Modal.Footer className="flex justify-end " >
-
-          <button className='border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white ' type='submit'>
+        <Modal.Footer className="flex justify-end">
+          <button className='border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white' type='button'>
             Remover Médico
           </button>
+          <button
+            onClick={() => {
+              excludeMainScaleDuty()
 
-          <button className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-5 text-white ' type='submit'>
+            }}
+            className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-5 text-white'
+            type='button'
+          >
             Excluir Plantão
           </button>
-
           <button
-            className="  mr-5 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            className="mr-5 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
           >
             Mudar Turno
           </button>
-
           <button
-            className="  mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            className="mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={() => setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" })}
           >
             Mudar Médico
           </button>
-
-
         </Modal.Footer>
       </Modal>
+      {mainScaleDutyInfo && (
+        <ModalOfConfirmation functionToExecut={excludeMainScaleDuty} />)}
     </div>
   );
 }

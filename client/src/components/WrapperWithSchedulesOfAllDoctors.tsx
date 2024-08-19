@@ -17,7 +17,7 @@ interface actualMainScaleDutyInfoProps {
 
 export function WrapperWithSchedulesOfAllDoctors() {
   const [modalInfo, setModalInfo] = useState({
-    modalToAddUserInModal: false,
+    modalToAddUserInDuty: false,
     modalToRequestDuty: false
   });
   const [actualMainScaleDutyInfo, setActualMainScaleDutyInfo] = useState<actualMainScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
@@ -35,7 +35,9 @@ export function WrapperWithSchedulesOfAllDoctors() {
   }, []);
 
   useEffect(() => {
-    fetchMainScaleDutiesData()
+    if (modalInfo.modalToAddUserInDuty == false && modalInfo.modalToRequestDuty == false) {
+      fetchMainScaleDutiesData()
+    }
   }, [modalInfo]);
 
 
@@ -58,7 +60,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());
     setActualMainScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
-    setModalInfo((prev) => ({ ...prev, modalToAddUserInModal: true }));
+    setModalInfo((prev) => ({ ...prev, modalToAddUserInDuty: true }));
   };
 
   const totalScaleDays = mainScale[0]?.total_of_scale_days ?? 0;
@@ -105,7 +107,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
               <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Diurno</h1>
             </div>
-            <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} />
+            <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} fetchDuties={fetchMainScaleDutiesData} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
@@ -119,7 +121,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
               <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Noturno</h1>
             </div>
-            <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} />
+            <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} fetchDuties={fetchMainScaleDutiesData} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day.dutyDay, 2)}
@@ -136,7 +138,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
         scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
         shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
         setIsOpen={setModalInfo}
-        modalIsOpen={modalInfo.modalToAddUserInModal}
+        modalIsOpen={modalInfo.modalToAddUserInDuty}
       />
     </div>
   );

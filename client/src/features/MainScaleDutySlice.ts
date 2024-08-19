@@ -32,7 +32,7 @@ export const fetchMainScaleDuties = createAsyncThunk(
 
 export const createMainScaleDuty = createAsyncThunk(
   "mainScaleDuty/createMainScaleDuty",
-  async (newDuty: Omit<MainScaleDutyInBackend[], "id">, { rejectWithValue }) => {
+  async (newDuty: MainScaleDutyInBackend[], { rejectWithValue }) => {
     try {
       const response = await api.post("/scales/main/duties/batch", newDuty);
       return response.data;

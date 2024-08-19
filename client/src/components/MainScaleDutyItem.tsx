@@ -11,14 +11,15 @@ interface MainScaleDutyProps {
   IdOfShiftOfScaleDuty: number | null;
   allMainScaleDuties: MainScaleDuty[];
   allDaysOfScaleDuty: dayOfScaleDutyProps[];
-
+  fetchDuties: () => Promise<void>;
 }
 
-export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMainScaleDuties, allDaysOfScaleDuty }: MainScaleDutyProps) {
+export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMainScaleDuties, allDaysOfScaleDuty, fetchDuties }: MainScaleDutyProps) {
 
   const mainScaleDutiesOfTheDay = allMainScaleDuties.filter((mainScaleDuty) => mainScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === mainScaleDuty.shift.id);
   const renderCount = useRef(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [actualDutyInfo, setActualDutyInfo] = useState<MainScaleDuty | null>(null);
 
 
   useEffect(() => {
@@ -31,6 +32,11 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
     renderCount.current++;
   }, []);
 
+
+  function changeDutyInfo(id: number) {
+    const dutyFiltered = allMainScaleDuties.find((duty) => duty.id === id) || null;
+    setActualDutyInfo(dutyFiltered);
+  }
 
   return (
     <div className='flex flex-col ' >
@@ -47,17 +53,15 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
           <div key={duty.id} className='border-r-2	p-2	border-[#e2e2e2]  '  >
             <div
               title="Mostrar informações desse plantão"
-              className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg		min-h-20		 ' onClick={() => setModalIsOpen(true)} >
+              className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg	min-h-20 '
+              onClick={() => {
+                changeDutyInfo(duty.id)
+                setModalIsOpen(true)
+              }} >
               <p className='font-bold '>{duty.user?.name}</p>
               <p className='font-bold '>{duty.shift?.start_time.substring(0, 5)} - {duty.shift?.end_time.substring(0, 5)} ({duty.shift.name})</p>
               <p  >{duty.user?.specialization}  Cardiologista</p>
             </div>
-            <ModalToEditDutyOfMainScale
-              mainScaleDutyInfo={duty}
-              setIsOpen={setModalIsOpen}
-              modalIsOpen={modalIsOpen}
-
-            />
           </div>
 
 
@@ -66,6 +70,12 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
       })
 
       }
+      <ModalToEditDutyOfMainScale
+        mainScaleDutyInfo={actualDutyInfo}
+        setIsOpen={setModalIsOpen}
+        modalIsOpen={modalIsOpen}
+        fetchDuties={fetchDuties}
+      />
 
     </div>
   );

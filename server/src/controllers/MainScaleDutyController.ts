@@ -58,7 +58,7 @@ export class MainScaleDutyController {
         throw new BadRequestError('Campo "scale_date" está faltando na requisição.');
       }
 
-      const scale = await main_scale_duty_Repository.findOneBy({ id: scale_id });
+      const scale = await main_scale_Repository.findOneBy({ id: scale_id });
       const user = await userRepository.findOneBy({ id: user_id });
       const shift = await shiftRepository.findOneBy({ id: shift_id });
 

@@ -19,7 +19,7 @@ export function Alert() {
 
       setTimeout(() => {
         dispatch(hideAlert());
-      }, 5000);
+      }, 100);
     }
   }, [isOpen]);
 
