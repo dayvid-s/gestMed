@@ -1,13 +1,12 @@
 import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
 import { deleteMainScaleDuty } from "@/features/MainScaleDutySlice";
-import { openModal } from "@/features/ModalOfConfirmationSlice";
 import { showAlert } from "@/features/alertSlice";
 import { AppDispatch } from "@/store";
 import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "rsuite";
-import { ModalOfConfirmation } from "./ModalOfConfirmation";
+import { ConfirmationDialog } from "./ConfirmationDialog";
 import { PreviewOfDoctor } from "./PreviewOfDoctor";
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -16,7 +15,7 @@ export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   mainScaleDutyInfo: ModelScaleDuty | null;
-  fetchDuties: () => Promise<void>
+  fetchDuties: () => Promise<void>;
 }
 
 export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo, fetchDuties }: ImodalProps) {
@@ -26,13 +25,16 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     quantityOfDays: "null",
   });
 
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState<"Create" | "Delete" | "Update">("Delete");
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogDescription, setDialogDescription] = useState(""); const [dialogOnConfirm, setDialogOnConfirm] = useState<() => void>(() => { });
+
   const dispatch = useDispatch<AppDispatch>();
 
   const handleClose = () => setIsOpen(false);
 
   async function excludeMainScaleDuty() {
-
-
     if (!mainScaleDutyInfo?.id) {
       console.error("ID do plantão não disponível");
       return dispatch(showAlert({
@@ -41,7 +43,6 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
         title: "ID do plantão não disponível",
       }));
     }
-
 
     const action = await dispatch(deleteMainScaleDuty(mainScaleDutyInfo?.id != undefined ? mainScaleDutyInfo.id : 0));
     const alertType: "success" | "error" = deleteMainScaleDuty.fulfilled.match(action)
@@ -55,27 +56,17 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
         ? "Plantão excluído com sucesso"
         : "Erro ao excluir plantão",
     }));
-    fetchDuties()
+    fetchDuties();
     setIsOpen(false);
+    setDialogOpen(false);
   }
 
-  const handleDeleteDuty = () => {
-    setIsOpen(false);
-
-    if (mainScaleDutyInfo?.id !== undefined) {
-      dispatch(openModal({
-        title: "Confirmar Exclusão",
-        message: "Você tem certeza que deseja excluir esse plantão?",
-        type: "Delete",
-      }));
-    } else {
-      console.error("ID do plantão não disponível");
-      dispatch(showAlert({
-        placement: "bottomEnd",
-        type: "error",
-        title: "ID do plantão não disponível",
-      }));
-    }
+  const handleOpenDialog = (type: "Create" | "Delete" | "Update", title: string, description: string, onConfirm: () => void) => {
+    setDialogType(type);
+    setDialogTitle(title);
+    setDialogDescription(description);
+    setDialogOnConfirm(() => onConfirm);
+    setDialogOpen(true);
   };
 
   return (
@@ -101,8 +92,8 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
           </button>
           <button
             onClick={() => {
-              excludeMainScaleDuty()
-
+              setIsOpen(false);
+              handleOpenDialog("Delete", "Excluir plantão", "Você tem certeza que deseja excluir esse plantão?", excludeMainScaleDuty);
             }}
             className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-5 text-white'
             type='button'
@@ -125,8 +116,15 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
           </button>
         </Modal.Footer>
       </Modal>
-      {mainScaleDutyInfo && (
-        <ModalOfConfirmation functionToExecut={excludeMainScaleDuty} />)}
+
+      <ConfirmationDialog
+        type={dialogType}
+        isOpen={isDialogOpen}
+        title={dialogTitle}
+        description={dialogDescription}
+        onConfirm={dialogOnConfirm}
+        onCancel={() => setDialogOpen(false)}
+      />
     </div>
   );
 }
