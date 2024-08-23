@@ -1,5 +1,5 @@
 export type roles = "Básico" | "Médico" | "Coordenador" | "Master";
-// export type Shifts = "SD" | "SN" | "SD/SN"
+export type Shifts = "SD" | "SN" | "SD/SN"
 
 export type genders = "Masculino" | "Feminino" | "";
 

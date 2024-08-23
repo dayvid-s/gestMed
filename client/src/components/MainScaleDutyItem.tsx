@@ -60,7 +60,7 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
               }} >
               <p className='font-bold '>{duty.user?.name}</p>
               <p className='font-bold '>{duty.shift?.start_time.substring(0, 5)} - {duty.shift?.end_time.substring(0, 5)} ({duty.shift.name})</p>
-              <p  >{duty.user?.specialization}  Cardiologista</p>
+              <p  >{duty.user?.specialization}</p>
             </div>
           </div>
 

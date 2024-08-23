@@ -126,6 +126,37 @@ export class MainScaleDutyController {
     return res.status(200).json(mainScaleDuty);
   }
 
+
+  async changeShift(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const mainScaleDuty = await main_scale_duty_Repository.findOne({
+      where: { id: parseInt(id, 10) },
+      relations: ['shift'],
+    });
+
+    if (!mainScaleDuty) {
+      throw new NotFoundError('Plantão de escala principal não encontrado.');
+    }
+
+    let newShift = null;
+    if (mainScaleDuty.shift.name === 'SD') {
+      newShift = await shiftRepository.findOneBy({ name: 'SN' });
+    } else if (mainScaleDuty.shift.name === 'SN') {
+      newShift = await shiftRepository.findOneBy({ name: 'SD' });
+    }
+
+    if (!newShift) {
+      throw new BadRequestError('Turno alternativo não encontrado.');
+    }
+
+    mainScaleDuty.shift = newShift;
+
+    await main_scale_duty_Repository.save(mainScaleDuty);
+
+    return res.status(200).json({ message: 'Turno alterado com sucesso.' });
+  }
+
   async delete(req: Request, res: Response) {
     const { id } = req.params;
 
@@ -136,5 +167,28 @@ export class MainScaleDutyController {
     await main_scale_duty_Repository.remove(mainScaleDuty);
 
     return res.status(200).json({ message: 'Plantão de escala principal deletado com sucesso.' });
+  }
+
+  async removeDoctor(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const mainScaleDuty = await main_scale_duty_Repository.findOne({
+      where: { id: parseInt(id, 10) },
+      relations: ['user'],
+    });
+
+    if (!mainScaleDuty) {
+      throw new NotFoundError('Plantão de escala principal não encontrado.');
+    }
+
+    if (!mainScaleDuty.user) {
+      throw new BadRequestError('Este plantão já não possui um médico associado.');
+    }
+
+    mainScaleDuty.user = null;
+
+    await main_scale_duty_Repository.save(mainScaleDuty);
+
+    return res.status(200).json({ message: 'Médico removido do plantão com sucesso.' });
   }
 }

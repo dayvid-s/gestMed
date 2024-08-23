@@ -11,8 +11,8 @@ export class Model_scale_duty {
   @ManyToOne(() => Model_scale, model_scale => model_scale.id, { onDelete: 'CASCADE' })
   scale: Model_scale;
 
-  @ManyToOne(() => User, user => user.id)
-  user: User;
+  @ManyToOne(() => User, user => user.id, { nullable: true })
+  user: User | null;
 
   @ManyToOne(() => Shift, shift => shift.id)
   shift: Shift;

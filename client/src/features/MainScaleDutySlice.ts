@@ -62,12 +62,45 @@ export const updateMainScaleDuty = createAsyncThunk(
   }
 );
 
+
+export const changeShift = createAsyncThunk(
+  "mainScaleDuty/changeShift",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/scales/main/duties/${id}/change-shift`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
+  }
+);
+
 export const deleteMainScaleDuty = createAsyncThunk(
   "mainScaleDuty/deleteMainScaleDuty",
   async (id: number, { rejectWithValue }) => {
     try {
       await api.delete(`/scales/main/duties/${id}`);
       return id;
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
+  }
+);
+
+export const removeDoctorFromDuty = createAsyncThunk(
+  "mainScaleDuty/removeDoctorFromDuty",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`/scales/main/duties/${id}/remove-doctor`);
+      return response.data;
     } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -88,13 +121,13 @@ const mainScaleDutySlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchMainScaleDuties.fulfilled, (state) => {
+      .addCase(fetchMainScaleDuties.fulfilled, (state, action: PayloadAction<MainScaleDuty[]>) => {
         state.loading = false;
+        state.mainScaleDuties = action.payload;
       })
       .addCase(fetchMainScaleDuties.rejected, (state, action) => {
         state.loading = false;
-        state.error = state.error = action.error.message ?? "Erro desconhecido";
-
+        state.error = action.error.message ?? "Erro desconhecido";
       })
       .addCase(createMainScaleDuty.pending, (state) => {
         state.loading = true;
@@ -134,7 +167,36 @@ const mainScaleDutySlice = createSlice({
       .addCase(deleteMainScaleDuty.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Erro desconhecido";
-
+      })
+      .addCase(removeDoctorFromDuty.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeDoctorFromDuty.fulfilled, (state, action: PayloadAction<MainScaleDuty>) => {
+        state.loading = false;
+        const index = state.mainScaleDuties.findIndex((duty) => duty.id === action.payload.id);
+        if (index !== -1) {
+          state.mainScaleDuties[index] = action.payload;
+        }
+      })
+      .addCase(removeDoctorFromDuty.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Erro desconhecido";
+      })
+      .addCase(changeShift.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(changeShift.fulfilled, (state, action: PayloadAction<MainScaleDuty>) => {
+        state.loading = false;
+        const index = state.mainScaleDuties.findIndex((duty) => duty.id === action.payload.id);
+        if (index !== -1) {
+          state.mainScaleDuties[index] = action.payload;
+        }
+      })
+      .addCase(changeShift.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Erro desconhecido";
       });
   },
 });

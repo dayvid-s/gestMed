@@ -9,7 +9,12 @@ router.post('/scales/main/duties', authMiddleware, mainScaleDutyController.creat
 router.post('/scales/main/duties/batch', authMiddleware, mainScaleDutyController.createBatch);
 router.get('/scales/main/duties', authMiddleware, mainScaleDutyController.getAll);
 router.get('/scales/main/duties/:id', authMiddleware, mainScaleDutyController.getOne);
+
+
+router.post('/scales/main/duties/:id/change-shift', authMiddleware, mainScaleDutyController.changeShift);
 router.put('/scales/main/duties/:id', authMiddleware, mainScaleDutyController.update);
+router.patch('/scales/main/duties/:id/remove-doctor', authMiddleware, mainScaleDutyController.removeDoctor);
 router.delete('/scales/main/duties/:id', authMiddleware, mainScaleDutyController.delete);
+
 
 export default router;

@@ -99,7 +99,7 @@ export class MainScaleController {
       for (let modelScaleDuty of modelScaleDuties) {
         const newDuty = main_scale_duty_Repository.create({
           scale: { id: mainScaleId },
-          user: { id: modelScaleDuty.user.id },
+          user: modelScaleDuty.user ? { id: modelScaleDuty.user.id } : null,
           shift: { id: modelScaleDuty.shift.id },
           scale_date: modelScaleDuty.scale_date,
         });
