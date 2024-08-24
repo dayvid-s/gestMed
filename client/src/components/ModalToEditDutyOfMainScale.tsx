@@ -1,3 +1,4 @@
+import { MainScaleDuty } from "@/@types/MainScaleDutyTypes";
 import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
 import { changeShift, deleteMainScaleDuty, removeDoctorFromDuty } from "@/features/MainScaleDutySlice";
 import { showAlert } from "@/features/alertSlice";
@@ -6,6 +7,7 @@ import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "rsuite";
+import { AddOneDoctorToDuty } from "./AddOneDoctorToDuty";
 import { ConfirmationDialog } from "./ConfirmationDialog";
 import { PreviewOfDoctor } from "./PreviewOfDoctor";
 
@@ -15,10 +17,11 @@ export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   mainScaleDutyInfo: ScaleDutyType | null;
+  setMainScaleDutyInfo: Dispatch<SetStateAction<MainScaleDuty | null>>;
   fetchDuties: () => Promise<void>;
 }
 
-export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo, fetchDuties }: ImodalProps) {
+export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo, setMainScaleDutyInfo, fetchDuties }: ImodalProps) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState<"Create" | "Delete" | "Update">("Delete");
   const [dialogTitle, setDialogTitle] = useState("");
@@ -28,6 +31,7 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
   const dispatch = useDispatch<AppDispatch>();
 
   const handleClose = () => setIsOpen(false);
+
 
   async function excludeMainScaleDuty() {
     if (!mainScaleDutyInfo?.id) {
@@ -132,27 +136,30 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
         <Modal.Header>
           <h4 className="text-4xl font-semibold">Editar Plantão</h4>
         </Modal.Header>
-        <Modal.Body style={{ height: "80vh", overflowX: "hidden" }}>
-          {mainScaleDutyInfo && (
-            <PreviewOfDoctor shift={mainScaleDutyInfo.shift} user={mainScaleDutyInfo.user} />
-          )}
+        <Modal.Body style={{ height: "80vh", }}>
+          {mainScaleDutyInfo?.user ? (
+            <PreviewOfDoctor shift={mainScaleDutyInfo?.shift} user={mainScaleDutyInfo?.user} />
+          ) : <AddOneDoctorToDuty
+          />}
         </Modal.Body>
         <Modal.Footer className="flex justify-end">
-          <button
-            className='border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white'
-            type='button'
-            onClick={() => {
-              setIsOpen(false)
-              handleOpenDialog(
-                "Delete",
-                "Remover Médico",
-                "Você tem certeza que deseja remover o médico deste plantão?",
-                removeDoctor
-              )
-            }}
-          >
-            Remover Médico
-          </button>
+
+          {mainScaleDutyInfo?.user &&
+            <button
+              className='border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white'
+              type='button'
+              onClick={() => {
+                setIsOpen(false)
+                handleOpenDialog(
+                  "Delete",
+                  "Remover Médico",
+                  "Você tem certeza que deseja remover o médico deste plantão?",
+                  removeDoctor
+                )
+              }}
+            >
+              Remover Médico
+            </button>}
           <button
             onClick={() => {
               setIsOpen(false)
@@ -188,7 +195,9 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
             type="button"
             onClick={() => console.log("Mudar Médico")}
           >
-            Mudar Médico
+            {mainScaleDutyInfo?.user ?
+              "Mudar Médico" : "Adicionar Médico"
+            }
           </button>
         </Modal.Footer>
       </Modal>

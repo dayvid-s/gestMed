@@ -4,8 +4,8 @@ import Image from "next/image";
 import Dayvid from "../assets/dayvid 1.png";
 
 interface ListToAddUserInScaleProps {
-  user: UserData | null;
-  shift: Shift
+  user: UserData | undefined;
+  shift: Shift | undefined
 }
 
 export function PreviewOfDoctor({
@@ -44,7 +44,7 @@ export function PreviewOfDoctor({
             <span className="text-gray-900 mb-4 ">{user?.specialization}</span>
 
             <h4 className="  text-black text-xl font-extrabold">Plantão Atual</h4>
-            <span>{shift.name == "SD" ? "Plantão Diurno" : "Plantão Noturno"} - {shift.name}</span>
+            <span>{shift?.name == "SD" ? "Plantão Diurno" : "Plantão Noturno"} - {shift?.name}</span>
           </div>
 
           <Image

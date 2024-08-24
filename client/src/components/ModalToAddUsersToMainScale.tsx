@@ -166,6 +166,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
             className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={resetForm}
+            disabled={!userToAddInMainScale}
           >
             Redefinir
           </button>

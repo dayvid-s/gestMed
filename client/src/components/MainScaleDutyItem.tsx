@@ -72,6 +72,7 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
       }
       <ModalToEditDutyOfMainScale
         mainScaleDutyInfo={actualDutyInfo}
+        setMainScaleDutyInfo={setActualDutyInfo}
         setIsOpen={setModalIsOpen}
         modalIsOpen={modalIsOpen}
         fetchDuties={fetchDuties}
