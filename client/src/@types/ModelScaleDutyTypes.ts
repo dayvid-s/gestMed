@@ -1,7 +1,7 @@
 import { ScaleData } from "./scaleTypes";
 import { Shift, UserData } from "./userTypes";
 
-export interface ModelScaleDuty {
+export interface ScaleDutyType {
   id: number;
   scale: ScaleData;
   user: UserData | null;

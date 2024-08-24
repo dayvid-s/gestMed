@@ -1,4 +1,4 @@
-import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
 import { UserDataWithSelected } from "@/@types/userTypes";
 import { AppDispatch } from "@/store";
 import { Manrope } from "next/font/google";
@@ -11,7 +11,7 @@ const manrope = Manrope({ subsets: ["latin"] });
 export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  modelScaleDutyInfo: ModelScaleDuty
+  modelScaleDutyInfo: ScaleDutyType
 }
 
 export function ModalToEditDutyOfModelScale({ modalIsOpen, setIsOpen }: ImodalProps) {

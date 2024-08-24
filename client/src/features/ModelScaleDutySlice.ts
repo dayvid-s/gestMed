@@ -1,9 +1,9 @@
-import { ModelScaleDuty, ModelScaleDutyInBackend } from "@/@types/ModelScaleDutyTypes";
+import { ModelScaleDutyInBackend, ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
 import { api } from "@/services/axiosClient";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ModelScaleDutyState {
-  modelScaleDuties: ModelScaleDuty[];
+  modelScaleDuties: ScaleDutyType[];
   loading: boolean;
   error: string | null;
 }
@@ -48,7 +48,7 @@ export const createModelScaleDuty = createAsyncThunk(
 
 export const updateModelScaleDuty = createAsyncThunk(
   "modelScaleDuty/updateModelScaleDuty",
-  async (updatedDuty: ModelScaleDuty, { rejectWithValue }) => {
+  async (updatedDuty: ScaleDutyType, { rejectWithValue }) => {
     try {
       const response = await api.put(`/scales/models/duties/${updatedDuty.id}`, updatedDuty);
       return response.data;
@@ -100,7 +100,7 @@ const modelScaleDutySlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createModelScaleDuty.fulfilled, (state, action: PayloadAction<ModelScaleDuty>) => {
+      .addCase(createModelScaleDuty.fulfilled, (state, action: PayloadAction<ScaleDutyType>) => {
         state.loading = false;
         state.modelScaleDuties.push(action.payload);
       })
@@ -112,7 +112,7 @@ const modelScaleDutySlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateModelScaleDuty.fulfilled, (state, action: PayloadAction<ModelScaleDuty>) => {
+      .addCase(updateModelScaleDuty.fulfilled, (state, action: PayloadAction<ScaleDutyType>) => {
         state.loading = false;
         const index = state.modelScaleDuties.findIndex((duty) => duty.id === action.payload.id);
         if (index !== -1) {

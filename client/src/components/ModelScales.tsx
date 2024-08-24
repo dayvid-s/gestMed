@@ -1,4 +1,4 @@
-import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
 import { ScaleBackendModel } from "@/@types/scaleTypes";
 import { showAlert } from "@/features/alertSlice";
 import { copyDutiesFromModel } from "@/features/MainScaleSlice";
@@ -23,7 +23,7 @@ interface scalesModelProps {
 export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: scalesModelProps) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [modelScaleDuties, setModelScaleDuties] = useState<ModelScaleDuty[]>([]);
+  const [modelScaleDuties, setModelScaleDuties] = useState<ScaleDutyType[]>([]);
   const [actualModelScaleDutyInfo, setActualModelScaleDutyInfo] = useState<actualModelScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -68,7 +68,7 @@ export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: s
       const action = await dispatch(fetchModelScaleDuties());
 
       if (fetchModelScaleDuties.fulfilled.match(action)) {
-        const fetchedModelScaleDuties: ModelScaleDuty[] = action.payload;
+        const fetchedModelScaleDuties: ScaleDutyType[] = action.payload;
         const filteredDuties = fetchedModelScaleDuties.filter(
           duty => duty?.scale?.name === actualModelScaleInfo?.name
         );

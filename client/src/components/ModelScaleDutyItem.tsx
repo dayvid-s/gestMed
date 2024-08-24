@@ -1,4 +1,4 @@
-import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
 import { useEffect, useRef, useState } from "react";
 import { ModalToEditDutyOfModelScale } from "./ModalToEditDutyOfModelScale";
 
@@ -9,7 +9,7 @@ interface dayOfScaleDutyProps {
 interface ModelScaleDutyProps {
   dayOfScaleDuty: dayOfScaleDutyProps;
   IdOfShiftOfScaleDuty: number | null;
-  allModelScaleDuties: ModelScaleDuty[];
+  allModelScaleDuties: ScaleDutyType[];
   allDaysOfScaleDuty: dayOfScaleDutyProps[];
 
 }

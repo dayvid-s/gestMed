@@ -1,4 +1,4 @@
-import { ModelScaleDuty } from "@/@types/ModelScaleDutyTypes";
+import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
 import { changeShift, deleteMainScaleDuty, removeDoctorFromDuty } from "@/features/MainScaleDutySlice";
 import { showAlert } from "@/features/alertSlice";
 import { AppDispatch } from "@/store";
@@ -14,7 +14,7 @@ const manrope = Manrope({ subsets: ["latin"] });
 export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  mainScaleDutyInfo: ModelScaleDuty | null;
+  mainScaleDutyInfo: ScaleDutyType | null;
   fetchDuties: () => Promise<void>;
 }
 
