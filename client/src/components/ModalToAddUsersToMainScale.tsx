@@ -19,7 +19,7 @@ export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<{
     modalToAddUserInDuty: boolean;
-    modalToRequestDuty: boolean
+    ModalForDoctorSolicitDuty: boolean
   }>>;
   shift_id: number | null;
   scale_date: number | null;

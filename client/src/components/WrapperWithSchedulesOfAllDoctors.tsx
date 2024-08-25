@@ -8,6 +8,7 @@ import { useAppSelector } from "@/utils/useSelectorHook";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { MainScaleDutyItem } from "./MainScaleDutyItem";
+import { ModalForDoctorSolicitDuty } from "./ModalForDoctorSolicitDuty";
 import { ModalToAddUsersToMainScale } from "./ModalToAddUsersToMainScale";
 
 interface actualMainScaleDutyInfoProps {
@@ -18,13 +19,16 @@ interface actualMainScaleDutyInfoProps {
 export function WrapperWithSchedulesOfAllDoctors() {
   const [modalInfo, setModalInfo] = useState({
     modalToAddUserInDuty: false,
-    modalToRequestDuty: false
+    ModalForDoctorSolicitDuty: false
   });
   const [actualMainScaleDutyInfo, setActualMainScaleDutyInfo] = useState<actualMainScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
 
   const dispatch = useDispatch<AppDispatch>();
   const { mainScale, loading, error } = useAppSelector((state) => state.mainScale);
   const [mainScaleDuties, setMainScaleDuties] = useState<MainScaleDuty[]>([]);
+  const user = useAppSelector((state) => state.auth.user);
+  const open = useAppSelector((state) => state.sideBar.open);
+
 
   useEffect(() => {
     dispatch(fetchMainScale()).then((result) => {
@@ -35,7 +39,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
   }, []);
 
   useEffect(() => {
-    if (modalInfo.modalToAddUserInDuty == false && modalInfo.modalToRequestDuty == false) {
+    if (modalInfo.modalToAddUserInDuty == false && modalInfo.ModalForDoctorSolicitDuty == false) {
       fetchMainScaleDutiesData()
     }
   }, [modalInfo]);
@@ -60,6 +64,11 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
     dispatch(closeSideBar());
     setActualMainScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
+    dispatch(closeSideBar())
+    if (user?.role === "Médico") {
+      setModalInfo((prev) => ({ ...prev, ModalForDoctorSolicitDuty: true }));
+      return
+    }
     setModalInfo((prev) => ({ ...prev, modalToAddUserInDuty: true }));
   };
 
@@ -134,6 +143,15 @@ export function WrapperWithSchedulesOfAllDoctors() {
         ))}
       </div>
 
+
+      <ModalForDoctorSolicitDuty
+        scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
+        shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
+        setIsOpen={setModalInfo}
+        modalIsOpen={modalInfo.ModalForDoctorSolicitDuty}
+        month={month}
+        year={year}
+      />
       <ModalToAddUsersToMainScale
         scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
         shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
