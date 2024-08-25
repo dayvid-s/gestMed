@@ -52,12 +52,12 @@ export default function Login() {
               <label className='my-1 text-left font-semibold ' htmlFor='username'>Usuário:</label>
               <br />
 
-              <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' autoComplete="current-password" type='text' id='username' name='email' required onChange={handleInputChange} />
+              <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium' autoComplete="email" type='text' id='username' name='email' required onChange={handleInputChange} />
               <br />
               <label className='my-1 text-left font-semibold  ' htmlFor='password'>Senha:</label>
 
               <br />
-              <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium ' type='password' id='password' name='password' required onChange={handleInputChange} />
+              <input className='border-2 w-56 px-3 py-0.5 rounded-md font-medium ' autoComplete="current-password" type='password' id='password' name='password' required onChange={handleInputChange} />
             </div>
 
             {/* <Link href="/home"> */}
