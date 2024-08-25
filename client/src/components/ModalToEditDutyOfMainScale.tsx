@@ -1,15 +1,17 @@
 import { MainScaleDuty } from "@/@types/MainScaleDutyTypes";
 import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
-import { changeShift, deleteMainScaleDuty, removeDoctorFromDuty } from "@/features/MainScaleDutySlice";
+import { UserDataWithSelected } from "@/@types/userTypes";
+import { changeShift, deleteMainScaleDuty, removeDoctorFromDuty, updateMainScaleDuty } from "@/features/MainScaleDutySlice";
 import { showAlert } from "@/features/alertSlice";
 import { AppDispatch } from "@/store";
 import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "rsuite";
-import { AddOneDoctorToDuty } from "./AddOneDoctorToDuty";
 import { ConfirmationDialog } from "./ConfirmationDialog";
+import { AddOneDoctorToDuty } from "./ListToAddOneDoctorToDuty";
 import { PreviewOfDoctor } from "./PreviewOfDoctor";
+import { SearchForDoctor } from "./SearchForDoctor";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -23,6 +25,11 @@ export interface ImodalProps {
 
 export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo, setMainScaleDutyInfo, fetchDuties }: ImodalProps) {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [doctors, setDoctors] = useState<UserDataWithSelected[]>([]);
+  const [queryInfo, setQueryInfo] = useState({
+    name: "",
+    especiality: "",
+  });
   const [dialogType, setDialogType] = useState<"Create" | "Delete" | "Update">("Delete");
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogDescription, setDialogDescription] = useState("");
@@ -124,6 +131,56 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     setDialogOpen(true);
   };
 
+
+  async function updateDoctorOfDuty() {
+    if (!mainScaleDutyInfo?.id) {
+      console.error("ID do plantão não disponível");
+      return dispatch(showAlert({
+        placement: "bottomEnd",
+        type: "error",
+        title: "ID do plantão não disponível",
+      }));
+    }
+
+    const selectedDoctor = doctors.find(doctor => doctor.selected);
+
+    if (!selectedDoctor) {
+      console.error("Nenhum médico selecionado");
+      return dispatch(showAlert({
+        placement: "bottomEnd",
+        type: "error",
+        title: "Nenhum médico selecionado",
+      }));
+    }
+
+    const mainScaleDutyInfoUpdated: ScaleDutyType = {
+      ...mainScaleDutyInfo,
+      user: selectedDoctor,
+      updated_at: new Date(),
+    };
+
+    const action = await dispatch(updateMainScaleDuty(mainScaleDutyInfoUpdated));
+
+    const alertType: "success" | "error" = updateMainScaleDuty.fulfilled.match(action)
+      ? "success"
+      : "error";
+
+    dispatch(showAlert({
+      placement: "bottomEnd",
+      type: alertType,
+      title: alertType === "success"
+        ? "Médico alterado com sucesso"
+        : "Erro ao alterar médico do plantão",
+    }));
+
+    if (alertType === "success") {
+      setMainScaleDutyInfo(mainScaleDutyInfoUpdated);
+    }
+
+    await fetchDuties();
+    setDialogOpen(false);
+  }
+
   return (
     <div className={manrope.className}>
       <Modal
@@ -136,11 +193,15 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
         <Modal.Header>
           <h4 className="text-4xl font-semibold">Editar Plantão</h4>
         </Modal.Header>
-        <Modal.Body style={{ height: "80vh", }}>
+        <Modal.Body style={{ height: "80vh", padding: "10px" }}>
           {mainScaleDutyInfo?.user ? (
             <PreviewOfDoctor shift={mainScaleDutyInfo?.shift} user={mainScaleDutyInfo?.user} />
-          ) : <AddOneDoctorToDuty
-          />}
+          ) : (
+            <>
+              <SearchForDoctor queryInfo={queryInfo} setQueryInfo={setQueryInfo} />
+              <AddOneDoctorToDuty doctors={doctors} setDoctors={setDoctors} />
+            </>
+          )}
         </Modal.Body>
         <Modal.Footer className="flex justify-end">
 
@@ -190,15 +251,16 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
           >
             Mudar Turno
           </button>
-          <button
-            className="mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
-            type="button"
-            onClick={() => console.log("Mudar Médico")}
-          >
-            {mainScaleDutyInfo?.user ?
-              "Mudar Médico" : "Adicionar Médico"
-            }
-          </button>
+          {!mainScaleDutyInfo?.user &&
+            <button
+              className="mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+              type="button"
+              onClick={updateDoctorOfDuty}
+            >
+              {mainScaleDutyInfo?.user ?
+                "Mudar Médico" : "Adicionar Médico"
+              }
+            </button>}
         </Modal.Footer>
       </Modal>
 

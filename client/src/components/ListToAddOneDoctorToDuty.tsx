@@ -3,23 +3,19 @@ import { showAlert } from "@/features/alertSlice";
 import { fetchDoctors } from "@/features/doctorSclice";
 import { AppDispatch } from "@/store";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Dayvid from "../assets/dayvid 1.png";
 
-interface ListToAddUserInScaleProps {
-  users: UserDataWithSelected[];
-  setUsers: Dispatch<SetStateAction<UserDataWithSelected[]>>;
-  usersSelected: UserDataWithSelected[];
-
-  loading: boolean;
-  error: string | null;
+interface AddOneDoctorToDutyProps {
+  doctors: UserDataWithSelected[];
+  setDoctors: Dispatch<SetStateAction<UserDataWithSelected[]>>;
 }
 
-export function AddOneDoctorToDuty() {
+export function AddOneDoctorToDuty({ doctors, setDoctors }: AddOneDoctorToDutyProps) {
 
-  const [doctors, setDoctors] = useState<UserDataWithSelected[]>([]);
   const dispatch = useDispatch<AppDispatch>();
+
   const handleWithUserSelected = (id: number) => {
     setDoctors((prevUsers) =>
       prevUsers.map((user) => ({
@@ -28,7 +24,6 @@ export function AddOneDoctorToDuty() {
       }))
     );
   };
-
 
   const fetchAllDoctors = async () => {
     try {
@@ -39,10 +34,10 @@ export function AddOneDoctorToDuty() {
           ...user,
           selected: false,
         }));
-        setDoctors(fetchedUsers);
-        console.log("ac")
+        setDoctors(updatedUsers); // Usando updatedUsers
+        console.log("ac");
       } else if (fetchDoctors.rejected.match(action)) {
-        console.log("ax")
+        console.log("ax");
         dispatch(
           showAlert({
             placement: "bottomEnd",
@@ -52,7 +47,7 @@ export function AddOneDoctorToDuty() {
         );
       }
     } catch (err) {
-      console.log("ao")
+      console.log("ao");
       dispatch(
         showAlert({
           placement: "bottomEnd",
@@ -64,11 +59,9 @@ export function AddOneDoctorToDuty() {
   };
 
   useEffect(() => {
-    fetchAllDoctors()
-    console.log(doctors)
-
-  }, [])
-
+    fetchAllDoctors();
+    console.log(doctors);
+  }, []);
 
   return (
     <>
@@ -97,8 +90,7 @@ export function AddOneDoctorToDuty() {
               </span>
             </div>
           </div>
-        ))
-        }
+        ))}
       </div>
     </>
   );

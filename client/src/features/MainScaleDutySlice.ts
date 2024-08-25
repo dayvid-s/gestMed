@@ -50,7 +50,14 @@ export const updateMainScaleDuty = createAsyncThunk(
   "mainScaleDuty/updateMainScaleDuty",
   async (updatedDuty: MainScaleDuty, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/scales/main/duties/${updatedDuty.id}`, updatedDuty);
+      const payload = {
+        scale_id: updatedDuty.scale.id,
+        user_id: updatedDuty.user?.id,
+        shift_id: updatedDuty.shift.id,
+        scale_date: updatedDuty.scale_date
+      };
+
+      const response = await api.put(`/scales/main/duties/${updatedDuty.id}`, payload);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {

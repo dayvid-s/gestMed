@@ -9,8 +9,9 @@ import { removeProperty } from "@/utils/ObjectManipulation";
 import { Manrope } from "next/font/google";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Modal } from "rsuite";
+import { Modal } from "rsuite";
 import { ListToAddUserInScale } from "./ListToAddUserInScale";
+import { SearchForDoctor } from "./SearchForDoctor";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -28,7 +29,6 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
   const [queryInfo, setQueryInfo] = useState({
     name: "",
     especiality: "",
-    quantityOfDays: "null",
   });
 
   const handleClose = () => {
@@ -75,12 +75,6 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
     }
   };
 
-  const handleInputChange = (name: string, value: string) => {
-    setQueryInfo((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
 
   const handleWithcreateScaleMainDuty = async () => {
     try {
@@ -109,7 +103,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
   };
 
   const resetForm = () => {
-    setQueryInfo({ name: "", especiality: "", quantityOfDays: "null" });
+    setQueryInfo({ name: "", especiality: "" });
     setDoctors(doctors.map(doctor => ({ ...doctor, selected: false })));
   };
 
@@ -126,30 +120,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
           <h4 className="text-4xl font-semibold">Adicionar Médicos na Escala Principal</h4>
         </Modal.Header>
         <Modal.Body style={{ height: "80vh", padding: "10px" }}>
-          <Form>
-            <div className="flex flex-col flex-wrap items-baseline sm:flex-row ">
-              <Form.Group controlId="name">
-                <Form.ControlLabel className="font-medium ">
-                  Nome do Médico
-                </Form.ControlLabel>
-                <Form.Control
-                  name="name"
-                  value={queryInfo.name}
-                  onChange={(value) => handleInputChange("name", value)}
-                />
-              </Form.Group>
-              <Form.Group className="ml-10" >
-                <Form.ControlLabel className=" mlfont-medium">
-                  Especialidade
-                </Form.ControlLabel>
-                <Form.Control
-                  name="speciality"
-                  value={queryInfo.especiality}
-                  onChange={(value) => handleInputChange("especiality", value)}
-                />
-              </Form.Group>
-            </div>
-          </Form>
+          <SearchForDoctor queryInfo={queryInfo} setQueryInfo={setQueryInfo} />
           <ListToAddUserInScale
             usersSelected={userToAddInMainScale}
             users={doctors}

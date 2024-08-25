@@ -53,13 +53,14 @@ export function MainScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMai
           <div key={duty.id} className='border-r-2	p-2	border-[#e2e2e2]  '  >
             <div
               title="Mostrar informações desse plantão"
-              className=' p-2 bg-[#C4E7E7] border-l-8 cursor-pointer	border-[#025959]	   rounded-r-lg	min-h-20 '
+              className={`p-2 ${duty.user ? 'bg-[#C4E7E7] border-[#025959] ' : 'bg-[#ffd8d8] border-[#f86060] '} border-l-8 cursor-pointer  rounded-r-lg min-h-20`}
               onClick={() => {
                 changeDutyInfo(duty.id)
                 setModalIsOpen(true)
               }} >
               <p className='font-bold '>{duty.user?.name}</p>
               <p className='font-bold '>{duty.shift?.start_time.substring(0, 5)} - {duty.shift?.end_time.substring(0, 5)} ({duty.shift.name})</p>
+              {!duty?.user && <p>{"Plantão sem médico"}</p>}
               <p  >{duty.user?.specialization}</p>
             </div>
           </div>
