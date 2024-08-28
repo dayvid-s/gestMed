@@ -3,7 +3,9 @@ import express, { Router } from 'express';
 import 'express-async-errors';
 import ModelScaleDutyRoute from './routes/ModelScaleDutyRoute';
 import ModelScaleRoute from './routes/ModelScaleRoute';
+import SolicitationOfDutyRoute from './routes/SolicitationOfDutyRoute';
 import UserRoute from './routes/UserRoute';
+
 
 import { AppDataSource } from './data-source';
 import { authMiddleware } from './middlewares/authMiddleware';
@@ -30,6 +32,9 @@ AppDataSource.initialize().then(async () => {
   app.use(MainScaleRoute)
   app.use(MainScaleDutyRoute)
   app.use(ModelScaleDutyRoute)
+  app.use(SolicitationOfDutyRoute)
+
+
   app.use(errorMiddleware)
 
 

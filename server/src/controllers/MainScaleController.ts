@@ -3,6 +3,7 @@ import { main_scale_duty_Repository } from '../repositories/main_scale_duty_Repo
 import { main_scale_Repository } from '../repositories/main_scale_Repository';
 import { model_scale_duty_Repository } from '../repositories/model_scale_DutyRepository';
 import { model_scaleRepository } from '../repositories/model_scaleRepository';
+import { SolicitationOfDutyRepository } from '../repositories/solicitation_dutyRepository';
 export class MainScaleController {
   async create(req: Request, res: Response) {
     const { total_of_scale_days, model_scale_id } = req.body;
@@ -61,8 +62,6 @@ export class MainScaleController {
       return res.status(500).json({ message: 'Erro interno do servidor' });
     }
   }
-
-
   async transformModelScaleIntoMainScale(req: Request, res: Response) {
     try {
       const { model_scale_id } = req.params;
@@ -88,17 +87,25 @@ export class MainScaleController {
 
       await main_scale_Repository.save(updatedMainScale);
 
+
+      await SolicitationOfDutyRepository.createQueryBuilder()
+        .delete()
+        .where('dutyId IN (SELECT id FROM main_scale_duty WHERE scaleId = :scaleId)', { scaleId: 1 })
+        .execute();
+
+      await main_scale_duty_Repository.createQueryBuilder()
+        .delete()
+        .where('scaleId = :scaleId', { scaleId: 1 })
+        .execute();
+
       const modelScaleDuties = await model_scale_duty_Repository.find({
         where: { scale: { id: scaleId } },
         relations: ['scale', 'user', 'shift'],
       });
 
-      await main_scale_duty_Repository.clear();
-
-      const mainScaleId = 1;
       for (let modelScaleDuty of modelScaleDuties) {
         const newDuty = main_scale_duty_Repository.create({
-          scale: { id: mainScaleId },
+          scale: { id: 1 },
           user: modelScaleDuty.user ? { id: modelScaleDuty.user.id } : null,
           shift: { id: modelScaleDuty.shift.id },
           scale_date: modelScaleDuty.scale_date,
