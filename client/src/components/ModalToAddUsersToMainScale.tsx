@@ -90,7 +90,7 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
       dispatch(showAlert({
         placement: "bottomEnd", type: "success", title:
           userToAddInMainScale.length > 1 ?
-            `${userToAddInMainScale.length} médicos adicionados no plantao` :
+            `${userToAddInMainScale.length} médicos adicionados no plantão` :
             "Médico adicionado no plantão"
       }));
 
