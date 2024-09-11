@@ -28,6 +28,7 @@ import { logoutUser } from "@/features/authSlice";
 import { closeSideBar, openSideBar } from "@/features/sideBarSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
+import { Settings } from "@mui/icons-material";
 import { Manrope } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -115,7 +116,8 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
       ],
     configuration: user?.role === "Médico"
       ? [{ name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }]
-      : [{ name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" },],
+      : [{ name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }, { name: "Configurações", icon: <Settings />, path: "/configuration" }
+      ],
   };
 
   return (
@@ -202,10 +204,12 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
                     <h1 className='font-bold text-white text-xl ' >{page.name}</h1>
                   </ListItemButton>
                 </Link>
+
               ))}
             </List>
             <Divider />
             <List>
+
               {sideBarItems.configuration.map((page, index) => (
                 <Link onClick={() => { dispatch(closeSideBar()); }} key={page.name} href={page.path} passHref>
                   <ListItemButton>

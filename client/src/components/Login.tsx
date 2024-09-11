@@ -1,26 +1,26 @@
 "use client";
-import Image from "next/image";
-import React, { FormEvent, useEffect, useState } from "react";
-import Logo from "../assets/gestmedLogo.png";
-
+import { showAlert } from "@/features/alertSlice";
 import { signInAsync } from "@/features/authSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-
+import Logo from "../assets/gestmedLogo.png";
 
 export default function Login() {
   const [user, setUser] = useState({ email: "", password: "" });
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useAppSelector((state) => state.auth);
   const router = useRouter();
-
+  const searchParams = useSearchParams();
+  const expired = searchParams.get("expired");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
       ...user,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -30,13 +30,33 @@ export default function Login() {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (expired) {
+      dispatch(
+        showAlert({
+          placement: "bottomEnd",
+          type: "info",
+          title: "Sua sessão expirou. Faça login novamente.",
+        })
+      );
+    }
+  }, [expired, dispatch]);
 
   const handleLogin = async (event: FormEvent) => {
-    event.preventDefault();
-    dispatch(signInAsync(user));
+    try {
+      event.preventDefault();
+      await dispatch(signInAsync(user)).unwrap();
+    } catch (error) {
+      console.error("Falha ao fazer login", error);
+      dispatch(
+        showAlert({
+          placement: "bottomEnd",
+          type: "error",
+          title: "Usuário ou senha inválidos.",
+        })
+      );
+    }
   };
-
-
 
   return (
     <div className='w-screen bg-[#025959] h-screen flex align justify-center items-center relative'>
