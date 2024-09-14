@@ -5,7 +5,7 @@ export type genders = "Masculino" | "Feminino" | "";
 
 export interface Shift {
   id: number;
-  name: string;
+  name: Shifts;
   start_time: string;
   end_time: string;
 }

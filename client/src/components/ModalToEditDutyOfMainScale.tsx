@@ -17,28 +17,28 @@ const manrope = Manrope({ subsets: ["latin"] });
 
 export interface ImodalProps {
   modalIsOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
   mainScaleDutyInfo: ScaleDutyType | null;
   setMainScaleDutyInfo: Dispatch<SetStateAction<MainScaleDuty | null>>;
   fetchDuties: () => Promise<void>;
 }
 
-export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDutyInfo, setMainScaleDutyInfo, fetchDuties }: ImodalProps) {
-  const [isDialogOpen, setDialogOpen] = useState(false);
+export function ModalToEditDutyOfMainScale({ modalIsOpen, closeModal, mainScaleDutyInfo, setMainScaleDutyInfo, fetchDuties }: ImodalProps) {
   const [doctors, setDoctors] = useState<UserDataWithSelected[]>([]);
   const [queryInfo, setQueryInfo] = useState({
     name: "",
     especiality: "",
   });
-  const [dialogType, setDialogType] = useState<"Create" | "Delete" | "Update">("Delete");
-  const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogDescription, setDialogDescription] = useState("");
-  const [dialogOnConfirm, setDialogOnConfirm] = useState<() => void>(() => { });
+
+  const [dialog, setDialog] = useState({
+    isOpen: false,
+    type: "Delete" as "Create" | "Delete" | "Update",
+    title: "",
+    description: "",
+    onConfirm: () => { },
+  });
 
   const dispatch = useDispatch<AppDispatch>();
-
-  const handleClose = () => setIsOpen(false);
-
 
   async function excludeMainScaleDuty() {
     if (!mainScaleDutyInfo?.id) {
@@ -51,9 +51,7 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     }
 
     const action = await dispatch(deleteMainScaleDuty(mainScaleDutyInfo.id));
-    const alertType: "success" | "error" = deleteMainScaleDuty.fulfilled.match(action)
-      ? "success"
-      : "error";
+    const alertType: "success" | "error" = deleteMainScaleDuty.fulfilled.match(action) ? "success" : "error";
 
     dispatch(showAlert({
       placement: "bottomEnd",
@@ -62,9 +60,10 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
         ? "Plantão excluído com sucesso"
         : "Erro ao excluir plantão",
     }));
+
     fetchDuties();
-    setIsOpen(false);
-    setDialogOpen(false);
+    closeModal();
+    setDialog((prev) => ({ ...prev, isOpen: false }));
   }
 
   async function removeDoctor() {
@@ -78,9 +77,7 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     }
 
     const action = await dispatch(removeDoctorFromDuty(mainScaleDutyInfo.id));
-    const alertType: "success" | "error" = removeDoctorFromDuty.fulfilled.match(action)
-      ? "success"
-      : "error";
+    const alertType: "success" | "error" = removeDoctorFromDuty.fulfilled.match(action) ? "success" : "error";
 
     dispatch(showAlert({
       placement: "bottomEnd",
@@ -91,8 +88,8 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     }));
 
     await fetchDuties();
-    setIsOpen(false);
-    setDialogOpen(false);
+    closeModal();
+    setDialog((prev) => ({ ...prev, isOpen: false }));
   }
 
   async function handleChangeShift() {
@@ -106,9 +103,7 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     }
 
     const action = await dispatch(changeShift(mainScaleDutyInfo.id));
-    const alertType: "success" | "error" = changeShift.fulfilled.match(action)
-      ? "success"
-      : "error";
+    const alertType: "success" | "error" = changeShift.fulfilled.match(action) ? "success" : "error";
 
     dispatch(showAlert({
       placement: "bottomEnd",
@@ -119,18 +114,9 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     }));
 
     await fetchDuties();
-    setIsOpen(false);
-    setDialogOpen(false);
+    closeModal();
+    setDialog((prev) => ({ ...prev, isOpen: false }));
   }
-
-  const handleOpenDialog = (type: "Create" | "Delete" | "Update", title: string, description: string, onConfirm: () => void) => {
-    setDialogType(type);
-    setDialogTitle(title);
-    setDialogDescription(description);
-    setDialogOnConfirm(() => onConfirm);
-    setDialogOpen(true);
-  };
-
 
   async function updateDoctorOfDuty() {
     if (!mainScaleDutyInfo?.id) {
@@ -161,9 +147,7 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
 
     const action = await dispatch(updateMainScaleDuty(mainScaleDutyInfoUpdated));
 
-    const alertType: "success" | "error" = updateMainScaleDuty.fulfilled.match(action)
-      ? "success"
-      : "error";
+    const alertType: "success" | "error" = updateMainScaleDuty.fulfilled.match(action) ? "success" : "error";
 
     dispatch(showAlert({
       placement: "bottomEnd",
@@ -178,8 +162,18 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
     }
 
     await fetchDuties();
-    setDialogOpen(false);
+    setDialog((prev) => ({ ...prev, isOpen: false }));
   }
+
+  const handleOpenDialog = (type: "Create" | "Delete" | "Update", title: string, description: string, onConfirm: () => void) => {
+    setDialog({
+      isOpen: true,
+      type,
+      title,
+      description,
+      onConfirm,
+    });
+  };
 
   return (
     <div className={manrope.className}>
@@ -188,7 +182,7 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
         backdrop={true}
         size="lg"
         open={modalIsOpen}
-        onClose={handleClose}
+        onClose={closeModal}
       >
         <Modal.Header>
           <h4 className="text-4xl font-semibold">Editar Plantão</h4>
@@ -204,35 +198,35 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
           )}
         </Modal.Body>
         <Modal.Footer className="flex justify-end">
-
-          {mainScaleDutyInfo?.user &&
+          {mainScaleDutyInfo?.user && (
             <button
-              className='border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white'
-              type='button'
+              className="border-2 mr-5 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] text-white"
+              type="button"
               onClick={() => {
-                setIsOpen(false)
+                closeModal();
                 handleOpenDialog(
                   "Delete",
                   "Remover Médico",
                   "Você tem certeza que deseja remover o médico deste plantão?",
                   removeDoctor
-                )
+                );
               }}
             >
               Remover Médico
-            </button>}
+            </button>
+          )}
           <button
             onClick={() => {
-              setIsOpen(false)
+              closeModal();
               handleOpenDialog(
                 "Delete",
                 "Excluir plantão",
                 "Você tem certeza que deseja excluir esse plantão?",
                 excludeMainScaleDuty
-              )
+              );
             }}
-            className='border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-5 text-white'
-            type='button'
+            className="border-2 rounded-lg w-44 h-12 bg-[#8a133f] hover:bg-[#cd497b] mr-5 text-white"
+            type="button"
           >
             Excluir Plantão
           </button>
@@ -240,37 +234,36 @@ export function ModalToEditDutyOfMainScale({ modalIsOpen, setIsOpen, mainScaleDu
             className="mr-5 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={() => {
-              setIsOpen(false)
+              closeModal();
               handleOpenDialog(
                 "Update",
                 "Mudar Turno",
                 "Você tem certeza que deseja mudar o turno desse plantão?",
                 handleChangeShift
-              )
+              );
             }}
           >
             Mudar Turno
           </button>
-          {!mainScaleDutyInfo?.user &&
+          {!mainScaleDutyInfo?.user && (
             <button
               className="mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
               type="button"
               onClick={updateDoctorOfDuty}
             >
-              {mainScaleDutyInfo?.user ?
-                "Mudar Médico" : "Adicionar Médico"
-              }
-            </button>}
+              {mainScaleDutyInfo?.user ? "Mudar Médico" : "Adicionar Médico"}
+            </button>
+          )}
         </Modal.Footer>
       </Modal>
 
       <ConfirmationDialog
-        type={dialogType}
-        isOpen={isDialogOpen}
-        title={dialogTitle}
-        description={dialogDescription}
-        onConfirm={dialogOnConfirm}
-        onCancel={() => setDialogOpen(false)}
+        type={dialog.type}
+        isOpen={dialog.isOpen}
+        title={dialog.title}
+        description={dialog.description}
+        onConfirm={dialog.onConfirm}
+        onCancel={() => setDialog((prev) => ({ ...prev, isOpen: false }))}
       />
     </div>
   );
