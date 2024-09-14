@@ -12,8 +12,8 @@ const dateTransformer: ValueTransformer = {
   },
 };
 
-@Entity('solicitation_of_duty')
-export class SolicitationOfDuty {
+@Entity('duty_solicitation')
+export class DutySolicitation {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

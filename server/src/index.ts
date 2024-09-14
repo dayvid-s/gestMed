@@ -1,9 +1,10 @@
 import cors from 'cors';
 import express, { Router } from 'express';
 import 'express-async-errors';
+import DutySolicitationRoute from './routes/DutySolicitationRoute';
 import ModelScaleDutyRoute from './routes/ModelScaleDutyRoute';
 import ModelScaleRoute from './routes/ModelScaleRoute';
-import SolicitationOfDutyRoute from './routes/SolicitationOfDutyRoute';
+import NotificationRoute from './routes/NotificationRoute';
 import UserRoute from './routes/UserRoute';
 
 
@@ -32,11 +33,12 @@ AppDataSource.initialize().then(async () => {
   app.use(UserRoute);
   app.use(ModelScaleRoute);
   app.use(ShiftRoute);
-  app.use(MainScaleRoute)
-  app.use(MainScaleDutyRoute)
-  app.use(ModelScaleDutyRoute)
-  app.use(SolicitationOfDutyRoute)
-  app.use(ConfigurationRoute)
+  app.use(MainScaleRoute);
+  app.use(MainScaleDutyRoute);
+  app.use(ModelScaleDutyRoute);
+  app.use(DutySolicitationRoute);
+  app.use(NotificationRoute);
+  app.use(ConfigurationRoute);
 
   app.use(errorMiddleware)
 

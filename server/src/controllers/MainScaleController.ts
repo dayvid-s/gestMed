@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
+import { DutySolicitationRepository } from '../repositories/duty_solicitation_Repository';
 import { main_scale_duty_Repository } from '../repositories/main_scale_duty_Repository';
 import { main_scale_Repository } from '../repositories/main_scale_Repository';
 import { model_scale_duty_Repository } from '../repositories/model_scale_DutyRepository';
 import { model_scaleRepository } from '../repositories/model_scaleRepository';
-import { SolicitationOfDutyRepository } from '../repositories/solicitation_dutyRepository';
 export class MainScaleController {
   async create(req: Request, res: Response) {
     const { total_of_scale_days, model_scale_id } = req.body;
@@ -88,7 +88,7 @@ export class MainScaleController {
       await main_scale_Repository.save(updatedMainScale);
 
 
-      await SolicitationOfDutyRepository.createQueryBuilder()
+      await DutySolicitationRepository.createQueryBuilder()
         .delete()
         .where('dutyId IN (SELECT id FROM main_scale_duty WHERE scaleId = :scaleId)', { scaleId: 1 })
         .execute();
