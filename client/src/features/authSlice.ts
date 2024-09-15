@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { UserType } from "../@types/userTypes";
+import { UserData } from "../@types/userTypes";
 import { api } from "../services/axiosClient";
 type ChangeUserPayload = {
-  user: UserType;
+  user: UserData;
 };
 
 
 type AuthState = {
-  user: UserType | null
+  user: UserData | null
   token: string | null
 }
 type SignInPayload = {
@@ -16,15 +16,7 @@ type SignInPayload = {
   password: string;
 };
 const initialState: AuthState = {
-  user: {
-    id: null,
-    email: null,
-    name: null,
-    specialization: null,
-    password: null,
-    role: null,
-    shift: null
-  },
+  user: null,
   token: null
 };
 

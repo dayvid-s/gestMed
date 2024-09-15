@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, ValueTransformer } from 'typeorm';
 import { SolicitationOfDutyType } from '../@types/SolicitationOfDutyTypes';
 import { Main_scale_duty } from './Main_Scale_Duty';
+import { Shift } from './Shift';
 import { User } from './User';
 
 const dateTransformer: ValueTransformer = {
@@ -20,8 +21,18 @@ export class DutySolicitation {
   @Column({ type: 'enum', enum: ['in progress', 'rejected', 'approved'] })
   status: SolicitationOfDutyType;
 
-  @ManyToOne(() => Main_scale_duty)
-  duty: Main_scale_duty;
+  @ManyToOne(() => Main_scale_duty, { nullable: true })
+  existentDuty: Main_scale_duty | null;
+
+  @Column({ type: 'varchar', length: 900, nullable: true })
+  message: string;
+
+
+  @ManyToOne(() => Shift, shift => shift.id, { nullable: true })
+  shift: Shift | null;
+
+  @Column('int', { nullable: true })
+  scale_date: number | null;
 
   @ManyToOne(() => User)
   user: User;

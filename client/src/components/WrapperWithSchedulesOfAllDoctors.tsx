@@ -121,7 +121,7 @@ export function WrapperWithSchedulesOfAllDoctors() {
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
                 onClick={() => handleWithModalOpen(day.dutyDay, 1)}
-                title="Adicionar médico nesse plantão"
+                title={user?.role === "Médico" ? "Solicitar para participar de plantão" : "Adicionar médico nesse plantão"}
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
               </div>

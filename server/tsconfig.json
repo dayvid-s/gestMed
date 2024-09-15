@@ -14,9 +14,9 @@
     "strict": true,
     "noImplicitAny": true,
     "strictPropertyInitialization": false,
-    "typeRoots": ["./src/@types"]
+    "typeRoots": ["@types"]
   },
-  "include": ["src/**/*", "src/**/*.json"],
+  "include": ["src/**/*", "src/**/*.json" ],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "files": true

@@ -10,24 +10,33 @@ export interface Shift {
   end_time: string;
 }
 
-export interface UserData {
-  id: number;
-  name: string;
-  email: string;
+export interface UserType {
+  id: number | null;
+  name: string | null;
+  email: string | null;
   specialization: string | null;
   password: string | null;
   role: roles | null;
   shift: Shift | null;
-  crm?: string | null;
-  uf?: string | null;
-  city?: string | null;
-  phone?: string | null;
-  cpf?: string | null;
-  rg?: string | null;
-  address?: string | null;
-  bank?: string | null;
-  agency?: string | null;
-  account?: string | null;
+}
+export interface UserData {
+  id: number;
+  name: string | null;
+  email: string | null;
+  specialization: string | null;
+  password: string | null;
+  role: roles | null;
+  shift: Shift | null;
+  crm: string;
+  uf: string;
+  city: string;
+  phone: string;
+  cpf: string;
+  rg: string;
+  address: string;
+  bank: string;
+  agency: string;
+  account: string;
   gender: genders;
 }
 

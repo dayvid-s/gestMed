@@ -37,7 +37,7 @@ export function MainScaleDutyItem({
     setModal((prev) => ({ ...prev, [modalName]: isOpen }));
   };
   const dispatch = useDispatch<AppDispatch>();
-  const mainScaleDutiesOfTheDay = allMainScaleDuties.filter((mainScaleDuty) => mainScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === mainScaleDuty.shift.id);
+  const mainScaleDutiesOfTheDay = allMainScaleDuties.filter((mainScaleDuty) => mainScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === mainScaleDuty?.shift?.id);
   const renderCount = useRef(0);
   const [actualDutyInfo, setActualDutyInfo] = useState<MainScaleDuty | null>(null);
 

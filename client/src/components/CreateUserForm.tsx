@@ -100,7 +100,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>CRM</Form.ControlLabel>
                 <Form.Control
                   name="crm"
-                  value={userData.crm}
+                  value={userData.crm ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o CRM"
                 />
@@ -109,7 +109,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>UF</Form.ControlLabel>
                 <Form.Control
                   name="uf"
-                  value={userData.uf}
+                  value={userData.uf ?? ""}
                   onChange={handleInput}
                   placeholder="Digite a UF"
                 />
@@ -118,7 +118,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Cidade</Form.ControlLabel>
                 <Form.Control
                   name="city"
-                  value={userData.city}
+                  value={userData.city ?? ""}
                   onChange={handleInput}
                   placeholder="Digite a cidade"
                 />
@@ -127,7 +127,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Telefone</Form.ControlLabel>
                 <Form.Control
                   name="phone"
-                  value={userData.phone}
+                  value={userData.phone ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o telefone"
                 />
@@ -136,7 +136,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>CPF</Form.ControlLabel>
                 <Form.Control
                   name="cpf"
-                  value={userData.cpf}
+                  value={userData.cpf ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o CPF"
                 />
@@ -145,7 +145,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>RG</Form.ControlLabel>
                 <Form.Control
                   name="rg"
-                  value={userData.rg}
+                  value={userData.rg ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o RG"
                 />
@@ -154,7 +154,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Endereço</Form.ControlLabel>
                 <Form.Control
                   name="address"
-                  value={userData.address}
+                  value={userData.address ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o endereço"
                 />
@@ -163,7 +163,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Banco</Form.ControlLabel>
                 <Form.Control
                   name="bank"
-                  value={userData.bank}
+                  value={userData.bank ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o banco"
                 />
@@ -172,7 +172,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Agência</Form.ControlLabel>
                 <Form.Control
                   name="agency"
-                  value={userData.agency}
+                  value={userData.agency ?? ""}
                   onChange={handleInput}
                   placeholder="Digite a agência"
                 />
@@ -181,7 +181,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Conta</Form.ControlLabel>
                 <Form.Control
                   name="account"
-                  value={userData.account}
+                  value={userData.account ?? ""}
                   onChange={handleInput}
                   placeholder="Digite a conta"
                 />
@@ -190,7 +190,7 @@ export function CreateUserForm({ handleInputChange, userData, shifts,
                 <Form.ControlLabel>Sexo</Form.ControlLabel>
                 <Form.Control
                   name="gender"
-                  value={userData.gender}
+                  value={userData.gender ?? ""}
                   onChange={handleInput}
                   placeholder="Digite o sexo"
                 />

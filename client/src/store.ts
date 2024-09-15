@@ -3,6 +3,7 @@ import { alertReducer } from "./features/alertSlice";
 import { AuthReducer } from "./features/authSlice";
 import { configurationReducer } from "./features/configurationSlice";
 import { DoctorReducer } from "./features/doctorSclice";
+import { solicitationReducer } from "./features/dutySolicitationSlice";
 import { formStepReducer } from "./features/formStepSlice";
 import { MainScaleDutyReducer } from "./features/MainScaleDutySlice";
 import { MainScaleReducer } from "./features/MainScaleSlice";
@@ -26,6 +27,7 @@ export const store = configureStore({
     mainScale: MainScaleReducer,
     mainScaleDuty: MainScaleDutyReducer,
     shift: ShiftReducer,
+    dutySolicitation: solicitationReducer,
     sideBar: sideBarReducer,
     doctor: DoctorReducer,
     modalConfirmation: ModalOfConfirmationSlice,
