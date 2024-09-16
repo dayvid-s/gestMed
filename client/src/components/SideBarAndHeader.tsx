@@ -106,13 +106,14 @@ export default function SideBarAndHeader({ children }: { children: React.ReactNo
 
   const sideBarItems = {
     pages: user?.role === "Médico"
-      ? [{ name: "Plantões", icon: <HomeIcon />, path: "/home" }, { name: "Solicitações de plantão", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }]
+      ? [{ name: "Plantões", icon: <HomeIcon />, path: "/home" },
+      { name: "Solicitações de plantão", icon: <ManageAccountsSharpIcon />, path: "/dutySolicitationForDoctor" }]
       : [
         { name: "Plantões", icon: <HomeIcon />, path: "/home" },
         { name: "Escala Modelo", icon: <DateRangeIcon />, path: "/scale" },
         { name: "Médicos", icon: <PeopleIcon />, path: "/users" },
         { name: "Relatórios", icon: <SearchIcon />, path: "" },
-        { name: "Solicitações de plantão", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }
+        { name: "Solicitações de plantão", icon: <ManageAccountsSharpIcon />, path: "/dutySolicitationForCoordinator" }
       ],
     configuration: user?.role === "Médico"
       ? [{ name: "Editar Conta", icon: <ManageAccountsSharpIcon />, path: "/userAccount" }]
