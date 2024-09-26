@@ -21,6 +21,7 @@ export class DutySolicitation {
   @Column({ type: 'enum', enum: ['in progress', 'rejected', 'approved'] })
   status: SolicitationOfDutyType;
 
+
   @ManyToOne(() => Main_scale_duty, { nullable: true })
   existentDuty: Main_scale_duty | null;
 

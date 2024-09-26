@@ -90,7 +90,7 @@ export class MainScaleController {
 
       await DutySolicitationRepository.createQueryBuilder()
         .delete()
-        .where('dutyId IN (SELECT id FROM main_scale_duty WHERE scaleId = :scaleId)', { scaleId: 1 })
+        .where('existentDutyId IN (SELECT id FROM main_scale_duty WHERE scaleId = :scaleId)', { scaleId: 1 })
         .execute();
 
       await main_scale_duty_Repository.createQueryBuilder()

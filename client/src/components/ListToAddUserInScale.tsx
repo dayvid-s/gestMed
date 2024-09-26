@@ -52,7 +52,7 @@ export function ListToAddUserInScale({
                 >
                   {user.name}
                 </p>
-                <span className="text-gray-900">Cardiologista</span>
+                <span className="text-gray-900">{user.specialization}</span>
                 <span className="text-slate-950 font-medium">
                   {user.shift?.start_time.substring(0, 5)} - {user.shift?.end_time.substring(0, 5)}
                 </span>

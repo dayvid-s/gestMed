@@ -5,11 +5,20 @@ import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Logo from "../assets/gestmedLogo.png";
 
 export default function Login() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <LoginComponent />
+    </Suspense>
+  );
+}
+
+
+function LoginComponent() {
   const [user, setUser] = useState({ email: "", password: "" });
   const dispatch = useDispatch<AppDispatch>();
   const { token } = useAppSelector((state) => state.auth);

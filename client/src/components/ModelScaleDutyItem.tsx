@@ -57,7 +57,7 @@ export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMo
                 modalIsOpen={modalIsOpen}
               />
               <p className='font-bold '>{duty.shift?.start_time.substring(0, 5)} - {duty.shift?.end_time.substring(0, 5)} ({duty.shift.name})</p>
-              <p  >{duty.user?.specialization}  Cardiologista</p>
+              <p  >{duty.user?.specialization}  </p>
             </div>
           </div>
 
