@@ -17,8 +17,8 @@ export class Main_scale_duty {
   @ManyToOne(() => Shift, shift => shift.id)
   shift: Shift;
 
-  @Column('int')
-  scale_date: number;
+  @Column('date')
+  scale_date: string;
 
   @CreateDateColumn()
   created_at: Date;

@@ -10,7 +10,7 @@ import { shiftRepository } from '../repositories/shiftRepository';
 
 interface InfoForNewDuty {
   shift: number;
-  scale_date: number;
+  scale_date: string;
 }
 
 

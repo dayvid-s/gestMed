@@ -12,8 +12,15 @@ import { GenericButton } from "./GenericButton";
 import { ModalToAddUsersToModelScale } from "./ModalToAddUsersToModelScale";
 import { ModelScaleDutyItem } from "./ModelScaleDutyItem";
 interface actualModelScaleDutyInfoProps {
-  dayOfScaleDuty: number | null;
+  dayOfScaleDuty: string | null;
   shiftOfScaleDuty: number | null;
+}
+
+export interface DayInfo {
+  dutyDay: string;
+  allDutiesAtDay: number;
+  formattedDate: string;
+  entireDate: string;
 }
 
 interface scalesModelProps {
@@ -85,7 +92,7 @@ export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: s
     }
   };
 
-  function handleWithModalOpen(dayOfScaleDuty: number, shiftOfScaleDuty: number) {
+  function handleWithModalOpen(dayOfScaleDuty: string, shiftOfScaleDuty: number) {
     dispatch(closeSideBar());
     setActualModelScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
     setModalIsOpen(true);
@@ -108,16 +115,32 @@ export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: s
       </div>
     );
   }
-
-  const totalScaleDays = actualModelScaleInfo?.total_of_scale_days;
+  const totalScaleDays = actualModelScaleInfo?.total_of_scale_days ?? 0; // Atualiza para o padrão de `mainScale[0]?.total_of_scale_days ?? 0`
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
 
-  const days = Array.from({ length: totalScaleDays || 0 }, (_, i) => ({
-    dutyDay: i + 1,
-    allDutiesAtDay: 0,
-  })); const diasDaSemana = ["Dom", "Seg", "Ter", "Quar", "Qui", "Sex", "Sáb"];
+  const formatDate = (day: number, month: number): string => {
+    return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}`;
+  };
+
+  const weekDaysAbbr = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+  const daysArray: DayInfo[] = Array.from({ length: totalScaleDays }, (_, i) => {
+    const day = i + 1;
+    const dayDate = new Date(year, month - 1, day);
+    const dayOfWeek = weekDaysAbbr[dayDate.getDay()];
+    const formattedDate = formatDate(day, month);
+    const entireDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`; // Formato como 'YYYY-MM-DD'
+
+    return {
+      dutyDay: dayOfWeek,
+      allDutiesAtDay: 0,
+      formattedDate,
+      entireDate,
+    };
+  });
+
 
 
 
@@ -137,24 +160,20 @@ export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: s
           : null
       }
       <div className='flex flex-wrap items-start justify-center mt-5'>
-        {days.map((day) => (
+        {daysArray.map((day) => (
           <div className='flex flex-col mb-5' key={day.dutyDay}>
-            <div className='flex justify-between px-3 w-64 bg-green500'>
-              <h4 className='text-white'>
-                {diasDaSemana[new Date(year, month - 1, day.dutyDay).getDay()]}
-              </h4>
-              <h4 className='text-white'>
-                {day.dutyDay.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
-              </h4>
+            <div className='flex justify-between w-64 px-3 bg-green500'>
+              <h4 className='text-white'>{day.dutyDay}</h4>
+              <h4 className='text-white'>{day.formattedDate}</h4>
             </div>
             <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
-              <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Diurno</h1>
+              <h1 className="self-center mt-3 text-2xl font-semibold text-green500 ">Plantão Diurno</h1>
             </div>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={1} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                onClick={() => handleWithModalOpen(day.dutyDay, 1)}
+                onClick={() => handleWithModalOpen(day.entireDate, 1)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
@@ -162,12 +181,12 @@ export function ModelScales({ actualModelScaleInfo, setActualModelScaleInfo }: s
             </div>
 
             <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
-              <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Noturno</h1>
+              <h1 className="self-center mt-3 text-2xl font-semibold text-green500 ">Plantão Noturno</h1>
             </div>
-            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={days} IdOfShiftOfScaleDuty={2} />
+            <ModelScaleDutyItem allModelScaleDuties={modelScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                onClick={() => handleWithModalOpen(day.dutyDay, 2)}
+                onClick={() => handleWithModalOpen(day.entireDate, 2)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>

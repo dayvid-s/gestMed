@@ -14,7 +14,7 @@ interface SolicitationOfDuty {
 
 interface InfoForNewDuty {
   shift: number;
-  scale_date: number;
+  scale_date: string;
 }
 
 interface SolicitationState {

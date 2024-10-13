@@ -19,10 +19,10 @@ export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<{
     modalToAddUserInDuty: boolean;
-    ModalForDoctorSolicitDuty: boolean
+    modalForDoctorSolicitDuty: boolean
   }>>;
   shift_id: number | null;
-  scale_date: number | null;
+  scale_date: string | null;
 }
 
 export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date, shift_id }: ImodalProps) {
@@ -131,10 +131,10 @@ export function ModalToAddUsersToMainScale({ modalIsOpen, setIsOpen, scale_date,
         </Modal.Body>
         <Modal.Footer className="flex" >
           <p className="font-medium">
-            Obs: Os médicos serão adicionados no plantão <span className="font-bold">{shift_id === 1 ? "diurno" : "noturno"}</span>, dia <span className="font-bold">{scale_date}</span>.
+            Obs: Os médicos serão adicionados no plantão <span className="font-bold">{shift_id === 1 ? "diurno" : "noturno"}</span>, dia <span className="font-bold">{scale_date ? `${scale_date.split("-")[2]}/${scale_date.split("-")[1]}` : "data inválida"}</span>.
           </p>
           <button
-            className="ml-0 md:ml-auto mr-10 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
+            className="ml-0 md:ml-auto mr-6 min-w-40 border-2 rounded-lg p-3 w-auto h-12 bg-green500 hover:bg-[#39cb76] text-white"
             type="button"
             onClick={resetForm}
             disabled={!userToAddInMainScale}

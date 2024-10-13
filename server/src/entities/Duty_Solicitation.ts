@@ -32,8 +32,8 @@ export class DutySolicitation {
   @ManyToOne(() => Shift, shift => shift.id, { nullable: true })
   shift: Shift | null;
 
-  @Column('int', { nullable: true })
-  scale_date: number | null;
+  @Column('date', { nullable: true })
+  scale_date: string | null;
 
   @ManyToOne(() => User)
   user: User;
