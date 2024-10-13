@@ -2,20 +2,18 @@ import { MainScaleDuty } from "@/@types/MainScaleDutyTypes";
 import { closeSideBar } from "@/features/sideBarSlice";
 import { AppDispatch } from "@/store";
 import { useAppSelector } from "@/utils/useSelectorHook";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ModalForDoctorVisualizeDuty } from "./ModalForDoctorVisualizeDuty";
 import { ModalToEditDutyOfMainScale } from "./ModalToEditDutyOfMainScale";
+import { DayInfo } from "./WrapperWithSchedulesOfAllDoctors";
 
-interface dayOfScaleDutyProps {
-  dutyDay: number;
-  allDutiesAtDay: number;
-}
+
 interface MainScaleDutyProps {
-  dayOfScaleDuty: dayOfScaleDutyProps;
+  dayOfScaleDuty: DayInfo;
   IdOfShiftOfScaleDuty: number | null;
   allMainScaleDuties: MainScaleDuty[];
-  allDaysOfScaleDuty: dayOfScaleDutyProps[];
+  allDaysOfScaleDuty: DayInfo[];
   fetchDuties: () => Promise<void>;
 }
 
@@ -37,20 +35,20 @@ export function MainScaleDutyItem({
     setModal((prev) => ({ ...prev, [modalName]: isOpen }));
   };
   const dispatch = useDispatch<AppDispatch>();
-  const mainScaleDutiesOfTheDay = allMainScaleDuties.filter((mainScaleDuty) => mainScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === mainScaleDuty?.shift?.id);
+  const mainScaleDutiesOfTheDay = allMainScaleDuties.filter((mainScaleDuty) => mainScaleDuty.scale_date == dayOfScaleDuty.entireDate && IdOfShiftOfScaleDuty === mainScaleDuty?.shift?.id);
   const renderCount = useRef(0);
   const [actualDutyInfo, setActualDutyInfo] = useState<MainScaleDuty | null>(null);
 
 
-  useEffect(() => {
-    if (renderCount.current < 1) {
-      allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
-        allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
-        mainScaleDutiesOfTheDay.length;
-    }
+  // useEffect(() => {
+  //   if (renderCount.current < 1) {
+  //     allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
+  //       allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
+  //       mainScaleDutiesOfTheDay.length;
+  //   }
 
-    renderCount.current++;
-  }, []);
+  //   renderCount.current++;
+  // }, []);
 
 
   function changeDutyInfo(id: number) {

@@ -1,16 +1,13 @@
 import { ScaleDutyType } from "@/@types/ModelScaleDutyTypes";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ModalToEditDutyOfModelScale } from "./ModalToEditDutyOfModelScale";
+import { DayInfo } from "./ModelScales";
 
-interface dayOfScaleDutyProps {
-  dutyDay: number;
-  allDutiesAtDay: number;
-}
 interface ModelScaleDutyProps {
-  dayOfScaleDuty: dayOfScaleDutyProps;
+  dayOfScaleDuty: DayInfo;
   IdOfShiftOfScaleDuty: number | null;
   allModelScaleDuties: ScaleDutyType[];
-  allDaysOfScaleDuty: dayOfScaleDutyProps[];
+  allDaysOfScaleDuty: DayInfo[];
 
 }
 
@@ -18,20 +15,20 @@ export function ModelScaleDutyItem({ dayOfScaleDuty, IdOfShiftOfScaleDuty, allMo
   // obs: tem como saber o maximo de plantoes que cada dia tem. apenas salvando o valor do total de cada plantao aqui. 
   // assim como tem como adicionar campos em branco, aqui, baseado na sentença anterior.
 
-  const modelScaleDutiesOfTheDay = allModelScaleDuties.filter((modelScaleDuty) => modelScaleDuty.scale_date === dayOfScaleDuty.dutyDay && IdOfShiftOfScaleDuty === modelScaleDuty.shift.id);
+  const modelScaleDutiesOfTheDay = allModelScaleDuties.filter((modelScaleDuty) => modelScaleDuty.scale_date === dayOfScaleDuty.entireDate && IdOfShiftOfScaleDuty === modelScaleDuty.shift.id);
   const renderCount = useRef(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
 
-  useEffect(() => {
-    if (renderCount.current < 1) {
-      allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
-        allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
-        modelScaleDutiesOfTheDay.length;
-    }
+  // useEffect(() => {
+  //   if (renderCount.current < 1) {
+  //     allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay =
+  //       allDaysOfScaleDuty[dayOfScaleDuty.dutyDay - 1].allDutiesAtDay +
+  //       modelScaleDutiesOfTheDay.length;
+  //   }
 
-    renderCount.current++;
-  }, []);
+  //   renderCount.current++;
+  // }, []);
 
 
   return (

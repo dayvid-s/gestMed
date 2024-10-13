@@ -11,17 +11,24 @@ import { MainScaleDutyItem } from "./MainScaleDutyItem";
 import { ModalForDoctorSolicitDuty } from "./ModalForDoctorSolicitDuty";
 import { ModalToAddUsersToMainScale } from "./ModalToAddUsersToMainScale";
 
-interface actualMainScaleDutyInfoProps {
-  dayOfScaleDuty: number | null;
+interface ActualMainScaleDutyInfoProps {
+  dayOfScaleDuty: string | null;
   shiftOfScaleDuty: number | null;
+}
+
+export interface DayInfo {
+  dutyDay: string;
+  allDutiesAtDay: number;
+  formattedDate: string;
+  entireDate: string;
 }
 
 export function WrapperWithSchedulesOfAllDoctors() {
   const [modalInfo, setModalInfo] = useState({
     modalToAddUserInDuty: false,
-    ModalForDoctorSolicitDuty: false
+    modalForDoctorSolicitDuty: false,
   });
-  const [actualMainScaleDutyInfo, setActualMainScaleDutyInfo] = useState<actualMainScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
+  const [actualMainScaleDutyInfo, setActualMainScaleDutyInfo] = useState<ActualMainScaleDutyInfoProps>({ dayOfScaleDuty: null, shiftOfScaleDuty: null });
 
   const dispatch = useDispatch<AppDispatch>();
   const { mainScale, loading, error } = useAppSelector((state) => state.mainScale);
@@ -29,22 +36,21 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const user = useAppSelector((state) => state.auth.user);
   const open = useAppSelector((state) => state.sideBar.open);
 
-
   useEffect(() => {
-    dispatch(fetchMainScale()).then((result) => {
+    const fetchScale = async () => {
+      const result = await dispatch(fetchMainScale());
       if (fetchMainScale.rejected.match(result)) {
-        dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao buscar plantões" }))
+        dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao buscar plantões" }));
       }
-    });
+    };
+    fetchScale();
   }, []);
 
   useEffect(() => {
-    if (modalInfo.modalToAddUserInDuty == false && modalInfo.ModalForDoctorSolicitDuty == false) {
-      fetchMainScaleDutiesData()
+    if (!modalInfo.modalToAddUserInDuty && !modalInfo.modalForDoctorSolicitDuty) {
+      fetchMainScaleDutiesData();
     }
   }, [modalInfo]);
-
-
 
   const fetchMainScaleDutiesData = async () => {
     try {
@@ -56,18 +62,16 @@ export function WrapperWithSchedulesOfAllDoctors() {
         dispatch(showAlert({ placement: "bottomEnd", type: "error", title: "Falha ao buscar plantões" }));
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
-
-  const handleWithModalOpen = (dayOfScaleDuty: number, shiftOfScaleDuty: number) => {
-    dispatch(closeSideBar());
+  const handleWithModalOpen = (dayOfScaleDuty: string, shiftOfScaleDuty: number) => {
     setActualMainScaleDutyInfo({ dayOfScaleDuty, shiftOfScaleDuty });
-    dispatch(closeSideBar())
+    dispatch(closeSideBar());
     if (user?.role === "Médico") {
-      setModalInfo((prev) => ({ ...prev, ModalForDoctorSolicitDuty: true }));
-      return
+      setModalInfo((prev) => ({ ...prev, modalForDoctorSolicitDuty: true }));
+      return;
     }
     setModalInfo((prev) => ({ ...prev, modalToAddUserInDuty: true }));
   };
@@ -77,16 +81,32 @@ export function WrapperWithSchedulesOfAllDoctors() {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
 
-  const daysArray = Array.from({ length: totalScaleDays }, (_, i) => ({
-    dutyDay: i + 1,
-    allDutiesAtDay: 0,
-  }));
-
-  const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const formatDate = (day: number, month: number): string => {
+    return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}`;
+  };
   const months = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
+  const weekDaysAbbr = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+  const daysArray: DayInfo[] = Array.from({ length: totalScaleDays }, (_, i) => {
+    const day = i + 1;
+    const dayDate = new Date(year, month - 1, i + 1);
+    const dayOfWeek = weekDaysAbbr[dayDate.getDay()];
+    const formattedDate = formatDate(i + 1, month);
+    const entireDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+
+
+
+    return {
+      dutyDay: dayOfWeek,
+      allDutiesAtDay: 0,
+      formattedDate,
+      entireDate,
+
+    };
+  });
 
   if (loading) {
     return <p>Carregando escalas...</p>;
@@ -104,36 +124,32 @@ export function WrapperWithSchedulesOfAllDoctors() {
       <div className='flex flex-wrap items-start justify-center mt-5'>
         {daysArray.map((day) => (
           <div className='flex flex-col mb-5' key={day.dutyDay}>
-            <div className='flex justify-between px-3 w-64 bg-green500'>
-              <h4 className='text-white'>
-                {daysOfWeek[new Date(year, month - 1, day.dutyDay).getDay()]}
-              </h4>
-              <h4 className='text-white'>
-                {day.dutyDay.toString().padStart(2, "0")}/{month.toString().padStart(2, "0")}
-              </h4>
+            <div className='flex justify-between w-64 px-3 bg-green500'>
+              <h4 className='text-white'>{day.dutyDay}</h4>
+              <h4 className='text-white'>{day.formattedDate}</h4>
             </div>
 
-            <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
-              <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Diurno</h1>
+            <div className="flex justify-center border-[#e2e2e2] border-r-2">
+              <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Diurno</h1>
             </div>
             <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={1} fetchDuties={fetchMainScaleDutiesData} />
 
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                onClick={() => handleWithModalOpen(day.dutyDay, 1)}
+                onClick={() => handleWithModalOpen(day.entireDate, 1)}
                 title={user?.role === "Médico" ? "Solicitar para participar de plantão" : "Adicionar médico nesse plantão"}
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
               </div>
             </div>
 
-            <div className=" flex justify-center border-[#e2e2e2] border-r-2" >
-              <h1 className="self-center mt-3 text-2xl font-semibold text-green500  ">Plantão Noturno</h1>
+            <div className="flex justify-center border-[#e2e2e2] border-r-2">
+              <h1 className="self-center mt-3 text-2xl font-semibold text-green500">Plantão Noturno</h1>
             </div>
             <MainScaleDutyItem allMainScaleDuties={mainScaleDuties} dayOfScaleDuty={day} allDaysOfScaleDuty={daysArray} IdOfShiftOfScaleDuty={2} fetchDuties={fetchMainScaleDutiesData} />
             <div className='border-r-2 p-1 border-[#e2e2e2] items-center justify-center gap-y-3'>
               <div
-                onClick={() => handleWithModalOpen(day.dutyDay, 2)}
+                onClick={() => handleWithModalOpen(day.entireDate, 2)}
                 title="Adicionar médico nesse plantão"
                 className='p-1 bg-[#ffffff] border-2 flex hover:bg-slate-200 cursor-pointer border-[#b7b7b7] rounded min-h-16 items-center justify-center'>
                 <p className='text-4xl text-slate-300'>+</p>
@@ -142,13 +158,11 @@ export function WrapperWithSchedulesOfAllDoctors() {
           </div>
         ))}
       </div>
-
-
       <ModalForDoctorSolicitDuty
         scale_date={actualMainScaleDutyInfo.dayOfScaleDuty}
         shift_id={actualMainScaleDutyInfo.shiftOfScaleDuty}
         setIsOpen={setModalInfo}
-        modalIsOpen={modalInfo.ModalForDoctorSolicitDuty}
+        modalIsOpen={modalInfo.modalForDoctorSolicitDuty}
         month={month}
         year={year}
       />

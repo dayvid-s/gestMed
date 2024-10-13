@@ -6,7 +6,7 @@ export interface MainScaleDuty {
   scale: ScaleData;
   user: UserData | null;
   shift: Shift;
-  scale_date: number;
+  scale_date: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -16,7 +16,7 @@ export interface MainScaleDutyInBackend {
   scale_id: number | undefined;
   user_id: number | null;
   shift_id: number | null;
-  scale_date: number | null;
+  scale_date: string | null;
   created_at?: Date;
   updated_at?: Date;
 }

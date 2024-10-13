@@ -13,10 +13,10 @@ export interface ImodalProps {
   modalIsOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<{
     modalToAddUserInDuty: boolean;
-    ModalForDoctorSolicitDuty: boolean;
+    modalForDoctorSolicitDuty: boolean;
   }>>;
   shift_id: number | null;
-  scale_date: number | null;
+  scale_date: string | null;
   month: number;
   year: number;
 }
@@ -84,7 +84,7 @@ export function ModalForDoctorSolicitDuty({
         <Modal.Header style={{ borderBottom: "2px solid #eaeaea", paddingBottom: "10px" }}>
           <h4 className="text-4xl font-semibold">Participar de plantão</h4>
         </Modal.Header>
-        <Modal.Body className="flex mt-5 flex-col">
+        <Modal.Body className="flex flex-col mt-5">
           <p className="font-medium">
             Deseja participar do plantão
             <span className="font-bold">
