@@ -8,6 +8,7 @@ const controller = new SolicitationOfDutyController();
 router.post('/solicitations/duties/create-without-duty', authMiddleware, controller.createSolicitationOfNoExistentDuty);
 router.post('/solicitations/duties/create-with-duty', authMiddleware, controller.createSolicitationOfExistentDuty);
 router.get('/solicitations/duties', authMiddleware, controller.getAll);
+router.post('/solicitations/duties/user', authMiddleware, controller.getAllFromOneUser);
 router.get('/solicitations/duties/:id', authMiddleware, controller.getById);
 router.put('/solicitations/duties/:id', authMiddleware, controller.update);
 router.delete('/solicitations/duties/:id', authMiddleware, controller.delete);

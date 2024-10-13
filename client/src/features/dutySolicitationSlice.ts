@@ -29,6 +29,43 @@ const initialState: SolicitationState = {
   error: null,
 };
 
+// Função auxiliar para fazer a solicitação à API
+async function postSolicitation<T>(
+  endpoint: string,
+  payload: T,
+  rejectWithValue: (value: string) => void
+) {
+  try {
+    const response = await api.post(endpoint, payload);
+    if (response.status < 300) {
+      return response.data;
+    } else {
+      return rejectWithValue("Falha ao criar solicitação");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    } else {
+      return rejectWithValue("Erro desconhecido");
+    }
+  }
+}
+
+// Função auxiliar para requisições GET
+async function getSolicitations(endpoint: string, rejectWithValue: (value: string) => void) {
+  try {
+    const response = await api.get(endpoint);
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    } else {
+      return rejectWithValue("Erro desconhecido");
+    }
+  }
+}
+
+// Thunks
 export const createSolicitationOfExistentDuty = createAsyncThunk<
   SolicitationOfDuty,
   { existentDuty: MainScaleDutyInBackend; user: UserData },
@@ -36,23 +73,7 @@ export const createSolicitationOfExistentDuty = createAsyncThunk<
 >(
   "solicitations/create-with-duty",
   async ({ existentDuty, user }, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/solicitations/duties/create-with-duty", {
-        existentDuty,
-        user,
-      });
-      if (response.status < 300) {
-        return response.data;
-      } else {
-        return rejectWithValue("Falha ao criar solicitação de plantão existente");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue("Erro desconhecido");
-      }
-    }
+    return postSolicitation("/solicitations/duties/create-with-duty", { existentDuty, user }, rejectWithValue);
   }
 );
 
@@ -63,25 +84,51 @@ export const createSolicitationOfNoExistentDuty = createAsyncThunk<
 >(
   "solicitations/create-without-duty",
   async ({ infoForNewDuty, user }, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/solicitations/duties/create-without-duty", {
-        infoForNewDuty,
-        user,
-      });
-      if (response.status < 300) {
-        return response.data;
-      } else {
-        return rejectWithValue("Falha ao criar solicitação de plantão inexistente");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue("Erro desconhecido");
-      }
-    }
+    return postSolicitation("/solicitations/duties/create-without-duty", { infoForNewDuty, user }, rejectWithValue);
   }
 );
+
+export const getAllSolicitations = createAsyncThunk<
+  SolicitationOfDuty[],
+  void,
+  { rejectValue: string }
+>(
+  "solicitations/getAll",
+  async (_, { rejectWithValue }) => {
+    return getSolicitations("/solicitations/duties", rejectWithValue);
+  }
+);
+
+export const getAllSolicitationsFromUser = createAsyncThunk<
+  SolicitationOfDuty[],
+  { user: UserData },
+  { rejectValue: string }
+>(
+  "solicitations/getAllFromOneUser",
+  async ({ user }, { rejectWithValue }) => {
+    return postSolicitation("/solicitations/duties/user", { user }, rejectWithValue);
+  }
+);
+
+const handlePending = (state: SolicitationState) => {
+  state.loading = true;
+  state.error = null;
+};
+
+const handleFulfilled = (state: SolicitationState, action: PayloadAction<SolicitationOfDuty[]>) => {
+  state.loading = false;
+  // state.solicitations = action.payload;
+};
+
+const handleFulfilledSingle = (state: SolicitationState, action: PayloadAction<SolicitationOfDuty>) => {
+  state.loading = false;
+  // state.solicitations.push(action.payload);
+};
+
+const handleRejected = (state: SolicitationState, action: PayloadAction<string | undefined>) => {
+  state.loading = false;
+  state.error = action.payload ?? "Erro desconhecido";
+};
 
 const solicitationSlice = createSlice({
   name: "solicitations",
@@ -89,38 +136,25 @@ const solicitationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createSolicitationOfExistentDuty.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        createSolicitationOfExistentDuty.fulfilled,
-        (state, action: PayloadAction<SolicitationOfDuty>) => {
-          state.loading = false;
-          state.solicitations.push(action.payload);
-        }
-      )
-      .addCase(createSolicitationOfExistentDuty.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload ?? "Erro desconhecido";
-      });
+      // createSolicitationOfExistentDuty
+      .addCase(createSolicitationOfExistentDuty.pending, handlePending)
+      .addCase(createSolicitationOfExistentDuty.fulfilled, handleFulfilledSingle)
+      .addCase(createSolicitationOfExistentDuty.rejected, handleRejected)
 
-    builder
-      .addCase(createSolicitationOfNoExistentDuty.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        createSolicitationOfNoExistentDuty.fulfilled,
-        (state, action: PayloadAction<SolicitationOfDuty>) => {
-          state.loading = false;
-          state.solicitations.push(action.payload);
-        }
-      )
-      .addCase(createSolicitationOfNoExistentDuty.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload ?? "Erro desconhecido";
-      });
+      // createSolicitationOfNoExistentDuty
+      .addCase(createSolicitationOfNoExistentDuty.pending, handlePending)
+      .addCase(createSolicitationOfNoExistentDuty.fulfilled, handleFulfilledSingle)
+      .addCase(createSolicitationOfNoExistentDuty.rejected, handleRejected)
+
+      // getAllSolicitations
+      .addCase(getAllSolicitations.pending, handlePending)
+      .addCase(getAllSolicitations.fulfilled, handleFulfilled)
+      .addCase(getAllSolicitations.rejected, handleRejected)
+
+      // getAllSolicitationsFromUser
+      .addCase(getAllSolicitationsFromUser.pending, handlePending)
+      .addCase(getAllSolicitationsFromUser.fulfilled, handleFulfilled)
+      .addCase(getAllSolicitationsFromUser.rejected, handleRejected);
   },
 });
 

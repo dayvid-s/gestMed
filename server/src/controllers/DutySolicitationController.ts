@@ -13,6 +13,13 @@ interface InfoForNewDuty {
   scale_date: number;
 }
 
+
+interface getAllFromOneUserRequestBody {
+  user: {
+    id: number;
+  };
+}
+
 export class SolicitationOfDutyController {
   async createSolicitationOfNoExistentDuty(req: Request, res: Response) {
     let { user, infoForNewDuty }: { user: User, infoForNewDuty: InfoForNewDuty } = req.body;
@@ -116,15 +123,35 @@ export class SolicitationOfDutyController {
   }
 
   async getAll(req: Request, res: Response): Promise<Response> {
-    const solicitations = await DutySolicitationRepository.find({ relations: ['duty', 'user'] });
+    const solicitations = await DutySolicitationRepository.find({ relations: ['existentDuty', 'user'] });
     return res.json(solicitations);
   }
+
+
+  async getAllFromOneUser(
+    req: Request<{}, {}, getAllFromOneUserRequestBody>,
+    res: Response
+  ): Promise<Response> {
+    const { user } = req.body;
+
+    if (!user || !user.id) {
+      return res.status(400).json({ message: "Usuário inválido." });
+    }
+
+    const solicitations = await DutySolicitationRepository.find({
+      where: { user: { id: user.id } },
+      relations: ['existentDuty', 'user'],
+    });
+
+    return res.json(solicitations);
+  }
+
 
   async getById(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const solicitation = await DutySolicitationRepository.findOne({
       where: { id: parseInt(id, 10) },
-      relations: ['duty', 'user'],
+      relations: ['existentDuty', 'userId'],
     });
     if (!solicitation) {
       return res.status(404).json({ message: 'Solicitação não encontrada' });
