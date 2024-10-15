@@ -1,4 +1,11 @@
-export function ListOfSolicitations() {
+import { DutySolicitation } from "@/@types/dutySolicitationtypes"
+
+interface ListOfOldSolicitationsProps {
+  solicitations: DutySolicitation[]
+
+}
+
+export function ListOfSolicitations({ solicitations }: ListOfOldSolicitationsProps) {
 
   return (
     <section className="mt-6 " >
