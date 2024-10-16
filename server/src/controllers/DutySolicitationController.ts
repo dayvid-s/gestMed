@@ -140,7 +140,7 @@ export class SolicitationOfDutyController {
 
     const solicitations = await DutySolicitationRepository.find({
       where: { user: { id: user.id } },
-      relations: ['existentDuty', 'user'],
+      relations: ['existentDuty', 'user', 'shift'],
     });
 
     return res.json(solicitations);

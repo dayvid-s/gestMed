@@ -1,16 +1,9 @@
-import { MainScaleDuty, MainScaleDutyInBackend } from "@/@types/MainScaleDutyTypes";
+import { DutySolicitation } from "@/@types/dutySolicitationtypes";
+import { MainScaleDutyInBackend } from "@/@types/MainScaleDutyTypes";
 import { UserData } from "@/@types/userTypes";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../services/axiosClient";
 
-type SolicitationStatus = "approved" | "in progress";
-interface SolicitationOfDuty {
-  id?: number;
-  status: SolicitationStatus;
-  message: string;
-  existentDuty?: MainScaleDuty;
-  user: UserData;
-}
 
 interface InfoForNewDuty {
   shift: number;
@@ -18,7 +11,7 @@ interface InfoForNewDuty {
 }
 
 interface SolicitationState {
-  solicitations: SolicitationOfDuty[];
+  solicitations: DutySolicitation[];
   loading: boolean;
   error: string | null;
 }
@@ -28,28 +21,6 @@ const initialState: SolicitationState = {
   loading: false,
   error: null,
 };
-
-// Função auxiliar para fazer a solicitação à API
-async function postSolicitation<T>(
-  endpoint: string,
-  payload: T,
-  rejectWithValue: (value: string) => void
-) {
-  try {
-    const response = await api.post(endpoint, payload);
-    if (response.status < 300) {
-      return response.data;
-    } else {
-      return rejectWithValue("Falha ao criar solicitação");
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      return rejectWithValue(error.message);
-    } else {
-      return rejectWithValue("Erro desconhecido");
-    }
-  }
-}
 
 // Função auxiliar para requisições GET
 async function getSolicitations(endpoint: string, rejectWithValue: (value: string) => void) {
@@ -67,29 +38,55 @@ async function getSolicitations(endpoint: string, rejectWithValue: (value: strin
 
 // Thunks
 export const createSolicitationOfExistentDuty = createAsyncThunk<
-  SolicitationOfDuty,
+  DutySolicitation,
   { existentDuty: MainScaleDutyInBackend; user: UserData },
   { rejectValue: string }
 >(
   "solicitations/create-with-duty",
   async ({ existentDuty, user }, { rejectWithValue }) => {
-    return postSolicitation("/solicitations/duties/create-with-duty", { existentDuty, user }, rejectWithValue);
+    try {
+      const response = await api.post("/solicitations/duties/create-with-duty", { existentDuty, user });
+      if (response.status < 300) {
+        return response.data;
+      } else {
+        return rejectWithValue("Falha ao criar solicitação");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
   }
 );
 
 export const createSolicitationOfNoExistentDuty = createAsyncThunk<
-  SolicitationOfDuty,
+  DutySolicitation,
   { infoForNewDuty: InfoForNewDuty; user: UserData },
   { rejectValue: string }
 >(
   "solicitations/create-without-duty",
   async ({ infoForNewDuty, user }, { rejectWithValue }) => {
-    return postSolicitation("/solicitations/duties/create-without-duty", { infoForNewDuty, user }, rejectWithValue);
+    try {
+      const response = await api.post("/solicitations/duties/create-without-duty", { infoForNewDuty, user });
+      if (response.status < 300) {
+        return response.data;
+      } else {
+        return rejectWithValue("Falha ao criar solicitação");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
   }
 );
 
 export const getAllSolicitations = createAsyncThunk<
-  SolicitationOfDuty[],
+  DutySolicitation[],
   void,
   { rejectValue: string }
 >(
@@ -100,13 +97,26 @@ export const getAllSolicitations = createAsyncThunk<
 );
 
 export const getAllSolicitationsFromUser = createAsyncThunk<
-  SolicitationOfDuty[],
+  DutySolicitation[],
   { user: UserData },
-  { rejectValue: string }
+  { rejectValue: any }
 >(
   "solicitations/getAllFromOneUser",
   async ({ user }, { rejectWithValue }) => {
-    return postSolicitation("/solicitations/duties/user", { user }, rejectWithValue);
+    try {
+      const response = await api.post("/solicitations/duties/user", { user });
+      if (response.status < 300) {
+        return response.data;
+      } else {
+        return rejectWithValue("Falha ao buscar solicitações do usuário");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue("Erro desconhecido");
+      }
+    }
   }
 );
 
@@ -115,12 +125,12 @@ const handlePending = (state: SolicitationState) => {
   state.error = null;
 };
 
-const handleFulfilled = (state: SolicitationState, action: PayloadAction<SolicitationOfDuty[]>) => {
+const handleFulfilled = (state: SolicitationState, action: PayloadAction<DutySolicitation[]>) => {
   state.loading = false;
   // state.solicitations = action.payload;
 };
 
-const handleFulfilledSingle = (state: SolicitationState, action: PayloadAction<SolicitationOfDuty>) => {
+const handleFulfilledSingle = (state: SolicitationState, action: PayloadAction<DutySolicitation>) => {
   state.loading = false;
   // state.solicitations.push(action.payload);
 };
